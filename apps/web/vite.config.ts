@@ -5,6 +5,7 @@ import viteReact from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import { nitro } from 'nitro/vite';
+import { tamaguiPlugin } from '@tamagui/vite-plugin';
 
 const config = defineConfig({
   plugins: [
@@ -12,6 +13,10 @@ const config = defineConfig({
     nitro(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({ projects: ['./tsconfig.json'] }),
+    tamaguiPlugin({
+      config: './tamagui.config.ts',
+      components: ['@craftedtales/ui', 'tamagui'],
+    }),
     tailwindcss(),
     tanstackStart(),
     viteReact({ babel: { plugins: ['babel-plugin-react-compiler'] } }),

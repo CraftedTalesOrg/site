@@ -1,11 +1,22 @@
 {
   "extends": "@craftedtales/config/base.json",
+  "types": [
+    "node",
+    "react"
+  ],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
-    "jsxImportSource": "@tamagui/core"
+    "jsxImportSource": "@tamagui/core",
+    "baseUrl": "./",
+    "outDir": "dist"
   },
   "include": [
-    "src"
+    "./**/*.ts",
+    "./**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    "types"
   ]
 }

@@ -1,12 +1,14 @@
+import { config } from '@craftedtales/ui';
 import { TanStackDevtools } from '@tanstack/react-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   HeadContent,
   Scripts,
   createRootRouteWithContext
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { TamaguiProvider } from 'tamagui';
 import Header from '../components/Header';
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
 import type { JSX } from 'react';
 import type { QueryClient } from '@tanstack/react-query';
@@ -21,7 +23,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      { title: 'TanStack Start Starter' },
+      { title: 'CraftedTales' },
     ],
     links: [
       {
@@ -41,17 +43,22 @@ function RootDocument({ children }: { children: React.ReactNode }): JSX.Element 
         <HeadContent />
       </head>
       <body>
-        <Header />
-        {children}
-        <TanStackDevtools
-          config={{ position: 'bottom-right' }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]} />
+        <TamaguiProvider config={config} defaultTheme={'dark'}>
+          <Header />
+          {children}
+          <TanStackDevtools
+            config={{ position: 'bottom-right' }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              {
+                name: 'Tanstack Query',
+                render: <ReactQueryDevtools />,
+              },
+            ]} />
+        </TamaguiProvider>
         <Scripts />
       </body>
     </html>
