@@ -2,6 +2,7 @@
   "name": "@craftedtales/ui",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "exports": {
     "./*": "./src/*.tsx"
   },
@@ -10,12 +11,17 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@craftedtales/tsconfig": "workspace:*",
+    "@craftedtales/config": "workspace:*",
     "react": "^18.2.0",
-    "typescript": "^5.0.0",
-    "@tamagui/core": "latest"
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "react": "*"
+  },
+  "dependencies": {
+    "@tamagui/colors": "^1.138.0",
+    "@tamagui/config": "^1.138.0",
+    "@tamagui/core": "^1.138.0",
+    "@tamagui/theme-builder": "^1.138.0"
   }
 }

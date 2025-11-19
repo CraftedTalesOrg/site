@@ -1,6 +1,7 @@
 {
-  "extends": "@craftedtales/tsconfig/base.json",
+  "extends": "@craftedtales/config/base.json",
   "compilerOptions": {
+    "target": "ES2022",
     "jsx": "react-jsx",
     "jsxImportSource": "@tamagui/core"
   },

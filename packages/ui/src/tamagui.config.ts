@@ -1,12 +1,16 @@
-import { createTamagui } from '@tamagui/core'
-import { config } from '@tamagui/config/v3'
+import { defaultConfig } from '@tamagui/config/v4';
+import { createTamagui } from '@tamagui/core';
+import { themes } from './themes';
 
-export const tamaguiConfig = createTamagui(config)
+export const config = createTamagui({
+  ...defaultConfig,
+  themes,
+});
 
-export type AppConfig = typeof tamaguiConfig
+export type AppConfig = typeof config;
+export default config;
 
 declare module '@tamagui/core' {
   interface TamaguiCustomConfig extends AppConfig { }
 }
 
-export default tamaguiConfig
