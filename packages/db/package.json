@@ -1,0 +1,21 @@
+{
+  "name": "@craftedtales/db",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "drizzle-kit generate:pg",
+    "push": "drizzle-kit push:pg"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.30.0",
+    "postgres": "^3.0.0"
+  },
+  "devDependencies": {
+    "@craftedtales/tsconfig": "workspace:*",
+    "drizzle-kit": "^0.20.0",
+    "typescript": "^5.0.0"
+  }
+}

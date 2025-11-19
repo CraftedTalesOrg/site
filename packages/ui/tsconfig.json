@@ -1,0 +1,10 @@
+{
+  "extends": "@craftedtales/tsconfig/base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@tamagui/core"
+  },
+  "include": [
+    "src"
+  ]
+}

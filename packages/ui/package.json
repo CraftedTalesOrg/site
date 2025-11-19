@@ -1,0 +1,21 @@
+{
+  "name": "@craftedtales/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./*": "./src/*.tsx"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@craftedtales/tsconfig": "workspace:*",
+    "react": "^18.2.0",
+    "typescript": "^5.0.0",
+    "@tamagui/core": "latest"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}

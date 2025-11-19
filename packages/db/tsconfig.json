@@ -1,0 +1,6 @@
+{
+  "extends": "@craftedtales/tsconfig/base.json",
+  "include": [
+    "src"
+  ]
+}
