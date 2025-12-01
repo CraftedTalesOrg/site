@@ -1,11 +1,10 @@
-import { defineConfig } from 'vite';
+import { tamaguiPlugin } from '@tamagui/vite-plugin';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
-import viteTsConfigPaths from 'vite-tsconfig-paths';
-import tailwindcss from '@tailwindcss/vite';
 import { nitro } from 'nitro/vite';
-import { tamaguiPlugin } from '@tamagui/vite-plugin';
+import { defineConfig } from 'vite';
+import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 const config = defineConfig({
   plugins: [
@@ -17,7 +16,6 @@ const config = defineConfig({
       config: './tamagui.config.ts',
       components: ['@craftedtales/ui', 'tamagui'],
     }),
-    tailwindcss(),
     tanstackStart(),
     viteReact({ babel: { plugins: ['babel-plugin-react-compiler'] } }),
   ],

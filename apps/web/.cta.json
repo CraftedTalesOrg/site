@@ -2,7 +2,7 @@
   "projectName": "craftedtales-web",
   "mode": "file-router",
   "typescript": true,
-  "tailwind": true,
+  "tailwind": false,
   "packageManager": "pnpm",
   "addOnOptions": {},
   "git": true,
@@ -16,7 +16,6 @@
     "sentry",
     "compiler",
     "form",
-    "mcp",
     "store",
     "tanstack-query"
   ]

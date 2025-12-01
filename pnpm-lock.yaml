@@ -33,6 +33,9 @@ importers:
       '@types/node':
         specifier: ^20.0.0
         version: 20.19.25
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.1(jiti@2.6.1)
       tsx:
         specifier: ^4.0.0
         version: 4.20.6
@@ -48,9 +51,6 @@ importers:
       '@sentry/tanstackstart-react':
         specifier: ^10.22.0
         version: 10.26.0(react@19.2.0)
-      '@tailwindcss/vite':
-        specifier: ^4.0.6
-        version: 4.1.17(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))
       '@tamagui/core':
         specifier: ^1.138.0
         version: 1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)
@@ -104,16 +104,13 @@ importers:
         version: 0.544.0(react@19.2.0)
       nitro:
         specifier: latest
-        version: 3.0.1-alpha.1(chokidar@3.6.0)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0))(lru-cache@11.2.2)(rollup@4.53.3)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))
+        version: 3.0.1-alpha.1(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0))(lru-cache@11.2.2)(rollup@4.53.3)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))
       react:
         specifier: ^19.2.0
         version: 19.2.0
       react-dom:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
-      tailwindcss:
-        specifier: ^4.0.6
-        version: 4.1.17
       tamagui:
         specifier: ^1.138.0
         version: 1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)
@@ -160,6 +157,9 @@ importers:
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.1(jiti@2.6.1)
       jsdom:
         specifier: ^27.0.0
         version: 27.2.0
@@ -213,6 +213,9 @@ importers:
       drizzle-kit:
         specifier: ^0.20.0
         version: 0.20.18
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.1(jiti@2.6.1)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -231,6 +234,9 @@ importers:
       '@tamagui/theme-builder':
         specifier: ^1.138.0
         version: 1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)
+      tamagui:
+        specifier: ^1.138.0
+        version: 1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)
     devDependencies:
       '@craftedtales/config':
         specifier: workspace:*
@@ -238,6 +244,9 @@ importers:
       '@tamagui/build':
         specifier: ^1.138.0
         version: 1.138.0(@swc/helpers@0.5.17)
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.1(jiti@2.6.1)
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -2186,96 +2195,6 @@ packages:
 
   '@swc/types@0.1.25':
     resolution: {integrity: sha512-iAoY/qRhNH8a/hBvm3zKj9qQ4oc2+3w1unPJa2XvTK3XjeLXtzcCingVPw/9e5mn1+0yPqxcBGp9Jf0pkfMb1g==}
-
-  '@tailwindcss/node@4.1.17':
-    resolution: {integrity: sha512-csIkHIgLb3JisEFQ0vxr2Y57GUNYh447C8xzwj89U/8fdW8LhProdxvnVH6U8M2Y73QKiTIH+LWbK3V2BBZsAg==}
-
-  '@tailwindcss/oxide-android-arm64@4.1.17':
-    resolution: {integrity: sha512-BMqpkJHgOZ5z78qqiGE6ZIRExyaHyuxjgrJ6eBO5+hfrfGkuya0lYfw8fRHG77gdTjWkNWEEm+qeG2cDMxArLQ==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [android]
-
-  '@tailwindcss/oxide-darwin-arm64@4.1.17':
-    resolution: {integrity: sha512-EquyumkQweUBNk1zGEU/wfZo2qkp/nQKRZM8bUYO0J+Lums5+wl2CcG1f9BgAjn/u9pJzdYddHWBiFXJTcxmOg==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@tailwindcss/oxide-darwin-x64@4.1.17':
-    resolution: {integrity: sha512-gdhEPLzke2Pog8s12oADwYu0IAw04Y2tlmgVzIN0+046ytcgx8uZmCzEg4VcQh+AHKiS7xaL8kGo/QTiNEGRog==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [darwin]
-
-  '@tailwindcss/oxide-freebsd-x64@4.1.17':
-    resolution: {integrity: sha512-hxGS81KskMxML9DXsaXT1H0DyA+ZBIbyG/sSAjWNe2EDl7TkPOBI42GBV3u38itzGUOmFfCzk1iAjDXds8Oh0g==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [freebsd]
-
-  '@tailwindcss/oxide-linux-arm-gnueabihf@4.1.17':
-    resolution: {integrity: sha512-k7jWk5E3ldAdw0cNglhjSgv501u7yrMf8oeZ0cElhxU6Y2o7f8yqelOp3fhf7evjIS6ujTI3U8pKUXV2I4iXHQ==}
-    engines: {node: '>= 10'}
-    cpu: [arm]
-    os: [linux]
-
-  '@tailwindcss/oxide-linux-arm64-gnu@4.1.17':
-    resolution: {integrity: sha512-HVDOm/mxK6+TbARwdW17WrgDYEGzmoYayrCgmLEw7FxTPLcp/glBisuyWkFz/jb7ZfiAXAXUACfyItn+nTgsdQ==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@tailwindcss/oxide-linux-arm64-musl@4.1.17':
-    resolution: {integrity: sha512-HvZLfGr42i5anKtIeQzxdkw/wPqIbpeZqe7vd3V9vI3RQxe3xU1fLjss0TjyhxWcBaipk7NYwSrwTwK1hJARMg==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@tailwindcss/oxide-linux-x64-gnu@4.1.17':
-    resolution: {integrity: sha512-M3XZuORCGB7VPOEDH+nzpJ21XPvK5PyjlkSFkFziNHGLc5d6g3di2McAAblmaSUNl8IOmzYwLx9NsE7bplNkwQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-
-  '@tailwindcss/oxide-linux-x64-musl@4.1.17':
-    resolution: {integrity: sha512-k7f+pf9eXLEey4pBlw+8dgfJHY4PZ5qOUFDyNf7SI6lHjQ9Zt7+NcscjpwdCEbYi6FI5c2KDTDWyf2iHcCSyyQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-
-  '@tailwindcss/oxide-wasm32-wasi@4.1.17':
-    resolution: {integrity: sha512-cEytGqSSoy7zK4JRWiTCx43FsKP/zGr0CsuMawhH67ONlH+T79VteQeJQRO/X7L0juEUA8ZyuYikcRBf0vsxhg==}
-    engines: {node: '>=14.0.0'}
-    cpu: [wasm32]
-    bundledDependencies:
-      - '@napi-rs/wasm-runtime'
-      - '@emnapi/core'
-      - '@emnapi/runtime'
-      - '@tybys/wasm-util'
-      - '@emnapi/wasi-threads'
-      - tslib
-
-  '@tailwindcss/oxide-win32-arm64-msvc@4.1.17':
-    resolution: {integrity: sha512-JU5AHr7gKbZlOGvMdb4722/0aYbU+tN6lv1kONx0JK2cGsh7g148zVWLM0IKR3NeKLv+L90chBVYcJ8uJWbC9A==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [win32]
-
-  '@tailwindcss/oxide-win32-x64-msvc@4.1.17':
-    resolution: {integrity: sha512-SKWM4waLuqx0IH+FMDUw6R66Hu4OuTALFgnleKbqhgGU30DY20NORZMZUKgLRjQXNN2TLzKvh48QXTig4h4bGw==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [win32]
-
-  '@tailwindcss/oxide@4.1.17':
-    resolution: {integrity: sha512-F0F7d01fmkQhsTjXezGBLdrl1KresJTcI3DB8EkScCldyKp3Msz4hub4uyYaVnk88BAS1g5DQjjF6F5qczheLA==}
-    engines: {node: '>= 10'}
-
-  '@tailwindcss/vite@4.1.17':
-    resolution: {integrity: sha512-4+9w8ZHOiGnpcGI6z1TVVfWaX/koK7fKeSYF3qlYg2xpBtbteP2ddBxiarL+HVgfSJGeK5RIxRQmKm4rTJJAwA==}
-    peerDependencies:
-      vite: ^5.2.0 || ^6 || ^7
 
   '@tamagui/accordion@1.138.0':
     resolution: {integrity: sha512-fC0wRv+AyNIYaZYZdKnIGn9t+aZq61DGxGwDxDyMwYCKeSYN7f87PpXfA8Jpjb4/0wb5s49nXbLwWAmlG84W/Q==}
@@ -5658,9 +5577,6 @@ packages:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
     engines: {node: '>=10.0.0'}
 
-  tailwindcss@4.1.17:
-    resolution: {integrity: sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==}
-
   tamagui@1.138.0:
     resolution: {integrity: sha512-YGhLFgxjs+GDBcfwUbG8vqecqKkigv0H+6FywbNy7RcltxGiCVs0/OlmSfWgt8e22fsVuBK3Uk8c/JJaL1mfCA==}
     peerDependencies:
@@ -7998,74 +7914,6 @@ snapshots:
   '@swc/types@0.1.25':
     dependencies:
       '@swc/counter': 0.1.3
-
-  '@tailwindcss/node@4.1.17':
-    dependencies:
-      '@jridgewell/remapping': 2.3.5
-      enhanced-resolve: 5.18.3
-      jiti: 2.6.1
-      lightningcss: 1.30.2
-      magic-string: 0.30.21
-      source-map-js: 1.2.1
-      tailwindcss: 4.1.17
-
-  '@tailwindcss/oxide-android-arm64@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-darwin-arm64@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-darwin-x64@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-freebsd-x64@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-linux-arm-gnueabihf@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-linux-arm64-gnu@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-linux-arm64-musl@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-linux-x64-gnu@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-linux-x64-musl@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-wasm32-wasi@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-win32-arm64-msvc@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide-win32-x64-msvc@4.1.17':
-    optional: true
-
-  '@tailwindcss/oxide@4.1.17':
-    optionalDependencies:
-      '@tailwindcss/oxide-android-arm64': 4.1.17
-      '@tailwindcss/oxide-darwin-arm64': 4.1.17
-      '@tailwindcss/oxide-darwin-x64': 4.1.17
-      '@tailwindcss/oxide-freebsd-x64': 4.1.17
-      '@tailwindcss/oxide-linux-arm-gnueabihf': 4.1.17
-      '@tailwindcss/oxide-linux-arm64-gnu': 4.1.17
-      '@tailwindcss/oxide-linux-arm64-musl': 4.1.17
-      '@tailwindcss/oxide-linux-x64-gnu': 4.1.17
-      '@tailwindcss/oxide-linux-x64-musl': 4.1.17
-      '@tailwindcss/oxide-wasm32-wasi': 4.1.17
-      '@tailwindcss/oxide-win32-arm64-msvc': 4.1.17
-      '@tailwindcss/oxide-win32-x64-msvc': 4.1.17
-
-  '@tailwindcss/vite@4.1.17(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))':
-    dependencies:
-      '@tailwindcss/node': 4.1.17
-      '@tailwindcss/oxide': 4.1.17
-      tailwindcss: 4.1.17
-      vite: 7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
 
   '@tamagui/accordion@1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)':
     dependencies:
@@ -10479,7 +10327,8 @@ snapshots:
 
   destroy@1.2.0: {}
 
-  detect-libc@2.1.2: {}
+  detect-libc@2.1.2:
+    optional: true
 
   diff@8.0.2: {}
 
@@ -11495,6 +11344,7 @@ snapshots:
       lightningcss-linux-x64-musl: 1.30.2
       lightningcss-win32-arm64-msvc: 1.30.2
       lightningcss-win32-x64-msvc: 1.30.2
+    optional: true
 
   locate-path@5.0.0:
     dependencies:
@@ -11811,7 +11661,7 @@ snapshots:
 
   nice-try@1.0.5: {}
 
-  nitro@3.0.1-alpha.1(chokidar@3.6.0)(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0))(lru-cache@11.2.2)(rollup@4.53.3)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)):
+  nitro@3.0.1-alpha.1(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0))(lru-cache@11.2.2)(rollup@4.53.3)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)):
     dependencies:
       consola: 3.4.2
       crossws: 0.4.1(srvx@0.9.6)
@@ -11826,7 +11676,7 @@ snapshots:
       srvx: 0.9.6
       undici: 7.16.0
       unenv: 2.0.0-rc.24
-      unstorage: 2.0.0-alpha.4(chokidar@3.6.0)(db0@0.3.4(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0)))(lru-cache@11.2.2)(ofetch@2.0.0-alpha.3)
+      unstorage: 2.0.0-alpha.4(db0@0.3.4(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0)))(lru-cache@11.2.2)(ofetch@2.0.0-alpha.3)
     optionalDependencies:
       rollup: 4.53.3
       vite: 7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
@@ -12576,8 +12426,6 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
 
-  tailwindcss@4.1.17: {}
-
   tamagui@1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0):
     dependencies:
       '@tamagui/accordion': 1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)
@@ -12835,9 +12683,8 @@ snapshots:
       '@unrs/resolver-binding-win32-ia32-msvc': 1.11.1
       '@unrs/resolver-binding-win32-x64-msvc': 1.11.1
 
-  unstorage@2.0.0-alpha.4(chokidar@3.6.0)(db0@0.3.4(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0)))(lru-cache@11.2.2)(ofetch@2.0.0-alpha.3):
+  unstorage@2.0.0-alpha.4(db0@0.3.4(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0)))(lru-cache@11.2.2)(ofetch@2.0.0-alpha.3):
     optionalDependencies:
-      chokidar: 3.6.0
       db0: 0.3.4(drizzle-orm@0.30.10(@opentelemetry/api@1.9.0)(@types/pg@8.15.5)(@types/react@19.2.6)(postgres@3.4.7)(react@19.2.0))
       lru-cache: 11.2.2
       ofetch: 2.0.0-alpha.3

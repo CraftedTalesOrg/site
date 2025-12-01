@@ -27,7 +27,7 @@ pnpm test
 
 ## Styling
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+This project uses [Tamagui](https://tamagui.dev/) for styling.
 
 
 ## Linting & Formatting

@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@craftedtales/config": "workspace:*",
+    "eslint": "^9.39.1",
     "drizzle-kit": "^0.20.0",
     "typescript": "^5.0.0"
   }

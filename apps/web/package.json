@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@sentry/tanstackstart-react": "^10.22.0",
-    "@tailwindcss/vite": "^4.0.6",
     "@tanstack/db": "^0.4.3",
     "@craftedtales/ui": "workspace:*",
     "@tamagui/core": "^1.138.0",
@@ -37,12 +36,12 @@
     "nitro": "latest",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.0.6",
     "vite-tsconfig-paths": "^5.1.4",
     "zod": "4.1.11"
   },
   "devDependencies": {
     "@craftedtales/config": "workspace:*",
+    "eslint": "^9.39.1",
     "@tamagui/vite-plugin": "^1.138.0",
     "@tanstack/devtools-event-client": "^0.3.2",
     "@tanstack/devtools-vite": "^0.3.11",

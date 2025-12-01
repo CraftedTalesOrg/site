@@ -1,9 +1,11 @@
-import { defaultConfig } from '@tamagui/config/v4';
 import { createTamagui } from '@tamagui/core';
+import { defaultConfig } from '@tamagui/config/v4';
 import { themes } from './themes';
+import { tokens } from './tokens';
 
 export const config = createTamagui({
   ...defaultConfig,
+  tokens,
   themes,
   shorthands: {
     ai: 'alignItems',

@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TamaguiProvider } from 'tamagui';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import appCss from '../styles.css?url';
 import type { JSX } from 'react';
@@ -46,6 +47,7 @@ function RootDocument({ children }: { children: React.ReactNode }): JSX.Element 
         <TamaguiProvider config={config} defaultTheme={'dark'}>
           <Header />
           {children}
+          <Footer />
           <TanStackDevtools
             config={{ position: 'bottom-right' }}
             plugins={[
