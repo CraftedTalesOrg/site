@@ -234,6 +234,9 @@ importers:
       '@tamagui/theme-builder':
         specifier: ^1.138.0
         version: 1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)
+      '@tanstack/react-router':
+        specifier: ^1.120.5
+        version: 1.136.11(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       tamagui:
         specifier: ^1.138.0
         version: 1.138.0(react-dom@19.2.0(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.2.6)(react@19.2.0))(react@19.2.0)
@@ -244,6 +247,9 @@ importers:
       '@tamagui/build':
         specifier: ^1.138.0
         version: 1.138.0(@swc/helpers@0.5.17)
+      '@types/react':
+        specifier: ^19.2.6
+        version: 19.2.6
       eslint:
         specifier: ^9.39.1
         version: 9.39.1(jiti@2.6.1)

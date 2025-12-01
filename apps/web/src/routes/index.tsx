@@ -50,7 +50,7 @@ function App(): JSX.Element {
   ];
 
   return (
-    <YStack flex={1} bg={'#010206'}>
+    <YStack flex={1} bg={'$background'}>
       {/* Hero Section */}
       <YStack py={'$10'}>
         <YStack px={'$4'} >

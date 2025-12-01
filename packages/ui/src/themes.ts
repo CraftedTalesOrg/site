@@ -1,12 +1,15 @@
 import { tokens } from './tokens';
 
+// Light theme using $tokenName CSS variable references
+// Scale: 1=bg, 2=subtle bg, 3=UI bg, 4=hover UI, 5=active UI, 6=subtle border, 7=strong border, 8=hover border, 9=primary, 10=hover primary, 11=subtle text, 12=text
 const light = {
   background: tokens.color.light1,
-  backgroundHover: tokens.color.light2,
-  backgroundPress: tokens.color.light3,
-  backgroundFocus: tokens.color.light2,
-  backgroundStrong: tokens.color.light2,
+  backgroundHover: tokens.color.light4,
+  backgroundPress: tokens.color.light5,
+  backgroundFocus: tokens.color.light4,
+  backgroundStrong: tokens.color.light3,
   backgroundTransparent: 'rgba(0,0,0,0)',
+  backgroundSubtle: tokens.color.light2,
 
   color: tokens.color.light12,
   colorHover: tokens.color.light12,
@@ -14,18 +17,21 @@ const light = {
   colorFocus: tokens.color.light12,
   colorTransparent: 'rgba(0,0,0,0)',
 
-  borderColor: tokens.color.light4,
-  borderColorHover: tokens.color.light5,
-  borderColorFocus: tokens.color.light6,
-  borderColorPress: tokens.color.light5,
+  borderColor: tokens.color.light6,
+  borderColorHover: tokens.color.light8,
+  borderColorFocus: tokens.color.light7,
+  borderColorPress: tokens.color.light7,
 
-  placeholderColor: tokens.color.light8,
-  outlineColor: tokens.color.light6,
+  placeholderColor: tokens.color.light11,
+  outlineColor: tokens.color.light7,
 
   // Semantic colors
-  muted: tokens.color.light5,
-  mutedForeground: tokens.color.light10,
-  accent: tokens.color.accentLight5,
+  primary: tokens.color.light9,
+  primaryHover: tokens.color.light10,
+  muted: tokens.color.light3,
+  mutedForeground: tokens.color.light11,
+  accent: tokens.color.accentLight9,
+  accentHover: tokens.color.accentLight10,
   accentForeground: tokens.color.accentLight12,
 
   // Shadows
@@ -35,15 +41,18 @@ const light = {
   shadowColorFocus: tokens.shadow.light2,
 };
 
-type Theme = typeof light;
+type BaseTheme = typeof light;
 
-export const dark: Theme = {
+// Dark theme
+// Scale: 1=bg, 2=subtle bg, 3=UI bg, 4=hover UI, 5=active UI, 6=subtle border, 7=strong border, 8=hover border, 9=primary, 10=hover primary, 11=subtle text, 12=text
+export const dark: BaseTheme = {
   background: tokens.color.dark1,
-  backgroundHover: tokens.color.dark2,
-  backgroundPress: tokens.color.dark3,
-  backgroundFocus: tokens.color.dark2,
+  backgroundHover: tokens.color.dark4,
+  backgroundPress: tokens.color.dark5,
+  backgroundFocus: tokens.color.dark4,
   backgroundStrong: tokens.color.dark3,
   backgroundTransparent: 'rgba(0,0,0,0)',
+  backgroundSubtle: tokens.color.dark2,
 
   color: tokens.color.dark12,
   colorHover: tokens.color.dark12,
@@ -51,18 +60,21 @@ export const dark: Theme = {
   colorFocus: tokens.color.dark12,
   colorTransparent: 'rgba(0,0,0,0)',
 
-  borderColor: tokens.color.dark3,
-  borderColorHover: tokens.color.dark4,
-  borderColorFocus: tokens.color.dark5,
-  borderColorPress: tokens.color.dark4,
+  borderColor: tokens.color.dark6,
+  borderColorHover: tokens.color.dark8,
+  borderColorFocus: tokens.color.dark7,
+  borderColorPress: tokens.color.dark7,
 
-  placeholderColor: tokens.color.dark8,
-  outlineColor: tokens.color.dark5,
+  placeholderColor: tokens.color.dark11,
+  outlineColor: tokens.color.dark7,
 
   // Semantic colors
-  muted: tokens.color.dark5,
-  mutedForeground: tokens.color.dark10,
-  accent: tokens.color.accentDark5,
+  primary: tokens.color.dark9,
+  primaryHover: tokens.color.dark10,
+  muted: tokens.color.dark3,
+  mutedForeground: tokens.color.dark11,
+  accent: tokens.color.accentDark9,
+  accentHover: tokens.color.accentDark10,
   accentForeground: tokens.color.accentDark12,
 
   // Shadows
@@ -75,4 +87,6 @@ export const dark: Theme = {
 export const themes = {
   light,
   dark,
-};
+} as const;
+
+export type ThemeName = keyof typeof themes;

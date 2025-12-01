@@ -1,4 +1,5 @@
 import { config } from '@craftedtales/ui';
+import { TamaguiProvider, Theme } from 'tamagui';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
@@ -7,9 +8,9 @@ import {
   createRootRouteWithContext
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { TamaguiProvider } from 'tamagui';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { ThemeContext, useThemeState } from '../hooks/useTheme';
 import appCss from '../styles.css?url';
 import type { JSX } from 'react';
 import type { QueryClient } from '@tanstack/react-query';
@@ -32,34 +33,46 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         href: appCss,
       },
     ],
+    scripts: [
+      {
+        // Prevent animation flash on load
+        children: "document.documentElement.classList.add('t_unmounted')",
+      },
+    ],
   }),
 
   shellComponent: RootDocument,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }): JSX.Element {
+  const themeState = useThemeState('dark');
+
   return (
     <html lang={'en'}>
       <head>
         <HeadContent />
       </head>
       <body>
-        <TamaguiProvider config={config} defaultTheme={'dark'}>
-          <Header />
-          {children}
-          <Footer />
-          <TanStackDevtools
-            config={{ position: 'bottom-right' }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-              {
-                name: 'Tanstack Query',
-                render: <ReactQueryDevtools />,
-              },
-            ]} />
+        <TamaguiProvider config={config} defaultTheme={themeState.theme}>
+          <ThemeContext value={themeState}>
+            <Theme name={themeState.theme}>
+              <Header />
+              {children}
+              <Footer />
+              <TanStackDevtools
+                config={{ position: 'bottom-right' }}
+                plugins={[
+                  {
+                    name: 'Tanstack Router',
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                  {
+                    name: 'Tanstack Query',
+                    render: <ReactQueryDevtools />,
+                  },
+                ]} />
+            </Theme>
+          </ThemeContext>
         </TamaguiProvider>
         <Scripts />
       </body>

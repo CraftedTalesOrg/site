@@ -3,26 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "dist/cjs",
-  "module": "dist/esm",
-  "module:jsx": "dist/jsx",
-  "types": "types/index.d.ts",
+  "main": "src/index.ts",
   "files": [
-    "types",
-    "src",
-    "dist"
+    "src"
   ],
   "sideEffects": [
     "*.css"
   ],
-  "exports": {
-    ".": {
-      "types": "./types/index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js",
-      "default": "./dist/esm/index.mjs"
-    }
-  },
   "scripts": {
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
@@ -31,12 +18,14 @@
   },
   "devDependencies": {
     "@craftedtales/config": "workspace:*",
-    "eslint": "^9.39.1",
     "@tamagui/build": "^1.138.0",
+    "@types/react": "^19.2.6",
+    "eslint": "^9.39.1",
     "react": "^19.2.0",
     "typescript": "^5.0.0"
   },
   "peerDependencies": {
+    "@tanstack/react-router": "*",
     "react": "*"
   },
   "dependencies": {
@@ -44,6 +33,7 @@
     "@tamagui/config": "^1.138.0",
     "@tamagui/core": "^1.138.0",
     "@tamagui/theme-builder": "^1.138.0",
+    "@tanstack/react-router": "^1.120.5",
     "tamagui": "^1.138.0"
   }
 }

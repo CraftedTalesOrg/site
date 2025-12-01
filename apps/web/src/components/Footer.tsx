@@ -1,27 +1,29 @@
 import { Link } from '@tanstack/react-router';
-import { Paragraph, XStack, YStack } from 'tamagui';
+import { SizableText, View, XStack, YStack } from 'tamagui';
 import type { JSX } from 'react';
 
 export default function Footer(): JSX.Element {
   return (
-    <YStack tag={'footer'} mt={'$10'} py={'$8'} borderTopWidth={1}>
-      <YStack ai={'center'} jc={'center'} gap={'$4'}>
-        <Paragraph size={'$3'} >
-          ©
-          {' '}
-          {new Date().getFullYear()}
-          {' '}
-          CraftedTales. All rights reserved.
-        </Paragraph>
-        <XStack gap={'$6'}>
-          <Link to={'/'}>
-            <Paragraph size={'$3'}>Privacy Policy</Paragraph>
-          </Link>
-          <Link to={'/'}>
-            <Paragraph size={'$3'}>Terms of Service</Paragraph>
-          </Link>
-        </XStack>
+    <View bg={'$background'}>
+      <YStack tag={'footer'} py={'$8'} borderTopWidth={1}>
+        <YStack ai={'center'} jc={'center'} gap={'$4'}>
+          <SizableText size={'$3'} >
+            ©
+            {' '}
+            {new Date().getFullYear()}
+            {' '}
+            CraftedTales. All rights reserved.
+          </SizableText>
+          <XStack gap={'$6'}>
+            <Link to={'/'}>
+              <SizableText size={'$3'}>Privacy Policy</SizableText>
+            </Link>
+            <Link to={'/'}>
+              <SizableText size={'$3'}>Terms of Service</SizableText>
+            </Link>
+          </XStack>
+        </YStack>
       </YStack>
-    </YStack>
+    </View>
   );
 }

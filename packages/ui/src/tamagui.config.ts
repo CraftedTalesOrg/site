@@ -33,7 +33,14 @@ export const config = createTamagui({
     minH: 'minHeight',
     maxH: 'maxHeight',
   } as const,
-  settings: { allowedStyleValues: 'somewhat-strict' },
+  settings: {
+    allowedStyleValues: 'somewhat-strict',
+    onlyAllowShorthands: false,
+  },
 });
 
 export type CraftedTalesUIConfig = typeof config;
+
+declare module 'tamagui' {
+  interface TamaguiCustomConfig extends CraftedTalesUIConfig {}
+}
