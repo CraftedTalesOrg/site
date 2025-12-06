@@ -6,8 +6,12 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
+    "lib": [
+      "ES2022",
+      "WebWorker"
+    ],
     "types": [
-      "node"
+      "@cloudflare/workers-types"
     ]
   },
   "include": [
