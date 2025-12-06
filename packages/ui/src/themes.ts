@@ -62,15 +62,15 @@ export const dark: BaseTheme = {
 
   borderColor: tokens.color.dark6,
   borderColorHover: tokens.color.dark8,
-  borderColorFocus: tokens.color.dark7,
-  borderColorPress: tokens.color.dark7,
+  borderColorFocus: tokens.color.primaryDark7,
+  borderColorPress: tokens.color.primaryDark7,
 
-  placeholderColor: tokens.color.dark11,
-  outlineColor: tokens.color.dark7,
+  placeholderColor: tokens.color.primaryDark11,
+  outlineColor: tokens.color.primaryDark7,
 
   // Semantic colors
-  primary: tokens.color.dark9,
-  primaryHover: tokens.color.dark10,
+  primary: tokens.color.primaryDark9,
+  primaryHover: tokens.color.primaryDark10,
   muted: tokens.color.dark3,
   mutedForeground: tokens.color.dark11,
   accent: tokens.color.accentDark9,

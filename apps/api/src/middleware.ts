@@ -5,7 +5,6 @@ import { logger } from 'hono/logger';
 import { prettyJSON } from 'hono/pretty-json';
 import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
-import { unknown } from 'zod/v4';
 
 // Core middleware
 export const createCoreMiddleware = (): MiddlewareHandler => async (_c, next) => next();
