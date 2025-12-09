@@ -1,4 +1,3 @@
-import { tamaguiPlugin } from '@tamagui/vite-plugin';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
@@ -12,10 +11,6 @@ const config = defineConfig({
     nitro(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({ projects: ['./tsconfig.json'] }),
-    tamaguiPlugin({
-      config: './tamagui.config.ts',
-      components: ['@craftedtales/ui', 'tamagui'],
-    }),
     tanstackStart(),
     viteReact({ babel: { plugins: ['babel-plugin-react-compiler'] } }),
   ],

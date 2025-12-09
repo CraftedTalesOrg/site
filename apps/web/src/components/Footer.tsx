@@ -1,149 +1,206 @@
-import { Link } from '@tanstack/react-router';
-import { Github, MessageCircle, Twitter } from 'lucide-react';
-import { Button, H3, Paragraph, SizableText, View, XStack, YStack } from 'tamagui';
 import type { JSX } from 'react';
+import { Box, Flex, Grid, HStack, Text } from '@chakra-ui/react';
+import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
-const footerLinks = {
-  explore: [
-    { label: 'Mods', href: '/mods' },
-    { label: 'Plugins', href: '/plugins' },
-    { label: 'Resource Packs', href: '/resource-packs' },
-    { label: 'Modpacks', href: '/modpacks' },
-  ],
-  community: [
-    { label: 'Discord', href: '/discord' },
-    { label: 'Forums', href: '/forums' },
-    { label: 'Creators', href: '/creators' },
-    { label: 'Blog', href: '/blog' },
-  ],
-  legal: [
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Service', href: '/terms' },
-    { label: 'DMCA', href: '/dmca' },
-    { label: 'Contact', href: '/contact' },
-  ],
-};
+interface FooterLinkProps {
+  to: string;
+  children: React.ReactNode;
+}
 
-const socialLinks = [
-  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: MessageCircle, href: 'https://discord.gg', label: 'Discord' },
-];
+function FooterLink({ to, children }: FooterLinkProps): JSX.Element {
+  return (
+    <Link
+      to={to}
+      style={{
+        color: 'var(--chakra-colors-text-secondary)',
+        fontSize: '0.9rem',
+        textDecoration: 'none',
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+interface SocialLinkProps {
+  href: string;
+  icon: string;
+}
+
+function SocialLink({ href, icon }: SocialLinkProps): JSX.Element {
+  return (
+    <a
+      href={href}
+      target={'_blank'}
+      rel={'noopener noreferrer'}
+      style={{
+        display: 'flex',
+        width: '40px',
+        height: '40px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--chakra-colors-bg-card)',
+        border: '1px solid var(--chakra-colors-border-base)',
+        borderRadius: '10px',
+        color: 'var(--chakra-colors-text-secondary)',
+        textDecoration: 'none',
+      }}
+    >
+      {icon}
+    </a>
+  );
+}
+
+interface FooterSectionProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+function FooterSection({ title, children }: FooterSectionProps): JSX.Element {
+  return (
+    <Box>
+      <Text
+        fontFamily={'heading'}
+        fontSize={'lg'}
+        fontWeight={'semibold'}
+        mb={'6'}
+        color={'text.primary'}
+      >
+        {title}
+      </Text>
+      <Flex direction={'column'} gap={'3'}>
+        {children}
+      </Flex>
+    </Box>
+  );
+}
 
 export default function Footer(): JSX.Element {
+  const { t } = useTranslation();
+
+  const footerSections = [
+    {
+      title: t($ => $.COMMON.FOOTER.SECTIONS.EXPLORE.TITLE),
+      links: [
+        { to: '/mods', label: t($ => $.COMMON.FOOTER.SECTIONS.EXPLORE.BROWSE_MODS) },
+        { to: '/categories', label: t($ => $.COMMON.FOOTER.SECTIONS.EXPLORE.CATEGORIES) },
+        { to: '/popular', label: t($ => $.COMMON.FOOTER.SECTIONS.EXPLORE.POPULAR) },
+        { to: '/new', label: t($ => $.COMMON.FOOTER.SECTIONS.EXPLORE.NEW_TRENDING) },
+      ],
+    },
+    {
+      title: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.TITLE),
+      links: [
+        { to: '/creators', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.CREATORS) },
+        { to: '/discord', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.DISCORD) },
+        { to: '/forums', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.FORUMS) },
+        { to: '/blog', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.BLOG) },
+      ],
+    },
+    {
+      title: t($ => $.COMMON.FOOTER.SECTIONS.SUPPORT.TITLE),
+      links: [
+        { to: '/help', label: t($ => $.COMMON.FOOTER.SECTIONS.SUPPORT.HELP_CENTER) },
+        { to: '/docs', label: t($ => $.COMMON.FOOTER.SECTIONS.SUPPORT.DOCUMENTATION) },
+        { to: '/contact', label: t($ => $.COMMON.FOOTER.SECTIONS.SUPPORT.CONTACT) },
+        { to: '/terms', label: t($ => $.COMMON.FOOTER.SECTIONS.SUPPORT.TERMS) },
+      ],
+    },
+  ];
+
+  const socialLinks = [
+    { href: 'https://twitter.com', icon: '𝕏' },
+    { href: 'https://discord.com', icon: '💬' },
+    { href: 'https://github.com', icon: '🐙' },
+  ];
+
   return (
-    <View bg={'$backgroundSubtle'} borderTopWidth={1} borderTopColor={'$borderColor'}>
-      <YStack tag={'footer'} py={'$10'} px={'$6'} maxWidth={1400} mx={'auto'} w={'100%'}>
-        {/* Main footer content */}
-        <XStack flexWrap={'wrap'} gap={'$10'} mb={'$10'}>
-          {/* Brand section */}
-          <YStack flex={1} minWidth={280} gap={'$4'}>
-            <XStack ai={'center'} gap={'$3'}>
-              <YStack
-                w={42}
-                h={42}
-                ai={'center'}
-                jc={'center'}
-                borderRadius={'$3'}
-                bg={'$primary'}
-              >
-                <SizableText fontSize={20}>{'🎮'}</SizableText>
-              </YStack>
-              <H3
-                size={'$6'}
-                fontWeight={'700'}
-                style={{
-                  backgroundImage: 'linear-gradient(135deg, var(--accent), var(--primary))',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                {'CraftedTales'}
-              </H3>
-            </XStack>
-            <Paragraph size={'$3'} color={'$mutedForeground'} maxWidth={300}>
-              {'The #1 community for Hytale mods, plugins, and resource packs. Built by modders, for modders.'}
-            </Paragraph>
-          </YStack>
-
-          {/* Explore links */}
-          <YStack minWidth={150} gap={'$4'}>
-            <H3 size={'$4'} fontWeight={'600'}>{'Explore'}</H3>
-            <YStack gap={'$3'}>
-              {footerLinks.explore.map(link => (
-                <Link key={link.label} to={link.href}>
-                  <SizableText size={'$3'} color={'$mutedForeground'} hoverStyle={{ color: '$color' }}>
-                    {link.label}
-                  </SizableText>
-                </Link>
-              ))}
-            </YStack>
-          </YStack>
-
-          {/* Community links */}
-          <YStack minWidth={150} gap={'$4'}>
-            <H3 size={'$4'} fontWeight={'600'}>{'Community'}</H3>
-            <YStack gap={'$3'}>
-              {footerLinks.community.map(link => (
-                <Link key={link.label} to={link.href}>
-                  <SizableText size={'$3'} color={'$mutedForeground'} hoverStyle={{ color: '$color' }}>
-                    {link.label}
-                  </SizableText>
-                </Link>
-              ))}
-            </YStack>
-          </YStack>
-
-          {/* Legal links */}
-          <YStack minWidth={150} gap={'$4'}>
-            <H3 size={'$4'} fontWeight={'600'}>{'Legal'}</H3>
-            <YStack gap={'$3'}>
-              {footerLinks.legal.map(link => (
-                <Link key={link.label} to={link.href}>
-                  <SizableText size={'$3'} color={'$mutedForeground'} hoverStyle={{ color: '$color' }}>
-                    {link.label}
-                  </SizableText>
-                </Link>
-              ))}
-            </YStack>
-          </YStack>
-        </XStack>
-
-        {/* Bottom bar */}
-        <XStack
-          pt={'$6'}
-          borderTopWidth={1}
-          borderTopColor={'$borderColor'}
-          jc={'space-between'}
-          ai={'center'}
-          flexWrap={'wrap'}
-          gap={'$4'}
+    <Box
+      as={'footer'}
+      position={'relative'}
+      zIndex={'1'}
+      bg={'bg.secondary'}
+      borderTop={'1px solid'}
+      borderColor={'border.base'}
+      px={'8'}
+      pt={'16'}
+      pb={'8'}
+    >
+      <Box maxW={'1200px'} mx={'auto'}>
+        {/* Footer Content */}
+        <Grid
+          templateColumns={{ base: '1fr', md: '2fr 1fr 1fr 1fr' }}
+          gap={'16'}
+          mb={'12'}
         >
-          <SizableText size={'$2'} color={'$mutedForeground'}>
-            {'© '}
-            {new Date().getFullYear()}
-            {' '}
-            {'CraftedTales. All rights reserved.'}
-          </SizableText>
+          {/* Brand Section */}
+          <Box>
+            <Flex align={'center'} gap={'3'} mb={'4'}>
+              <Box
+                w={'42px'}
+                h={'42px'}
+                bgGradient={'to-br'}
+                gradientFrom={'brand.cyan.500'}
+                gradientTo={'brand.purple.500'}
+                borderRadius={'10px'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                fontSize={'2xl'}
+                boxShadow={'glow.cyan'}
+              >
+                {'🎮'}
+              </Box>
+              <Text
+                fontFamily={'heading'}
+                fontSize={'2xl'}
+                fontWeight={'bold'}
+                bgGradient={'to-br'}
+                gradientFrom={'brand.cyan.500'}
+                gradientTo={'brand.purple.500'}
+                bgClip={'text'}
+              >
+                {t($ => $.COMMON.APP_NAME)}
+              </Text>
+            </Flex>
+            <Text color={'text.secondary'} fontSize={'md'} maxW={'300px'}>
+              {t($ => $.COMMON.FOOTER.BRAND.DESCRIPTION)}
+            </Text>
+          </Box>
 
-          <XStack gap={'$3'}>
-            {socialLinks.map(social => (
-              <Button
-                key={social.label}
-                size={'$3'}
-                circular
-                bg={'$backgroundStrong'}
-                borderWidth={1}
-                borderColor={'$borderColor'}
-                icon={<social.icon size={18} />}
-                aria-label={social.label}
-                hoverStyle={{ borderColor: '$accent', bg: '$backgroundHover' }}
-              />
+          {/* Footer Sections */}
+          {footerSections.map((section, index) => (
+            <FooterSection key={index} title={section.title}>
+              {section.links.map(link => (
+                <FooterLink key={link.to} to={link.to}>
+                  {link.label}
+                </FooterLink>
+              ))}
+            </FooterSection>
+          ))}
+        </Grid>
+
+        {/* Footer Bottom */}
+        <Flex
+          pt={'8'}
+          borderTop={'1px solid'}
+          borderColor={'border.base'}
+          justify={'space-between'}
+          align={'center'}
+          direction={{ base: 'column', md: 'row' }}
+          gap={'4'}
+        >
+          <Text color={'text.muted'} fontSize={'sm'}>
+            {t($ => $.COMMON.FOOTER.COPYRIGHT, { year: new Date().getFullYear() })}
+          </Text>
+          <HStack gap={'4'}>
+            {socialLinks.map(link => (
+              <SocialLink key={link.href} href={link.href} icon={link.icon} />
             ))}
-          </XStack>
-        </XStack>
-      </YStack>
-    </View>
+          </HStack>
+        </Flex>
+      </Box>
+    </Box>
   );
 }

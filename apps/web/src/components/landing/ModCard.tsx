@@ -1,98 +1,120 @@
-import { Card } from '@craftedtales/ui';
+import { Box, Text, Flex } from '@chakra-ui/react';
+import type { JSX } from 'react';
 import { Download, Star } from 'lucide-react';
-import { H3, Paragraph, XStack, YStack } from 'tamagui';
-import type { JSX, ReactNode } from 'react';
 
 interface ModCardProps {
-  icon: ReactNode;
-  title: string;
-  category: string;
-  description: string;
-  downloads: number;
-  rating: number;
+  icon: JSX.Element;
   badge?: string;
+  category: string;
+  title: string;
+  description: string;
+  downloads: string;
+  rating: string;
 }
 
-export function ModCard({
+export default function ModCard({
   icon,
-  title,
+  badge,
   category,
+  title,
   description,
   downloads,
   rating,
-  badge,
 }: ModCardProps): JSX.Element {
   return (
-    <Card p={'$0'}>
-      {/* Image area */}
-      <YStack
-        h={180}
-        bg={'$backgroundSubtle'}
-        ai={'center'}
-        jc={'center'}
-        position={'relative'}>
+    <Box
+      bg={'bg.card'}
+      border={'1px solid'}
+      borderColor={'border.default'}
+      borderRadius={'16px'}
+      overflow={'hidden'}
+      transition={'all 0.4s ease'}
+      cursor={'pointer'}
+      _hover={{
+        transform: 'translateY(-5px)',
+        borderColor: 'brand.purple.500',
+        boxShadow: 'glow.purple',
+      }}
+    >
+      <Box
+        width={'100%'}
+        height={'180px'}
+        bgGradient={'to-br'}
+        gradientFrom={'bg.tertiary'}
+        gradientTo={'bg.secondary'}
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        fontSize={'4rem'}
+        color={'text.muted'}
+        position={'relative'}
+      >
         {icon}
-        {badge ? (
-          <XStack
+        {badge && (
+          <Box
             position={'absolute'}
-            top={'$3'}
-            right={'$3'}
-            bg={'$accent'}
-            px={'$3'}
-            py={'$1'}
-            borderRadius={'$10'}>
-            <Paragraph size={'$1'} fontWeight={'700'} textTransform={'uppercase'} color={'$background'}>
-              {badge}
-            </Paragraph>
-          </XStack>
-        ) : null}
-      </YStack>
-
-      {/* Content */}
-      <YStack p={'$5'} gap={'$3'}>
-        <XStack>
-          <XStack
-            bg={'$backgroundSubtle'}
-            px={'$3'}
-            py={'$1'}
-            borderRadius={'$10'}>
-            <Paragraph size={'$1'} fontWeight={'600'} textTransform={'uppercase'} color={'$primary'}>
-              {category}
-            </Paragraph>
-          </XStack>
-        </XStack>
-
-        <H3 size={'$6'} fontWeight={'600'}>
+            top={4}
+            right={4}
+            px={3}
+            py={'0.35rem'}
+            bg={'brand.orange.500'}
+            color={'white'}
+            borderRadius={'20px'}
+            fontSize={'0.7rem'}
+            fontWeight={'700'}
+            textTransform={'uppercase'}
+          >
+            {badge}
+          </Box>
+        )}
+      </Box>
+      <Box p={6}>
+        <Box
+          display={'inline-block'}
+          px={3}
+          py={1}
+          bg={'rgba(139, 92, 246, 0.15)'}
+          color={'brand.purple.500'}
+          borderRadius={'20px'}
+          fontSize={'0.7rem'}
+          fontWeight={'600'}
+          textTransform={'uppercase'}
+          mb={3}
+        >
+          {category}
+        </Box>
+        <Text
+          fontFamily={'heading'}
+          fontSize={'1.35rem'}
+          fontWeight={'600'}
+          mb={2}
+        >
           {title}
-        </H3>
-
-        <Paragraph
-          size={'$3'}
-          color={'$mutedForeground'}
-          numberOfLines={2}>
+        </Text>
+        <Text
+          fontSize={'0.9rem'}
+          color={'text.secondary'}
+          mb={4}
+          maxLines={2}
+        >
           {description}
-        </Paragraph>
-
-        {/* Stats */}
-        <XStack
-          gap={'$5'}
-          pt={'$3'}
-          borderTopWidth={1}
-          borderTopColor={'$borderColor'}>
-          <XStack ai={'center'} gap={'$2'}>
-            <Download size={16} color={'var(--mutedForeground)'} />
-            <Paragraph size={'$3'} color={'$mutedForeground'}>
-              {downloads >= 1000 ? `${(downloads / 1000).toFixed(1)}k` : downloads}
-            </Paragraph>
-          </XStack>
-          <XStack ai={'center'} gap={'$2'}>
-            <Star size={16} color={'var(--mutedForeground)'} />
-            <Paragraph size={'$3'} color={'$mutedForeground'}>
-              {rating.toFixed(1)}
-            </Paragraph>
-          </XStack>
-        </XStack>
-      </YStack>
-    </Card>
+        </Text>
+        <Flex
+          gap={6}
+          pt={4}
+          borderTop={'1px solid'}
+          borderColor={'border.default'}
+        >
+          <Flex align={'center'} gap={2} fontSize={'0.85rem'} color={'text.muted'}>
+            <Download size={16} />
+            <Text>{downloads}</Text>
+          </Flex>
+          <Flex align={'center'} gap={2} fontSize={'0.85rem'} color={'text.muted'}>
+            <Star size={16} />
+            <Text>{rating}</Text>
+          </Flex>
+        </Flex>
+      </Box>
+    </Box>
   );
 }

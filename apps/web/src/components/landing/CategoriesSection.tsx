@@ -1,54 +1,77 @@
-import { YStack } from 'tamagui';
+import { Box, Container, Text, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
-import {
-  Blocks,
-  Boxes,
-  Code2,
-  Image,
-  Package,
-  Puzzle,
-  Users,
-  Zap,
-} from 'lucide-react';
-import { CategoryCard } from './CategoryCard';
-import { SectionHeader } from '../SectionHeader';
+import { useTranslation } from 'react-i18next';
+import { Sword, Wand2, Globe, Sparkles, Package, Image, Palette, FileCode } from 'lucide-react';
+import CategoryCard from './CategoryCard';
 
-const categories = [
-  { icon: <Puzzle size={32} color={'var(--accent)'} />, name: 'Mods', count: 1234 },
-  { icon: <Package size={32} color={'var(--accent)'} />, name: 'Plugins', count: 567 },
-  { icon: <Image size={32} color={'var(--accent)'} />, name: 'Resource Packs', count: 890 },
-  { icon: <Boxes size={32} color={'var(--accent)'} />, name: 'Modpacks', count: 234 },
-  { icon: <Zap size={32} color={'var(--accent)'} />, name: 'Shaders', count: 123 },
-  { icon: <Blocks size={32} color={'var(--accent)'} />, name: 'Maps', count: 456 },
-  { icon: <Code2 size={32} color={'var(--accent)'} />, name: 'Tools', count: 78 },
-  { icon: <Users size={32} color={'var(--accent)'} />, name: 'Server Plugins', count: 345 },
+type CategoryKey = 'COMBAT' | 'MAGIC' | 'WORLD' | 'ADVENTURE' | 'ITEMS' | 'GRAPHICS' | 'TEXTURES' | 'UTILITY';
+
+const categories: { icon: JSX.Element; key: CategoryKey }[] = [
+  { icon: <Sword size={32} />, key: 'COMBAT' },
+  { icon: <Wand2 size={32} />, key: 'MAGIC' },
+  { icon: <Globe size={32} />, key: 'WORLD' },
+  { icon: <Sparkles size={32} />, key: 'ADVENTURE' },
+  { icon: <Package size={32} />, key: 'ITEMS' },
+  { icon: <Image size={32} />, key: 'GRAPHICS' },
+  { icon: <Palette size={32} />, key: 'TEXTURES' },
+  { icon: <FileCode size={32} />, key: 'UTILITY' },
 ];
 
-export function CategoriesSection(): JSX.Element {
+export default function CategoriesSection(): JSX.Element {
+  const { t } = useTranslation();
+
   return (
-    <YStack bg={'$backgroundSubtle'} py={'$12'} px={'$4'}>
-      <SectionHeader
-        tag={'Categories'}
-        title={'Explore by Category'}
-        subtitle={'Find exactly what you\'re looking for in our organized collection.'}
-      />
-      <YStack
-        maxWidth={1200}
-        mx={'auto'}
-        width={'100%'}
-        gridTemplateColumns={'repeat(4, 1fr)'}
-        gap={'$4'}
-        style={{ display: 'grid' }}
-      >
-        {categories.map(category => (
-          <CategoryCard
-            key={category.name}
-            icon={category.icon}
-            name={category.name}
-            count={category.count}
-          />
-        ))}
-      </YStack>
-    </YStack>
+    <Box
+      as={'section'}
+      position={'relative'}
+      zIndex={1}
+      py={24}
+      px={8}
+      bg={'bg.secondary'}
+    >
+      <Container maxWidth={'1200px'}>
+        <Box textAlign={'center'} maxWidth={'700px'} mx={'auto'} mb={16}>
+          <Box
+            display={'inline-block'}
+            px={4}
+            py={2}
+            bg={'rgba(139, 92, 246, 0.15)'}
+            color={'brand.purple.500'}
+            borderRadius={'20px'}
+            fontSize={'0.8rem'}
+            fontWeight={'600'}
+            textTransform={'uppercase'}
+            letterSpacing={'1px'}
+            mb={4}
+          >
+            {t($ => $.LANDING.CATEGORIES.TAG)}
+          </Box>
+          <Text
+            fontFamily={'heading'}
+            fontSize={'2.75rem'}
+            fontWeight={'700'}
+            mb={4}
+          >
+            {t($ => $.LANDING.CATEGORIES.TITLE)}
+          </Text>
+          <Text color={'text.secondary'} fontSize={'1.1rem'}>
+            {t($ => $.LANDING.CATEGORIES.SUBTITLE)}
+          </Text>
+        </Box>
+        <Grid
+          templateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }}
+          gap={6}
+        >
+          {categories.map(category => (
+            <CategoryCard
+              key={category.key}
+              icon={category.icon}
+              name={t($ => $.LANDING.CATEGORIES.ITEMS[category.key].NAME)}
+              count={t($ => $.LANDING.CATEGORIES.ITEMS[category.key].COUNT)}
+            />
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 }

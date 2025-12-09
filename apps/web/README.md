@@ -27,7 +27,7 @@ pnpm test
 
 ## Styling
 
-This project uses [Tamagui](https://tamagui.dev/) for styling.
+This project uses [Chakra](https://chakra-ui.com) for styling.
 
 
 ## Linting & Formatting

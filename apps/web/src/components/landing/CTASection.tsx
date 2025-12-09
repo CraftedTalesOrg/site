@@ -1,59 +1,72 @@
-import { Button, H2, Paragraph, YStack } from 'tamagui';
+import { Box, Container, Text, Button } from '@chakra-ui/react';
 import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 
-export function CTASection(): JSX.Element {
+export default function CTASection(): JSX.Element {
+  const { t } = useTranslation();
+
   return (
-    <YStack py={'$12'} px={'$4'}>
-      <YStack
-        maxWidth={900}
-        mx={'auto'}
-        w={'100%'}
-        bg={'$backgroundStrong'}
-        borderWidth={1}
-        borderColor={'$borderColor'}
-        borderRadius={'$6'}
-        p={'$10'}
-        ai={'center'}
-        gap={'$6'}
-        position={'relative'}
-        overflow={'hidden'}
-      >
-        {/* Gradient overlay */}
-        <YStack
-          position={'absolute'}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          opacity={0.1}
-          style={{
-            background: 'radial-gradient(circle at center, var(--accent) 0%, transparent 70%)',
-          }}
-        />
-
-        <YStack zIndex={1} ai={'center'} gap={'$4'}>
-          <H2 size={'$9'} fontWeight={'700'} textAlign={'center'}>
-            {'Ready to Share Your Creation?'}
-          </H2>
-          <Paragraph size={'$5'} color={'$mutedForeground'} textAlign={'center'} maxWidth={600}>
-            {'Join thousands of creators and share your mods with the CraftedTales community. It\'s free and takes less than a minute.'}
-          </Paragraph>
-        </YStack>
-
-        <Button
-          size={'$5'}
-          bg={'$primary'}
-          color={'white'}
-          px={'$10'}
-          zIndex={1}
-          shadowColor={'$accent'}
-          shadowRadius={30}
-          shadowOpacity={0.4}
-          hoverStyle={{ bg: '$primaryHover', transform: 'translateY(-2px)' }}
+    <Box as={'section'} position={'relative'} zIndex={1} py={24} px={8}>
+      <Container maxWidth={'900px'}>
+        <Box
+          bgGradient={'to-br'}
+          gradientFrom={'rgba(0, 212, 255, 0.1)'}
+          gradientTo={'rgba(139, 92, 246, 0.1)'}
+          border={'1px solid'}
+          borderColor={'border.default'}
+          borderRadius={'24px'}
+          p={16}
+          textAlign={'center'}
+          position={'relative'}
+          overflow={'hidden'}
         >
-          {'Start Creating'}
-        </Button>
-      </YStack>
-    </YStack>
+          <Box
+            position={'absolute'}
+            top={'-50%'}
+            left={'-50%'}
+            width={'200%'}
+            height={'200%'}
+            background={'radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 50%)'}
+            animation={'pulse 4s ease-in-out infinite'}
+            pointerEvents={'none'}
+          />
+          <Box position={'relative'} zIndex={1}>
+            <Text
+              fontFamily={'heading'}
+              fontSize={'2.5rem'}
+              fontWeight={'700'}
+              mb={4}
+            >
+              {t($ => $.LANDING.CTA.TITLE)}
+            </Text>
+            <Text
+              color={'text.secondary'}
+              fontSize={'1.1rem'}
+              mb={8}
+              maxWidth={'600px'}
+              mx={'auto'}
+            >
+              {t($ => $.LANDING.CTA.DESCRIPTION)}
+            </Text>
+            <Button
+              px={10}
+              py={6}
+              fontSize={'1rem'}
+              bgGradient={'to-r'}
+              gradientFrom={'brand.cyan.500'}
+              gradientTo={'brand.purple.500'}
+              color={'text.primary'}
+              boxShadow={'glow.cyan'}
+              _hover={{
+                transform: 'translateY(-2px)',
+                boxShadow: '0 0 40px rgba(0, 212, 255, 0.5)',
+              }}
+            >
+              {t($ => $.LANDING.CTA.BUTTON)}
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 }

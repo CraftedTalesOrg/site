@@ -1,41 +1,53 @@
-import { Card } from '@craftedtales/ui';
-import { H3, Paragraph, YStack } from 'tamagui';
-import type { JSX, ReactNode } from 'react';
+import { Box, Text } from '@chakra-ui/react';
+import type { JSX } from 'react';
 
 interface FeatureCardProps {
-  icon: ReactNode;
+  icon: JSX.Element;
   title: string;
   description: string;
 }
 
-export function FeatureCard({ icon, title, description }: FeatureCardProps): JSX.Element {
+export default function FeatureCard({ icon, title, description }: FeatureCardProps): JSX.Element {
   return (
-    <Card
-      size={'lg'}
-      gap={'$5'}
-      hoverStyle={{
-        borderColor: '$primary',
-        shadowColor: '$primary',
-        shadowRadius: 30,
-        shadowOpacity: 0.2,
-      }}>
-      <YStack
-        w={60}
-        h={60}
-        ai={'center'}
-        jc={'center'}
-        bg={'$backgroundSubtle'}
-        borderRadius={'$3'}>
+    <Box
+      bg={'bg.card'}
+      border={'1px solid'}
+      borderColor={'border.default'}
+      borderRadius={'20px'}
+      p={10}
+      transition={'all 0.4s ease'}
+      _hover={{
+        borderColor: 'brand.green.500',
+        boxShadow: '0 0 30px rgba(16, 185, 129, 0.2)',
+      }}
+    >
+      <Box
+        width={'60px'}
+        height={'60px'}
+        bgGradient={'to-br'}
+        gradientFrom={'rgba(16, 185, 129, 0.15)'}
+        gradientTo={'rgba(0, 212, 255, 0.15)'}
+        borderRadius={'14px'}
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        fontSize={'1.75rem'}
+        color={'brand.green.500'}
+        mb={6}
+      >
         {icon}
-      </YStack>
-      <YStack gap={'$2'}>
-        <H3 size={'$6'} fontWeight={'600'}>
-          {title}
-        </H3>
-        <Paragraph size={'$4'} color={'$mutedForeground'} lineHeight={'$5'}>
-          {description}
-        </Paragraph>
-      </YStack>
-    </Card>
+      </Box>
+      <Text
+        fontFamily={'heading'}
+        fontSize={'1.35rem'}
+        fontWeight={'600'}
+        mb={3}
+      >
+        {title}
+      </Text>
+      <Text color={'text.secondary'} fontSize={'0.95rem'}>
+        {description}
+      </Text>
+    </Box>
   );
 }

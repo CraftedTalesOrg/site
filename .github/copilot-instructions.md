@@ -7,7 +7,6 @@ This is a monorepo managed with **pnpm** and **Turbo**. It contains a full-stack
 - **apps/web**: Frontend application using **TanStack Start** (SSR), **TanStack Router**, **TanStack Query**.
 - **apps/api**: Backend service using **Hono**.
 - **packages/db**: Database schema and connection logic using **Drizzle ORM** and **Postgres**.
-- **packages/ui**: Shared UI library using **Tamagui**.
 
 ## Tech Stack & Patterns
 
@@ -19,7 +18,7 @@ This is a monorepo managed with **pnpm** and **Turbo**. It contains a full-stack
 - **Data Management**:
   - **TanStack Query** for async state.
   - **TanStack DB** (`@tanstack/react-db`) for local-first/client-side collections (see `src/db-collections`).
-- **Styling**: **Tamagui**.
+- **Styling**: **Chakra**.
 - **Compiler**: **React Compiler** is enabled via Babel. Avoid manual memoization (`useMemo`, `useCallback`) unless strictly necessary.
 
 ### Backend (`apps/api`)

@@ -1,182 +1,152 @@
-import { Button, H1, H2, XStack, YStack } from 'tamagui';
+import { Box, Container, Flex, Text, Button, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
-import { StatItem } from './StatItem';
+import { useTranslation } from 'react-i18next';
+import FloatingCards from './FloatingCards';
 
-const stats = [
-  { value: '2,500+', label: 'Mods' },
-  { value: '1.2M+', label: 'Downloads' },
-  { value: '15K+', label: 'Creators' },
-];
+export default function HeroSection(): JSX.Element {
+  const { t } = useTranslation();
 
-export function HeroSection(): JSX.Element {
   return (
-    <YStack minHeight={700} ai={'center'} jc={'center'} px={'$4'} py={'$10'}>
-      <XStack maxWidth={1400} width={'100%'} gap={'$8'} ai={'center'}>
-        {/* Text Content */}
-        <YStack flex={1} gap={'$6'}>
-          <YStack gap={'$4'}>
-            <H1 size={'$10'} fontWeight={'700'} lineHeight={'$10'}>
-              {'Discover the Best'}
+    <Box
+      as={'section'}
+      position={'relative'}
+      zIndex={1}
+      minHeight={'100vh'}
+      display={'flex'}
+      alignItems={'center'}
+      py={{ base: 32, md: 16 }}
+      px={8}
+    >
+      <Container maxWidth={'1400px'}>
+        <Grid
+          templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
+          gap={16}
+          alignItems={'center'}
+        >
+          <Box>
+            <Text
+              as={'h1'}
+              fontFamily={'heading'}
+              fontSize={{ base: '3rem', md: '4rem' }}
+              fontWeight={'700'}
+              lineHeight={'1.1'}
+              mb={6}
+            >
+              {t($ => $.LANDING.HERO.TITLE)}
               {' '}
-              <H1
-                size={'$10'}
-                fontWeight={'700'}
-                style={{
-                  backgroundImage: 'linear-gradient(135deg, var(--accent), var(--primary))',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+              <Box
+                as={'span'}
+                bgGradient={'to-r'}
+                gradientFrom={'brand.cyan.500'}
+                gradientTo={'brand.purple.500'}
+                bgClip={'text'}
+              >
+                {t($ => $.LANDING.HERO.TITLE_HIGHLIGHT)}
+              </Box>
+            </Text>
+            <Text
+              fontSize={'1.2rem'}
+              color={'text.secondary'}
+              mb={8}
+              maxWidth={'500px'}
+            >
+              {t($ => $.LANDING.HERO.DESCRIPTION)}
+            </Text>
+            <Flex gap={4} mb={12} flexWrap={'wrap'}>
+              <Button
+                px={10}
+                py={6}
+                fontSize={'1rem'}
+                bgGradient={'to-r'}
+                gradientFrom={'brand.cyan.500'}
+                gradientTo={'brand.purple.500'}
+                color={'text.primary'}
+                boxShadow={'glow.cyan'}
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 0 40px rgba(0, 212, 255, 0.5)',
                 }}
               >
-                {'Hytale Mods'}
-              </H1>
-            </H1>
-            <H2 size={'$6'} fontWeight={'400'} color={'$mutedForeground'} maxWidth={500}>
-              {'Download mods, plugins, and resource packs from the largest Hytale modding community.'}
-            </H2>
-          </YStack>
-
-          {/* CTA Buttons */}
-          <XStack gap={'$4'} flexWrap={'wrap'}>
-            <Button
-              size={'$5'}
-              bg={'$primary'}
-              color={'white'}
-              px={'$8'}
-              shadowColor={'$accent'}
-              shadowRadius={30}
-              shadowOpacity={0.4}
-              hoverStyle={{ bg: '$primaryHover', transform: 'translateY(-2px)' }}
-            >
-              {'Explore Mods'}
-            </Button>
-            <Button
-              size={'$5'}
-              bg={'transparent'}
-              borderWidth={1}
-              borderColor={'$borderColor'}
-              color={'$color'}
-              px={'$8'}
-              hoverStyle={{ borderColor: '$accent', bg: '$backgroundHover' }}
-            >
-              {'Upload Your Mod'}
-            </Button>
-          </XStack>
-
-          {/* Stats */}
-          <XStack gap={'$10'} mt={'$4'} flexWrap={'wrap'}>
-            {stats.map(stat => (
-              <StatItem key={stat.label} value={stat.value} label={stat.label} />
-            ))}
-          </XStack>
-        </YStack>
-
-        {/* Visual Content - Floating Cards */}
-        <YStack flex={1} position={'relative'} minHeight={400}>
-          {/* First Card */}
-          <YStack
-            position={'absolute'}
-            top={0}
-            left={0}
-            w={280}
-            h={200}
-            bg={'$backgroundStrong'}
-            borderWidth={1}
-            borderColor={'$borderColor'}
-            borderRadius={'$4'}
-            p={'$4'}
-            gap={'$3'}
-            zIndex={3}
-            shadowColor={'$background'}
-            shadowRadius={20}
-            shadowOpacity={0.5}
-            style={{
-              animation: 'float 6s ease-in-out infinite',
-            }}
-          >
-            <YStack h={120} bg={'$backgroundSubtle'} borderRadius={'$3'} ai={'center'} jc={'center'}>
-              {/* Placeholder for Puzzle icon */}
-              <div style={{ width: 64, height: 64, background: 'var(--primary)' }} />
-            </YStack>
-            <YStack gap={'$1'}>
-              <div style={{ fontSize: '14px', fontWeight: '600' }}>
-                {'Advanced Crafting'}
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--mutedForeground)' }}>
-                {'Gameplay'}
-              </div>
-            </YStack>
-          </YStack>
-
-          {/* Second Card */}
-          <YStack
-            position={'absolute'}
-            top={60}
-            right={0}
-            w={260}
-            h={200}
-            bg={'$backgroundStrong'}
-            borderWidth={1}
-            borderColor={'$borderColor'}
-            borderRadius={'$4'}
-            p={'$4'}
-            gap={'$3'}
-            zIndex={2}
-            shadowColor={'$background'}
-            shadowRadius={20}
-            shadowOpacity={0.5}
-            style={{
-              animation: 'float 7s ease-in-out infinite',
-            }}
-          >
-            <YStack h={120} bg={'$backgroundSubtle'} borderRadius={'$3'} ai={'center'} jc={'center'}>
-              <div style={{ width: 64, height: 64, background: 'var(--primary)' }} />
-            </YStack>
-            <YStack gap={'$1'}>
-              <div style={{ fontSize: '14px', fontWeight: '600' }}>
-                {'Enhanced Combat'}
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--mutedForeground)' }}>
-                {'Combat'}
-              </div>
-            </YStack>
-          </YStack>
-
-          {/* Third Card */}
-          <YStack
-            position={'absolute'}
-            bottom={20}
-            left={60}
-            w={240}
-            h={200}
-            bg={'$backgroundStrong'}
-            borderWidth={1}
-            borderColor={'$borderColor'}
-            borderRadius={'$4'}
-            p={'$4'}
-            gap={'$3'}
-            zIndex={1}
-            shadowColor={'$background'}
-            shadowRadius={20}
-            shadowOpacity={0.5}
-            style={{
-              animation: 'float 8s ease-in-out infinite',
-            }}
-          >
-            <YStack h={120} bg={'$backgroundSubtle'} borderRadius={'$3'} ai={'center'} jc={'center'}>
-              <div style={{ width: 64, height: 64, background: 'var(--primary)' }} />
-            </YStack>
-            <YStack gap={'$1'}>
-              <div style={{ fontSize: '14px', fontWeight: '600' }}>
-                {'Building Expansion'}
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--mutedForeground)' }}>
-                {'Building'}
-              </div>
-            </YStack>
-          </YStack>
-        </YStack>
-      </XStack>
-    </YStack>
+                {t($ => $.LANDING.HERO.CTA_EXPLORE)}
+              </Button>
+              <Button
+                px={10}
+                py={6}
+                fontSize={'1rem'}
+                bg={'transparent'}
+                color={'text.primary'}
+                border={'1px solid'}
+                borderColor={'border.default'}
+                _hover={{
+                  borderColor: 'brand.cyan.500',
+                  color: 'brand.cyan.500',
+                }}
+              >
+                {t($ => $.LANDING.HERO.CTA_DISCORD)}
+              </Button>
+            </Flex>
+            <Flex gap={12}>
+              <Box textAlign={'center'}>
+                <Text
+                  fontFamily={'heading'}
+                  fontSize={'2.5rem'}
+                  fontWeight={'700'}
+                  color={'brand.cyan.500'}
+                >
+                  {t($ => $.LANDING.HERO.STATS.MODS_COUNT)}
+                </Text>
+                <Text
+                  fontSize={'0.85rem'}
+                  color={'text.muted'}
+                  textTransform={'uppercase'}
+                  letterSpacing={'1px'}
+                >
+                  {t($ => $.LANDING.HERO.STATS.MODS)}
+                </Text>
+              </Box>
+              <Box textAlign={'center'}>
+                <Text
+                  fontFamily={'heading'}
+                  fontSize={'2.5rem'}
+                  fontWeight={'700'}
+                  color={'brand.cyan.500'}
+                >
+                  {t($ => $.LANDING.HERO.STATS.DOWNLOADS_COUNT)}
+                </Text>
+                <Text
+                  fontSize={'0.85rem'}
+                  color={'text.muted'}
+                  textTransform={'uppercase'}
+                  letterSpacing={'1px'}
+                >
+                  {t($ => $.LANDING.HERO.STATS.DOWNLOADS)}
+                </Text>
+              </Box>
+              <Box textAlign={'center'}>
+                <Text
+                  fontFamily={'heading'}
+                  fontSize={'2.5rem'}
+                  fontWeight={'700'}
+                  color={'brand.cyan.500'}
+                >
+                  {t($ => $.LANDING.HERO.STATS.CREATORS_COUNT)}
+                </Text>
+                <Text
+                  fontSize={'0.85rem'}
+                  color={'text.muted'}
+                  textTransform={'uppercase'}
+                  letterSpacing={'1px'}
+                >
+                  {t($ => $.LANDING.HERO.STATS.CREATORS)}
+                </Text>
+              </Box>
+            </Flex>
+          </Box>
+          <Box position={'relative'} display={{ base: 'none', lg: 'block' }}>
+            <FloatingCards />
+          </Box>
+        </Grid>
+      </Container>
+    </Box>
   );
 }

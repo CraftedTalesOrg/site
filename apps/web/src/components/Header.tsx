@@ -1,139 +1,153 @@
-import { ButtonLink } from '@craftedtales/ui';
-import { Link } from '@tanstack/react-router';
-import { Boxes, Moon, Package, Puzzle, Sun, Upload, Users } from 'lucide-react';
-import { useState } from 'react';
-import { Button, H2, Text, XStack, YStack } from 'tamagui';
-import { useTheme } from '../hooks/useTheme';
 import type { JSX } from 'react';
-
-const navItems = [
-  { label: 'Mods', icon: Puzzle, href: '/mods' },
-  { label: 'Plugins', icon: Package, href: '/plugins' },
-  { label: 'Resource Packs', icon: Boxes, href: '/resource-packs' },
-  { label: 'Community', icon: Users, href: '/community' },
-] as const;
+import { Box, Flex, HStack, Button } from '@chakra-ui/react';
+import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 export default function Header(): JSX.Element {
-  const { theme, setTheme } = useTheme();
-  const [isSignedIn] = useState(true); // Fake sign-in state for now
+  const { t } = useTranslation();
 
   return (
-    <XStack
-      tag={'header'}
-      position={'absolute'}
-      top={0}
-      left={0}
-      right={0}
+    <Box
+      as={'header'}
+      position={'fixed'}
+      top={'0'}
+      left={'0'}
+      right={'0'}
       zIndex={1000}
-      ai={'center'}
-      jc={'space-between'}
-      py={'$3'}
-      px={'$6'}
-      borderBottomWidth={1}
-      borderBottomColor={'$borderColor'}
-      bg={'$background'}
-      style={{
-        backdropFilter: 'blur(20px)',
-        backgroundColor: 'rgba(var(--background), 0.85)',
-        position: 'fixed',
-      }}
+      px={'8'}
+      py={'4'}
+      bg={'rgba(10, 10, 15, 0.85)'}
+      backdropFilter={'blur(20px)'}
+      borderBottom={'1px solid'}
+      borderColor={'border.base'}
     >
-      {/* Logo */}
-      <Link to={'/'}>
-        <XStack ai={'center'} gap={'$3'}>
-          <YStack
-            w={42}
-            h={42}
-            ai={'center'}
-            jc={'center'}
-            borderRadius={'$3'}
-            bg={'$primary'}
-            shadowColor={'$accent'}
-            shadowRadius={30}
-            shadowOpacity={0.3}
+      <Flex
+        maxW={'1400px'}
+        mx={'auto'}
+        justify={'space-between'}
+        align={'center'}
+      >
+        {/* Logo */}
+        <Link
+          to={'/'}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            textDecoration: 'none',
+          }}
+        >
+          <Box
+            w={'42px'}
+            h={'42px'}
+            bgGradient={'to-br'}
+            gradientFrom={'brand.cyan.500'}
+            gradientTo={'brand.purple.500'}
+            borderRadius={'10px'}
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            fontSize={'2xl'}
+            boxShadow={'glow.cyan'}
           >
-            <Text color={'white'} fontSize={20}>
-              {'🎮'}
-            </Text>
-          </YStack>
-          <H2
-            size={'$6'}
-            fontWeight={'700'}
+            {'🎮'}
+          </Box>
+          <Box
+            fontFamily={'heading'}
+            fontSize={'2xl'}
+            fontWeight={'bold'}
+            bgGradient={'to-br'}
+            gradientFrom={'brand.cyan.500'}
+            gradientTo={'brand.purple.500'}
+            bgClip={'text'}
+          >
+            {t($ => $.COMMON.APP_NAME)}
+          </Box>
+        </Link>
+
+        {/* Navigation Links */}
+        <HStack gap={'10'} display={{ base: 'none', lg: 'flex' }}>
+          <Link
+            to={'/mods'}
             style={{
-              backgroundImage: 'linear-gradient(135deg, var(--accent), var(--primary))',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: 'var(--chakra-colors-text-secondary)',
+              fontWeight: '500',
+              fontSize: '0.95rem',
+              position: 'relative',
+              textDecoration: 'none',
             }}
           >
-            {'CraftedTales'}
-          </H2>
-        </XStack>
-      </Link>
-
-      {/* Navigation Tabs */}
-      <XStack gap={'$6'} ai={'center'} display={'none'} $md={{ display: 'flex' }}>
-        {navItems.map(item => (
-          <ButtonLink
-            key={item.label}
-            to={item.href}
-            unstyled
-            color={'$mutedForeground'}
-            fontWeight={'500'}
-            fontSize={'$4'}
+            {t($ => $.COMMON.HEADER.NAV.MODS)}
+          </Link>
+          <Link
+            to={'/categories'}
+            style={{
+              color: 'var(--chakra-colors-text-secondary)',
+              fontWeight: '500',
+              fontSize: '0.95rem',
+              position: 'relative',
+              textDecoration: 'none',
+            }}
           >
-            {item.label}
-          </ButtonLink>
-        ))}
-      </XStack>
+            {t($ => $.COMMON.HEADER.NAV.CATEGORIES)}
+          </Link>
+          <Link
+            to={'/creators'}
+            style={{
+              color: 'var(--chakra-colors-text-secondary)',
+              fontWeight: '500',
+              fontSize: '0.95rem',
+              position: 'relative',
+              textDecoration: 'none',
+            }}
+          >
+            {t($ => $.COMMON.HEADER.NAV.CREATORS)}
+          </Link>
+          <Link
+            to={'/about'}
+            style={{
+              color: 'var(--chakra-colors-text-secondary)',
+              fontWeight: '500',
+              fontSize: '0.95rem',
+              position: 'relative',
+              textDecoration: 'none',
+            }}
+          >
+            {t($ => $.COMMON.HEADER.NAV.ABOUT)}
+          </Link>
+        </HStack>
 
-      {/* Right side: Auth + Theme + CTA */}
-      <XStack gap={'$3'} ai={'center'}>
-        {isSignedIn
-          ? (
-              <>
-                <Button
-                  size={'$3'}
-                  bg={'transparent'}
-                  borderWidth={1}
-                  borderColor={'$borderColor'}
-                  hoverStyle={{ borderColor: '$accent', bg: '$backgroundHover' }}
-                >
-                  {'Sign In'}
-                </Button>
-                <Button
-                  size={'$3'}
-                  bg={'$primary'}
-                  color={'white'}
-                  icon={<Upload size={16} />}
-                  shadowColor={'$accent'}
-                  shadowRadius={20}
-                  shadowOpacity={0.3}
-                  hoverStyle={{ bg: '$primaryHover', transform: 'translateY(-2px)' }}
-                >
-                  {'Upload Mod'}
-                </Button>
-              </>
-            )
-          : (
-              <Button
-                size={'$3'}
-                bg={'$primary'}
-                color={'white'}
-              >
-                {'Sign In'}
-              </Button>
-            )}
+        {/* CTA Buttons */}
+        <HStack gap={'4'} display={{ base: 'none', md: 'flex' }}>
+          <Button
+            asChild
+            variant={'outline'}
+            borderColor={'border.base'}
+            color={'text.primary'}
+          >
+            <Link to={'/login'}>{t($ => $.COMMON.HEADER.CTA.SIGN_IN)}</Link>
+          </Button>
+          <Button
+            asChild
+            bgGradient={'to-br'}
+            gradientFrom={'brand.cyan.500'}
+            gradientTo={'brand.purple.500'}
+            color={'text.primary'}
+            boxShadow={'glow.cyan'}
+          >
+            <Link to={'/register'}>{t($ => $.COMMON.HEADER.CTA.GET_STARTED)}</Link>
+          </Button>
+        </HStack>
 
+        {/* Mobile Menu Button */}
         <Button
-          size={'$3'}
-          circular
-          bg={'transparent'}
-          icon={theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          aria-label={'Toggle theme'}
-        />
-      </XStack>
-    </XStack>
+          display={{ base: 'flex', md: 'none' }}
+          variant={'ghost'}
+          fontSize={'xl'}
+        >
+          {'☰'}
+        </Button>
+      </Flex>
+    </Box>
   );
 }

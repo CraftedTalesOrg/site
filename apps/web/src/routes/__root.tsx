@@ -1,6 +1,9 @@
-import { config } from '@craftedtales/ui';
-import { TamaguiProvider, Theme } from 'tamagui';
+import { system } from '@/theming';
+import {
+  ChakraProvider,
+} from '@chakra-ui/react';
 import { TanStackDevtools } from '@tanstack/react-devtools';
+import type { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   HeadContent,
@@ -8,12 +11,12 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import type { JSX } from 'react';
+import { I18nextProvider } from 'react-i18next';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import { ThemeContext, useThemeState } from '../hooks/useTheme';
+import i18n from '../i18n/config';
 import appCss from '../styles.css?url';
-import type { JSX } from 'react';
-import type { QueryClient } from '@tanstack/react-query';
 
 interface MyRouterContext { queryClient: QueryClient }
 
@@ -58,36 +61,32 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }): JSX.Element {
-  const themeState = useThemeState('dark');
-
   return (
     <html lang={'en'}>
       <head>
         <HeadContent />
       </head>
       <body>
-        <TamaguiProvider config={config} defaultTheme={themeState.theme}>
-          <ThemeContext value={themeState}>
-            <Theme name={themeState.theme}>
-              <Header />
-              {children}
-              <Footer />
-              <TanStackDevtools
-                config={{ position: 'bottom-right' }}
-                plugins={[
-                  {
-                    name: 'Tanstack Router',
-                    render: <TanStackRouterDevtoolsPanel />,
-                  },
-                  {
-                    name: 'Tanstack Query',
-                    render: <ReactQueryDevtools />,
-                  },
-                ]}
-              />
-            </Theme>
-          </ThemeContext>
-        </TamaguiProvider>
+        <I18nextProvider i18n={i18n}>
+          <ChakraProvider value={system}>
+            <Header />
+            {children}
+            <Footer />
+            <TanStackDevtools
+              config={{ position: 'bottom-right' }}
+              plugins={[
+                {
+                  name: 'Tanstack Router',
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+                {
+                  name: 'Tanstack Query',
+                  render: <ReactQueryDevtools />,
+                },
+              ]}
+            />
+          </ChakraProvider>
+        </I18nextProvider>
         <Scripts />
       </body>
     </html>

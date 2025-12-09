@@ -1,74 +1,75 @@
-import { YStack, XStack } from 'tamagui';
+import { Box, Container, Text, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
-import {
-  Code2,
-  Download,
-  Gauge,
-  Rocket,
-  ShieldCheck,
-  Users,
-} from 'lucide-react';
-import { FeatureCard } from './FeatureCard';
-import { SectionHeader } from '../SectionHeader';
+import { useTranslation } from 'react-i18next';
+import { Zap, Shield, RefreshCw, Users, Download, Star } from 'lucide-react';
+import FeatureCard from './FeatureCard';
 
-const features = [
-  {
-    icon: <Download size={28} color={'var(--primary)'} />,
-    title: 'Fast Downloads',
-    description: 'Lightning-fast CDN-powered downloads with no wait times or speed limits.',
-  },
-  {
-    icon: <ShieldCheck size={28} color={'var(--primary)'} />,
-    title: 'Verified Mods',
-    description: 'All mods are scanned and verified to ensure they are safe and malware-free.',
-  },
-  {
-    icon: <Rocket size={28} color={'var(--primary)'} />,
-    title: 'Easy Installation',
-    description: 'One-click install with our mod manager or simple manual installation guides.',
-  },
-  {
-    icon: <Users size={28} color={'var(--primary)'} />,
-    title: 'Active Community',
-    description: 'Join thousands of creators and players in our vibrant Discord community.',
-  },
-  {
-    icon: <Code2 size={28} color={'var(--primary)'} />,
-    title: 'Developer Tools',
-    description: 'Comprehensive SDK and documentation to help you create amazing mods.',
-  },
-  {
-    icon: <Gauge size={28} color={'var(--primary)'} />,
-    title: 'Performance First',
-    description: 'Optimized infrastructure ensures mods load quickly and run smoothly.',
-  },
+type FeatureKey = 'FEATURE_1' | 'FEATURE_2' | 'FEATURE_3' | 'FEATURE_4' | 'FEATURE_5' | 'FEATURE_6';
+
+const features: { icon: JSX.Element; key: FeatureKey }[] = [
+  { icon: <Zap size={28} />, key: 'FEATURE_1' },
+  { icon: <Shield size={28} />, key: 'FEATURE_2' },
+  { icon: <RefreshCw size={28} />, key: 'FEATURE_3' },
+  { icon: <Users size={28} />, key: 'FEATURE_4' },
+  { icon: <Download size={28} />, key: 'FEATURE_5' },
+  { icon: <Star size={28} />, key: 'FEATURE_6' },
 ];
 
-export function FeaturesSection(): JSX.Element {
+export default function FeaturesSection(): JSX.Element {
+  const { t } = useTranslation();
+
   return (
-    <YStack bg={'$backgroundSubtle'} py={'$12'} px={'$4'}>
-      <SectionHeader
-        tag={'Why CraftedTales?'}
-        title={'Built for the Community'}
-        subtitle={'Everything you need to discover, download, and share Hytale mods.'}
-      />
-      <XStack
-        flexWrap={'wrap'}
-        jc={'center'}
-        gap={'$6'}
-        maxWidth={1200}
-        mx={'auto'}
-      >
-        {features.map(feature => (
-          <YStack key={feature.title} w={'100%'} $sm={{ w: '48%' }} $md={{ w: '31%' }}>
+    <Box
+      as={'section'}
+      position={'relative'}
+      zIndex={1}
+      py={24}
+      px={8}
+      bg={'bg.secondary'}
+    >
+      <Container maxWidth={'1200px'}>
+        <Box textAlign={'center'} maxWidth={'700px'} mx={'auto'} mb={16}>
+          <Box
+            display={'inline-block'}
+            px={4}
+            py={2}
+            bg={'rgba(16, 185, 129, 0.15)'}
+            color={'brand.green.500'}
+            borderRadius={'20px'}
+            fontSize={'0.8rem'}
+            fontWeight={'600'}
+            textTransform={'uppercase'}
+            letterSpacing={'1px'}
+            mb={4}
+          >
+            {t($ => $.LANDING.FEATURES.TAG)}
+          </Box>
+          <Text
+            fontFamily={'heading'}
+            fontSize={'2.75rem'}
+            fontWeight={'700'}
+            mb={4}
+          >
+            {t($ => $.LANDING.FEATURES.TITLE)}
+          </Text>
+          <Text color={'text.secondary'} fontSize={'1.1rem'}>
+            {t($ => $.LANDING.FEATURES.SUBTITLE)}
+          </Text>
+        </Box>
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+          gap={8}
+        >
+          {features.map(feature => (
             <FeatureCard
+              key={feature.key}
               icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
+              title={t($ => $.LANDING.FEATURES.ITEMS[feature.key].TITLE)}
+              description={t($ => $.LANDING.FEATURES.ITEMS[feature.key].DESCRIPTION)}
             />
-          </YStack>
-        ))}
-      </XStack>
-    </YStack>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 }

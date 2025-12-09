@@ -1,0 +1,17 @@
+{
+	"servers": {
+		"chakra-ui": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@chakra-ui/react-mcp"
+			],
+			"type": "stdio"
+		},
+		"i18next documentation": {
+			"url": "https://www.i18next.com/~gitbook/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
