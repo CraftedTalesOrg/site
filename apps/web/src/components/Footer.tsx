@@ -45,8 +45,9 @@ export default function Footer(): JSX.Element {
                 ai={'center'}
                 jc={'center'}
                 borderRadius={'$3'}
-                bg={'$primary'}>
-                <SizableText fontSize={20}>🎮</SizableText>
+                bg={'$primary'}
+              >
+                <SizableText fontSize={20}>{'🎮'}</SizableText>
               </YStack>
               <H3
                 size={'$6'}
@@ -56,18 +57,19 @@ export default function Footer(): JSX.Element {
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                }}>
-                ModsTale
+                }}
+              >
+                {'CraftedTales'}
               </H3>
             </XStack>
             <Paragraph size={'$3'} color={'$mutedForeground'} maxWidth={300}>
-              The #1 community for Hytale mods, plugins, and resource packs. Built by modders, for modders.
+              {'The #1 community for Hytale mods, plugins, and resource packs. Built by modders, for modders.'}
             </Paragraph>
           </YStack>
 
           {/* Explore links */}
           <YStack minWidth={150} gap={'$4'}>
-            <H3 size={'$4'} fontWeight={'600'}>Explore</H3>
+            <H3 size={'$4'} fontWeight={'600'}>{'Explore'}</H3>
             <YStack gap={'$3'}>
               {footerLinks.explore.map(link => (
                 <Link key={link.label} to={link.href}>
@@ -81,7 +83,7 @@ export default function Footer(): JSX.Element {
 
           {/* Community links */}
           <YStack minWidth={150} gap={'$4'}>
-            <H3 size={'$4'} fontWeight={'600'}>Community</H3>
+            <H3 size={'$4'} fontWeight={'600'}>{'Community'}</H3>
             <YStack gap={'$3'}>
               {footerLinks.community.map(link => (
                 <Link key={link.label} to={link.href}>
@@ -95,7 +97,7 @@ export default function Footer(): JSX.Element {
 
           {/* Legal links */}
           <YStack minWidth={150} gap={'$4'}>
-            <H3 size={'$4'} fontWeight={'600'}>Legal</H3>
+            <H3 size={'$4'} fontWeight={'600'}>{'Legal'}</H3>
             <YStack gap={'$3'}>
               {footerLinks.legal.map(link => (
                 <Link key={link.label} to={link.href}>
@@ -116,9 +118,13 @@ export default function Footer(): JSX.Element {
           jc={'space-between'}
           ai={'center'}
           flexWrap={'wrap'}
-          gap={'$4'}>
+          gap={'$4'}
+        >
           <SizableText size={'$2'} color={'$mutedForeground'}>
-            © {new Date().getFullYear()} ModsTale. All rights reserved.
+            {'© '}
+            {new Date().getFullYear()}
+            {' '}
+            {'CraftedTales. All rights reserved.'}
           </SizableText>
 
           <XStack gap={'$3'}>

@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   HeadContent,
   Scripts,
-  createRootRouteWithContext
+  createRootRouteWithContext,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import Footer from '../components/Footer';
@@ -32,11 +32,24 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: 'stylesheet',
         href: appCss,
       },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap',
+      },
     ],
     scripts: [
       {
         // Prevent animation flash on load
-        children: "document.documentElement.classList.add('t_unmounted')",
+        children: 'document.documentElement.classList.add(\'t_unmounted\')',
       },
     ],
   }),
@@ -70,7 +83,8 @@ function RootDocument({ children }: { children: React.ReactNode }): JSX.Element 
                     name: 'Tanstack Query',
                     render: <ReactQueryDevtools />,
                   },
-                ]} />
+                ]}
+              />
             </Theme>
           </ThemeContext>
         </TamaguiProvider>

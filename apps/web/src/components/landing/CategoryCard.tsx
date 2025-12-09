@@ -20,14 +20,16 @@ export function CategoryCard({ icon, name, count }: CategoryCardProps): JSX.Elem
         shadowColor: '$accent',
         shadowRadius: 30,
         shadowOpacity: 0.3,
-      }}>
+      }}
+    >
       <YStack
         w={70}
         h={70}
         ai={'center'}
         jc={'center'}
         bg={'$backgroundSubtle'}
-        borderRadius={'$4'}>
+        borderRadius={'$4'}
+      >
         {icon}
       </YStack>
       <YStack ai={'center'} gap={'$1'}>
@@ -35,7 +37,9 @@ export function CategoryCard({ icon, name, count }: CategoryCardProps): JSX.Elem
           {name}
         </H3>
         <Paragraph size={'$3'} color={'$mutedForeground'}>
-          {count.toLocaleString()} mods
+          {count.toLocaleString()}
+          {' '}
+          {'mods'}
         </Paragraph>
       </YStack>
     </Card>

@@ -340,7 +340,7 @@ export default defineConfig([
 
   // Stylistic configuration factory (only for JS/TS files)
   {
-    files: ['**/*.js', '**/*.ts'],
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
     ...stylistic.configs.customize({
       indent: 2,
       quotes: 'single',
@@ -352,7 +352,7 @@ export default defineConfig([
 
   // Global padding rules (only for JS/TS files)
   {
-    files: ['**/*.js', '**/*.ts'],
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
     rules: {
       '@stylistic/padding-line-between-statements': [
         'error',
@@ -372,7 +372,7 @@ export default defineConfig([
 
   // TypeScript files
   {
-    files: ['**/*.ts'],
+    files: ['**/*.ts', '**/*.tsx'],
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
@@ -409,6 +409,8 @@ export default defineConfig([
           leadingUnderscore: 'require',
         },
       ],
+      // @stylistic
+      '@stylistic/jsx-curly-brace-presence':["warn", "always"],
       // eslint
       'arrow-body-style': ['error', 'as-needed'],
       'curly': 'warn',

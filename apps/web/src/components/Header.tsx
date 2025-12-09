@@ -36,7 +36,8 @@ export default function Header(): JSX.Element {
         backdropFilter: 'blur(20px)',
         backgroundColor: 'rgba(var(--background), 0.85)',
         position: 'fixed',
-      }}>
+      }}
+    >
       {/* Logo */}
       <Link to={'/'}>
         <XStack ai={'center'} gap={'$3'}>
@@ -49,9 +50,10 @@ export default function Header(): JSX.Element {
             bg={'$primary'}
             shadowColor={'$accent'}
             shadowRadius={30}
-            shadowOpacity={0.3}>
+            shadowOpacity={0.3}
+          >
             <Text color={'white'} fontSize={20}>
-              🎮
+              {'🎮'}
             </Text>
           </YStack>
           <H2
@@ -62,8 +64,9 @@ export default function Header(): JSX.Element {
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-            }}>
-            ModsTale
+            }}
+          >
+            {'CraftedTales'}
           </H2>
         </XStack>
       </Link>
@@ -77,7 +80,8 @@ export default function Header(): JSX.Element {
             unstyled
             color={'$mutedForeground'}
             fontWeight={'500'}
-            fontSize={'$4'}>
+            fontSize={'$4'}
+          >
             {item.label}
           </ButtonLink>
         ))}
@@ -85,36 +89,41 @@ export default function Header(): JSX.Element {
 
       {/* Right side: Auth + Theme + CTA */}
       <XStack gap={'$3'} ai={'center'}>
-        {isSignedIn ? (
-          <>
-            <Button
-              size={'$3'}
-              bg={'transparent'}
-              borderWidth={1}
-              borderColor={'$borderColor'}
-              hoverStyle={{ borderColor: '$accent', bg: '$backgroundHover' }}>
-              Sign In
-            </Button>
-            <Button
-              size={'$3'}
-              bg={'$primary'}
-              color={'white'}
-              icon={<Upload size={16} />}
-              shadowColor={'$accent'}
-              shadowRadius={20}
-              shadowOpacity={0.3}
-              hoverStyle={{ bg: '$primaryHover', transform: 'translateY(-2px)' }}>
-              Upload Mod
-            </Button>
-          </>
-        ) : (
-          <Button
-            size={'$3'}
-            bg={'$primary'}
-            color={'white'}>
-            Sign In
-          </Button>
-        )}
+        {isSignedIn
+          ? (
+              <>
+                <Button
+                  size={'$3'}
+                  bg={'transparent'}
+                  borderWidth={1}
+                  borderColor={'$borderColor'}
+                  hoverStyle={{ borderColor: '$accent', bg: '$backgroundHover' }}
+                >
+                  {'Sign In'}
+                </Button>
+                <Button
+                  size={'$3'}
+                  bg={'$primary'}
+                  color={'white'}
+                  icon={<Upload size={16} />}
+                  shadowColor={'$accent'}
+                  shadowRadius={20}
+                  shadowOpacity={0.3}
+                  hoverStyle={{ bg: '$primaryHover', transform: 'translateY(-2px)' }}
+                >
+                  {'Upload Mod'}
+                </Button>
+              </>
+            )
+          : (
+              <Button
+                size={'$3'}
+                bg={'$primary'}
+                color={'white'}
+              >
+                {'Sign In'}
+              </Button>
+            )}
 
         <Button
           size={'$3'}
@@ -122,7 +131,8 @@ export default function Header(): JSX.Element {
           bg={'transparent'}
           icon={theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          aria-label={'Toggle theme'} />
+          aria-label={'Toggle theme'}
+        />
       </XStack>
     </XStack>
   );
