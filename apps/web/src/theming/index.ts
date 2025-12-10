@@ -3,6 +3,13 @@ import {
   defaultConfig,
   defineConfig,
 } from '@chakra-ui/react';
+import {
+  badgeRecipe,
+  buttonRecipe,
+  cardRecipe,
+  headingRecipe,
+  iconContainerRecipe,
+} from './components';
 
 const config = defineConfig({
   theme: {
@@ -82,6 +89,30 @@ const config = defineConfig({
         // Border color
         border: {
           base: { value: '#2a2a3a' },
+          default: { value: '#2a2a3a' },
+        },
+        // Alpha variants for backgrounds
+        alpha: {
+          cyan: {
+            10: { value: 'rgba(0, 212, 255, 0.1)' },
+            15: { value: 'rgba(0, 212, 255, 0.15)' },
+            25: { value: 'rgba(0, 212, 255, 0.25)' },
+          },
+          purple: {
+            10: { value: 'rgba(139, 92, 246, 0.1)' },
+            15: { value: 'rgba(139, 92, 246, 0.15)' },
+            25: { value: 'rgba(139, 92, 246, 0.25)' },
+          },
+          green: {
+            10: { value: 'rgba(16, 185, 129, 0.1)' },
+            15: { value: 'rgba(16, 185, 129, 0.15)' },
+            25: { value: 'rgba(16, 185, 129, 0.25)' },
+          },
+          orange: {
+            10: { value: 'rgba(255, 107, 53, 0.1)' },
+            15: { value: 'rgba(255, 107, 53, 0.15)' },
+            25: { value: 'rgba(255, 107, 53, 0.25)' },
+          },
         },
       },
       fonts: {
@@ -113,11 +144,26 @@ const config = defineConfig({
         '2xl': { value: '24px' },
       },
       shadows: {
-        glow: {
+        'glow': {
           cyan: { value: '0 0 30px rgba(0, 212, 255, 0.3)' },
           purple: { value: '0 0 30px rgba(139, 92, 246, 0.3)' },
           green: { value: '0 0 30px rgba(16, 185, 129, 0.2)' },
         },
+        'glow.hover': {
+          cyan: { value: '0 0 40px rgba(0, 212, 255, 0.5)' },
+          purple: { value: '0 0 40px rgba(139, 92, 246, 0.5)' },
+          green: { value: '0 0 40px rgba(16, 185, 129, 0.4)' },
+        },
+        'card': {
+          elevated: { value: '0 20px 50px rgba(0, 0, 0, 0.5)' },
+        },
+      },
+      gradients: {
+        'primary': { value: 'linear-gradient(135deg, {colors.brand.cyan.500}, {colors.brand.purple.500})' },
+        'primary.subtle': { value: 'linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(139, 92, 246, 0.15))' },
+        'primary.subtle.hover': { value: 'linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(139, 92, 246, 0.25))' },
+        'feature': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(0, 212, 255, 0.15))' },
+        'feature.hover': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(0, 212, 255, 0.25))' },
       },
     },
     semanticTokens: {
@@ -185,6 +231,13 @@ const config = defineConfig({
         '0%, 100%': { transform: 'scale(1)', opacity: '0.5' },
         '50%': { transform: 'scale(1.1)', opacity: '1' },
       },
+    },
+    recipes: {
+      badge: badgeRecipe,
+      button: buttonRecipe,
+      card: cardRecipe,
+      heading: headingRecipe,
+      iconContainer: iconContainerRecipe,
     },
   },
 });

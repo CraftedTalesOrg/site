@@ -3,6 +3,7 @@ import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Zap, Shield, RefreshCw, Users, Download, Star } from 'lucide-react';
 import FeatureCard from './FeatureCard';
+import { Badge } from '@/theming/components';
 
 type FeatureKey = 'FEATURE_1' | 'FEATURE_2' | 'FEATURE_3' | 'FEATURE_4' | 'FEATURE_5' | 'FEATURE_6';
 
@@ -29,26 +30,15 @@ export default function FeaturesSection(): JSX.Element {
     >
       <Container maxWidth={'1200px'}>
         <Box textAlign={'center'} maxWidth={'700px'} mx={'auto'} mb={16}>
-          <Box
-            display={'inline-block'}
-            px={4}
-            py={2}
-            bg={'rgba(16, 185, 129, 0.15)'}
-            color={'brand.green.500'}
-            borderRadius={'20px'}
-            fontSize={'0.8rem'}
-            fontWeight={'600'}
-            textTransform={'uppercase'}
-            letterSpacing={'1px'}
-            mb={4}
-          >
+          <Badge variant={'tag'} colorPalette={'green'} mb={4}>
             {t($ => $.LANDING.FEATURES.TAG)}
-          </Box>
+          </Badge>
           <Text
             fontFamily={'heading'}
             fontSize={'2.75rem'}
             fontWeight={'700'}
             mb={4}
+            color={'text.primary'}
           >
             {t($ => $.LANDING.FEATURES.TITLE)}
           </Text>

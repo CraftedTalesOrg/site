@@ -1,6 +1,7 @@
 import { Box, Text, Flex } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { Download, Star } from 'lucide-react';
+import { Card, Badge } from '@/theming/components';
 
 interface ModCardProps {
   icon: JSX.Element;
@@ -22,20 +23,7 @@ export default function ModCard({
   rating,
 }: ModCardProps): JSX.Element {
   return (
-    <Box
-      bg={'bg.card'}
-      border={'1px solid'}
-      borderColor={'border.default'}
-      borderRadius={'16px'}
-      overflow={'hidden'}
-      transition={'all 0.4s ease'}
-      cursor={'pointer'}
-      _hover={{
-        transform: 'translateY(-5px)',
-        borderColor: 'brand.purple.500',
-        boxShadow: 'glow.purple',
-      }}
-    >
+    <Card variant={'mod'} colorPalette={'purple'}>
       <Box
         width={'100%'}
         height={'180px'}
@@ -51,43 +39,21 @@ export default function ModCard({
       >
         {icon}
         {badge && (
-          <Box
-            position={'absolute'}
-            top={4}
-            right={4}
-            px={3}
-            py={'0.35rem'}
-            bg={'brand.orange.500'}
-            color={'white'}
-            borderRadius={'20px'}
-            fontSize={'0.7rem'}
-            fontWeight={'700'}
-            textTransform={'uppercase'}
-          >
+          <Badge variant={'status'} colorPalette={'orange'}>
             {badge}
-          </Box>
+          </Badge>
         )}
       </Box>
       <Box p={6}>
-        <Box
-          display={'inline-block'}
-          px={3}
-          py={1}
-          bg={'rgba(139, 92, 246, 0.15)'}
-          color={'brand.purple.500'}
-          borderRadius={'20px'}
-          fontSize={'0.7rem'}
-          fontWeight={'600'}
-          textTransform={'uppercase'}
-          mb={3}
-        >
+        <Badge variant={'tag'} colorPalette={'purple'} mb={3}>
           {category}
-        </Box>
+        </Badge>
         <Text
           fontFamily={'heading'}
           fontSize={'1.35rem'}
           fontWeight={'600'}
           mb={2}
+          color={'text.primary'}
         >
           {title}
         </Text>
@@ -115,6 +81,6 @@ export default function ModCard({
           </Flex>
         </Flex>
       </Box>
-    </Box>
+    </Card>
   );
 }

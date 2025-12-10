@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Sword, Zap, Shield, Globe, Sparkles, Package } from 'lucide-react';
 import SearchBar from './SearchBar';
 import ModCard from './ModCard';
+import { Badge } from '@/theming/components';
 
 type ModKey = 'MOD_1' | 'MOD_2' | 'MOD_3' | 'MOD_4' | 'MOD_5' | 'MOD_6';
 
@@ -23,26 +24,15 @@ export default function FeaturedModsSection(): JSX.Element {
     <Box as={'section'} position={'relative'} zIndex={1} py={24} px={8}>
       <Container maxWidth={'1200px'}>
         <Box textAlign={'center'} maxWidth={'700px'} mx={'auto'} mb={16}>
-          <Box
-            display={'inline-block'}
-            px={4}
-            py={2}
-            bg={'rgba(0, 212, 255, 0.15)'}
-            color={'brand.cyan.500'}
-            borderRadius={'20px'}
-            fontSize={'0.8rem'}
-            fontWeight={'600'}
-            textTransform={'uppercase'}
-            letterSpacing={'1px'}
-            mb={4}
-          >
+          <Badge variant={'tag'} colorPalette={'cyan'} mb={4}>
             {t($ => $.LANDING.FEATURED.TAG)}
-          </Box>
+          </Badge>
           <Text
             fontFamily={'heading'}
             fontSize={'2.75rem'}
             fontWeight={'700'}
             mb={4}
+            color={'text.primary'}
           >
             {t($ => $.LANDING.FEATURED.TITLE)}
           </Text>

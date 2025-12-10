@@ -3,6 +3,7 @@ import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sword, Wand2, Globe, Sparkles, Package, Image, Palette, FileCode } from 'lucide-react';
 import CategoryCard from './CategoryCard';
+import { Badge } from '@/theming/components';
 
 type CategoryKey = 'COMBAT' | 'MAGIC' | 'WORLD' | 'ADVENTURE' | 'ITEMS' | 'GRAPHICS' | 'TEXTURES' | 'UTILITY';
 
@@ -31,26 +32,15 @@ export default function CategoriesSection(): JSX.Element {
     >
       <Container maxWidth={'1200px'}>
         <Box textAlign={'center'} maxWidth={'700px'} mx={'auto'} mb={16}>
-          <Box
-            display={'inline-block'}
-            px={4}
-            py={2}
-            bg={'rgba(139, 92, 246, 0.15)'}
-            color={'brand.purple.500'}
-            borderRadius={'20px'}
-            fontSize={'0.8rem'}
-            fontWeight={'600'}
-            textTransform={'uppercase'}
-            letterSpacing={'1px'}
-            mb={4}
-          >
+          <Badge variant={'tag'} colorPalette={'purple'} mb={4}>
             {t($ => $.LANDING.CATEGORIES.TAG)}
-          </Box>
+          </Badge>
           <Text
             fontFamily={'heading'}
             fontSize={'2.75rem'}
             fontWeight={'700'}
             mb={4}
+            color={'text.primary'}
           >
             {t($ => $.LANDING.CATEGORIES.TITLE)}
           </Text>

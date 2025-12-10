@@ -13,8 +13,8 @@ function Landing(): JSX.Element {
   return (
     <Box position={'relative'}>
       {/* Background Pattern */}
-      <Box className={'bg-pattern'} />
-      <Box className={'grid-overlay'} />
+      <div className={'bg-pattern'} />
+      <div className={'grid-overlay'} />
 
       {/* Content */}
       <HeroSection />

@@ -1,7 +1,8 @@
-import { Box, Container, Flex, Text, Button, Grid } from '@chakra-ui/react';
+import { Box, Container, Flex, Text, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import FloatingCards from './FloatingCards';
+import { Button } from '@/theming/components';
 
 export default function HeroSection(): JSX.Element {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ export default function HeroSection(): JSX.Element {
               fontWeight={'700'}
               lineHeight={'1.1'}
               mb={6}
+              color={'text.primary'}
             >
               {t($ => $.LANDING.HERO.TITLE)}
               {' '}
@@ -53,35 +55,10 @@ export default function HeroSection(): JSX.Element {
               {t($ => $.LANDING.HERO.DESCRIPTION)}
             </Text>
             <Flex gap={4} mb={12} flexWrap={'wrap'}>
-              <Button
-                px={10}
-                py={6}
-                fontSize={'1rem'}
-                bgGradient={'to-r'}
-                gradientFrom={'brand.cyan.500'}
-                gradientTo={'brand.purple.500'}
-                color={'text.primary'}
-                boxShadow={'glow.cyan'}
-                _hover={{
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 0 40px rgba(0, 212, 255, 0.5)',
-                }}
-              >
+              <Button variant={'gradient'}>
                 {t($ => $.LANDING.HERO.CTA_EXPLORE)}
               </Button>
-              <Button
-                px={10}
-                py={6}
-                fontSize={'1rem'}
-                bg={'transparent'}
-                color={'text.primary'}
-                border={'1px solid'}
-                borderColor={'border.default'}
-                _hover={{
-                  borderColor: 'brand.cyan.500',
-                  color: 'brand.cyan.500',
-                }}
-              >
+              <Button variant={'outline-hover'}>
                 {t($ => $.LANDING.HERO.CTA_DISCORD)}
               </Button>
             </Flex>
