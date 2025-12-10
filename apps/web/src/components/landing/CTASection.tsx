@@ -1,7 +1,7 @@
-import { Box, Container, Text } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/theming/components';
+import { Button, Text } from '@/theming/components';
 
 export default function CTASection(): JSX.Element {
   const { t } = useTranslation();
@@ -32,18 +32,11 @@ export default function CTASection(): JSX.Element {
             pointerEvents={'none'}
           />
           <Box position={'relative'} zIndex={1}>
-            <Text
-              fontFamily={'heading'}
-              fontSize={'2.5rem'}
-              fontWeight={'700'}
-              mb={4}
-              color={'text.primary'}
-            >
+            <Text variant={'sectionTitle'} mb={4}>
               {t($ => $.LANDING.CTA.TITLE)}
             </Text>
             <Text
-              color={'text.secondary'}
-              fontSize={'1.1rem'}
+              variant={'subtitle'}
               mb={8}
               maxWidth={'600px'}
               mx={'auto'}

@@ -1,7 +1,7 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { Sword, Wand2, Package } from 'lucide-react';
-import { Card, Badge } from '@/theming/components';
+import { Card, Badge, Text } from '@/theming/components';
 
 interface FloatingCard {
   icon: JSX.Element;
@@ -72,16 +72,10 @@ export default function FloatingCards(): JSX.Element {
             <Badge variant={'tag'} colorPalette={'blue'} mb={2}>
               {card.tag}
             </Badge>
-            <Text
-              fontFamily={'heading'}
-              fontSize={'1.1rem'}
-              fontWeight={'600'}
-              mb={1}
-              color={'text.primary'}
-            >
+            <Text variant={'cardTitle'} mb={1}>
               {card.title}
             </Text>
-            <Text fontSize={'0.75rem'} color={'text.muted'}>
+            <Text variant={'caption'}>
               {card.meta}
             </Text>
           </Box>

@@ -1,9 +1,9 @@
-import { Box, Container, Text, Grid } from '@chakra-ui/react';
+import { Box, Container, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sword, Wand2, Globe, Sparkles, Package, Image, Palette, FileCode } from 'lucide-react';
 import CategoryCard from './CategoryCard';
-import { Badge } from '@/theming/components';
+import { Badge, Text } from '@/theming/components';
 
 type CategoryKey = 'COMBAT' | 'MAGIC' | 'WORLD' | 'ADVENTURE' | 'ITEMS' | 'GRAPHICS' | 'TEXTURES' | 'UTILITY';
 
@@ -35,16 +35,10 @@ export default function CategoriesSection(): JSX.Element {
           <Badge variant={'tag'} colorPalette={'gold'} mb={4}>
             {t($ => $.LANDING.CATEGORIES.TAG)}
           </Badge>
-          <Text
-            fontFamily={'heading'}
-            fontSize={'2.75rem'}
-            fontWeight={'700'}
-            mb={4}
-            color={'text.primary'}
-          >
+          <Text variant={'sectionTitle'} mb={4}>
             {t($ => $.LANDING.CATEGORIES.TITLE)}
           </Text>
-          <Text color={'text.secondary'} fontSize={'1.1rem'}>
+          <Text variant={'subtitle'}>
             {t($ => $.LANDING.CATEGORIES.SUBTITLE)}
           </Text>
         </Box>

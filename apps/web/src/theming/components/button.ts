@@ -6,8 +6,8 @@ export const buttonRecipe = defineRecipe({
   variants: {
     variant: {
       'gradient': {
-        px: 10,
-        py: 6,
+        px: 8,
+        py: 4,
         fontSize: 'md',
         bgGradient: 'to-b',
         gradientFrom: 'brand.gold.300',
@@ -25,8 +25,8 @@ export const buttonRecipe = defineRecipe({
         },
       },
       'outline-hover': {
-        px: 10,
-        py: 6,
+        px: 8,
+        py: 4,
         fontSize: 'md',
         bg: 'transparent',
         color: 'text.primary',

@@ -7,8 +7,8 @@ import {
   badgeRecipe,
   buttonRecipe,
   cardRecipe,
-  headingRecipe,
   iconContainerRecipe,
+  textRecipe,
 } from './components';
 import {
   keyframes,
@@ -224,8 +224,8 @@ const config = defineConfig({
       badge: badgeRecipe,
       button: buttonRecipe,
       card: cardRecipe,
-      heading: headingRecipe,
       iconContainer: iconContainerRecipe,
+      text: textRecipe,
     },
   },
 });

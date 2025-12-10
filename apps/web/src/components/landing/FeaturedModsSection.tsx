@@ -1,10 +1,10 @@
-import { Box, Container, Text, Grid } from '@chakra-ui/react';
+import { Box, Container, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sword, Zap, Shield, Globe, Sparkles, Package } from 'lucide-react';
 import SearchBar from './SearchBar';
 import ModCard from './ModCard';
-import { Badge } from '@/theming/components';
+import { Badge, Text } from '@/theming/components';
 
 type ModKey = 'MOD_1' | 'MOD_2' | 'MOD_3' | 'MOD_4' | 'MOD_5' | 'MOD_6';
 
@@ -27,16 +27,10 @@ export default function FeaturedModsSection(): JSX.Element {
           <Badge variant={'tag'} colorPalette={'blue'} mb={4}>
             {t($ => $.LANDING.FEATURED.TAG)}
           </Badge>
-          <Text
-            fontFamily={'heading'}
-            fontSize={'2.75rem'}
-            fontWeight={'700'}
-            mb={4}
-            color={'text.primary'}
-          >
+          <Text variant={'sectionTitle'} mb={4}>
             {t($ => $.LANDING.FEATURED.TITLE)}
           </Text>
-          <Text color={'text.secondary'} fontSize={'1.1rem'}>
+          <Text variant={'subtitle'}>
             {t($ => $.LANDING.FEATURED.SUBTITLE)}
           </Text>
         </Box>

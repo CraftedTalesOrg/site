@@ -13,21 +13,14 @@ export const cardRecipe = defineRecipe({
   },
   variants: {
     variant: {
-      category: {
+      pressable: {
         p: 8,
-        textAlign: 'center',
         cursor: 'pointer',
-        _hover: {
-          transform: 'translateY(-8px)',
-        },
-      },
-      mod: {
-        overflow: 'hidden',
         _hover: {
           transform: 'translateY(-5px)',
         },
       },
-      feature: {
+      hoverable: {
         p: 8,
         _hover: {
           transform: 'translateY(-5px)',
@@ -60,7 +53,7 @@ export const cardRecipe = defineRecipe({
     },
   },
   defaultVariants: {
-    variant: 'category',
+    variant: 'pressable',
     colorPalette: 'blue',
   },
 });

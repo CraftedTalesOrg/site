@@ -1,9 +1,9 @@
-import { Box, Container, Text, Grid } from '@chakra-ui/react';
+import { Box, Container, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Zap, Shield, RefreshCw, Users, Download, Star } from 'lucide-react';
 import FeatureCard from './FeatureCard';
-import { Badge } from '@/theming/components';
+import { Badge, Text } from '@/theming/components';
 
 type FeatureKey = 'FEATURE_1' | 'FEATURE_2' | 'FEATURE_3' | 'FEATURE_4' | 'FEATURE_5' | 'FEATURE_6';
 
@@ -33,16 +33,10 @@ export default function FeaturesSection(): JSX.Element {
           <Badge variant={'tag'} colorPalette={'green'} mb={4}>
             {t($ => $.LANDING.FEATURES.TAG)}
           </Badge>
-          <Text
-            fontFamily={'heading'}
-            fontSize={'2.75rem'}
-            fontWeight={'700'}
-            mb={4}
-            color={'text.primary'}
-          >
+          <Text variant={'sectionTitle'} mb={4}>
             {t($ => $.LANDING.FEATURES.TITLE)}
           </Text>
-          <Text color={'text.secondary'} fontSize={'1.1rem'}>
+          <Text variant={'subtitle'}>
             {t($ => $.LANDING.FEATURES.SUBTITLE)}
           </Text>
         </Box>

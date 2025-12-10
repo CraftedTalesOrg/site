@@ -1,6 +1,5 @@
-import { Group, Text } from '@chakra-ui/react';
+import { Card, IconContainer, Text } from '@/theming/components';
 import type { JSX } from 'react';
-import { Card, IconContainer } from '@/theming/components';
 
 interface CategoryCardProps {
   icon: JSX.Element;
@@ -16,18 +15,16 @@ export default function CategoryCard({
   colorPalette = 'blue',
 }: CategoryCardProps): JSX.Element {
   return (
-    <Group asChild>
-      <Card variant={'category'} colorPalette={colorPalette}>
-        <IconContainer size={'lg'} colorPalette={colorPalette} mx={'auto'} mb={6}>
-          {icon}
-        </IconContainer>
-        <Text fontFamily={'heading'} fontSize={'1.25rem'} fontWeight={'600'} mb={2} color={'text.primary'}>
-          {name}
-        </Text>
-        <Text fontSize={'0.85rem'} color={'text.muted'}>
-          {count}
-        </Text>
-      </Card>
-    </Group>
+    <Card variant={'pressable'} colorPalette={colorPalette}>
+      <IconContainer size={'lg'} colorPalette={colorPalette} mx={'auto'} mb={6}>
+        {icon}
+      </IconContainer>
+      <Text variant={'cardTitle'} mb={2} textAlign={'center'}>
+        {name}
+      </Text>
+      <Text variant={'caption'} textAlign={'center'}>
+        {count}
+      </Text>
+    </Card>
   );
 }

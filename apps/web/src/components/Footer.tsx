@@ -1,7 +1,8 @@
 import type { JSX } from 'react';
-import { Box, Flex, Grid, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, HStack } from '@chakra-ui/react';
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/theming/components';
 
 interface FooterLinkProps {
   to: string;
@@ -60,13 +61,7 @@ interface FooterSectionProps {
 function FooterSection({ title, children }: FooterSectionProps): JSX.Element {
   return (
     <Box>
-      <Text
-        fontFamily={'heading'}
-        fontSize={'lg'}
-        fontWeight={'semibold'}
-        mb={'6'}
-        color={'text.primary'}
-      >
+      <Text variant={'footerSectionTitle'} mb={'6'}>
         {title}
       </Text>
       <Flex direction={'column'} gap={'3'}>
@@ -153,9 +148,7 @@ export default function Footer(): JSX.Element {
                 {'🎮'}
               </Box>
               <Text
-                fontFamily={'heading'}
-                fontSize={'2xl'}
-                fontWeight={'bold'}
+                variant={'brandLogo'}
                 bgGradient={'to-b'}
                 gradientFrom={'brand.gold.300'}
                 gradientTo={'brand.gold.500'}
@@ -164,7 +157,7 @@ export default function Footer(): JSX.Element {
                 {t($ => $.COMMON.APP_NAME)}
               </Text>
             </Flex>
-            <Text color={'text.secondary'} fontSize={'md'} maxW={'300px'}>
+            <Text variant={'cardBody'} maxW={'300px'}>
               {t($ => $.COMMON.FOOTER.BRAND.DESCRIPTION)}
             </Text>
           </Box>
@@ -191,7 +184,7 @@ export default function Footer(): JSX.Element {
           direction={{ base: 'column', md: 'row' }}
           gap={'4'}
         >
-          <Text color={'text.muted'} fontSize={'sm'}>
+          <Text variant={'caption'}>
             {t($ => $.COMMON.FOOTER.COPYRIGHT, { year: new Date().getFullYear() })}
           </Text>
           <HStack gap={'4'}>

@@ -1,8 +1,8 @@
-import { Box, Container, Flex, Text, Grid } from '@chakra-ui/react';
+import { Box, Container, Flex, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import FloatingCards from './FloatingCards';
-import { Button } from '@/theming/components';
+import { Button, Text } from '@/theming/components';
 
 export default function HeroSection(): JSX.Element {
   const { t } = useTranslation();
@@ -27,12 +27,8 @@ export default function HeroSection(): JSX.Element {
           <Box>
             <Text
               as={'h1'}
-              fontFamily={'heading'}
-              fontSize={{ base: '3rem', md: '4rem' }}
-              fontWeight={'700'}
-              lineHeight={'1.1'}
+              variant={'heroTitle'}
               mb={6}
-              color={'text.primary'}
             >
               {t($ => $.LANDING.HERO.TITLE)}
               {' '}
@@ -47,8 +43,7 @@ export default function HeroSection(): JSX.Element {
               </Box>
             </Text>
             <Text
-              fontSize={'1.2rem'}
-              color={'text.secondary'}
+              variant={'heroSubtitle'}
               mb={8}
               maxWidth={'500px'}
             >
@@ -64,56 +59,26 @@ export default function HeroSection(): JSX.Element {
             </Flex>
             <Flex gap={12}>
               <Box textAlign={'center'}>
-                <Text
-                  fontFamily={'heading'}
-                  fontSize={'2.5rem'}
-                  fontWeight={'700'}
-                  color={'brand.blue.500'}
-                >
+                <Text variant={'statValue'}>
                   {t($ => $.LANDING.HERO.STATS.MODS_COUNT)}
                 </Text>
-                <Text
-                  fontSize={'0.85rem'}
-                  color={'text.muted'}
-                  textTransform={'uppercase'}
-                  letterSpacing={'1px'}
-                >
+                <Text variant={'statLabel'}>
                   {t($ => $.LANDING.HERO.STATS.MODS)}
                 </Text>
               </Box>
               <Box textAlign={'center'}>
-                <Text
-                  fontFamily={'heading'}
-                  fontSize={'2.5rem'}
-                  fontWeight={'700'}
-                  color={'brand.blue.500'}
-                >
+                <Text variant={'statValue'}>
                   {t($ => $.LANDING.HERO.STATS.DOWNLOADS_COUNT)}
                 </Text>
-                <Text
-                  fontSize={'0.85rem'}
-                  color={'text.muted'}
-                  textTransform={'uppercase'}
-                  letterSpacing={'1px'}
-                >
+                <Text variant={'statLabel'}>
                   {t($ => $.LANDING.HERO.STATS.DOWNLOADS)}
                 </Text>
               </Box>
               <Box textAlign={'center'}>
-                <Text
-                  fontFamily={'heading'}
-                  fontSize={'2.5rem'}
-                  fontWeight={'700'}
-                  color={'brand.blue.500'}
-                >
+                <Text variant={'statValue'}>
                   {t($ => $.LANDING.HERO.STATS.CREATORS_COUNT)}
                 </Text>
-                <Text
-                  fontSize={'0.85rem'}
-                  color={'text.muted'}
-                  textTransform={'uppercase'}
-                  letterSpacing={'1px'}
-                >
+                <Text variant={'statLabel'}>
                   {t($ => $.LANDING.HERO.STATS.CREATORS)}
                 </Text>
               </Box>

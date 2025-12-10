@@ -1,7 +1,7 @@
-import { Box, Text, Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { Download, Star } from 'lucide-react';
-import { Card, Badge } from '@/theming/components';
+import { Card, Badge, Text } from '@/theming/components';
 
 interface ModCardProps {
   icon: JSX.Element;
@@ -23,7 +23,7 @@ export default function ModCard({
   rating,
 }: ModCardProps): JSX.Element {
   return (
-    <Card variant={'mod'} colorPalette={'gold'}>
+    <Card variant={'pressable'} colorPalette={'gold'}>
       <Box
         width={'100%'}
         height={'180px'}
@@ -48,21 +48,10 @@ export default function ModCard({
         <Badge variant={'tag'} colorPalette={'gold'} mb={3}>
           {category}
         </Badge>
-        <Text
-          fontFamily={'heading'}
-          fontSize={'1.35rem'}
-          fontWeight={'600'}
-          mb={2}
-          color={'text.primary'}
-        >
+        <Text variant={'cardTitle'} mb={2}>
           {title}
         </Text>
-        <Text
-          fontSize={'0.9rem'}
-          color={'text.secondary'}
-          mb={4}
-          maxLines={2}
-        >
+        <Text variant={'cardBody'} mb={4} maxLines={2}>
           {description}
         </Text>
         <Flex
@@ -73,11 +62,11 @@ export default function ModCard({
         >
           <Flex align={'center'} gap={2} fontSize={'0.85rem'} color={'text.muted'}>
             <Download size={16} />
-            <Text>{downloads}</Text>
+            <Text variant={'caption'}>{downloads}</Text>
           </Flex>
           <Flex align={'center'} gap={2} fontSize={'0.85rem'} color={'text.muted'}>
             <Star size={16} />
-            <Text>{rating}</Text>
+            <Text variant={'caption'}>{rating}</Text>
           </Flex>
         </Flex>
       </Box>
