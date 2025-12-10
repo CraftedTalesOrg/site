@@ -28,13 +28,13 @@ export const badgeRecipe = defineRecipe({
       },
     },
     colorPalette: {
-      cyan: {
-        bg: 'alpha.cyan.15',
-        color: 'brand.cyan.500',
+      blue: {
+        bg: 'alpha.blue.15',
+        color: 'brand.blue.500',
       },
-      purple: {
-        bg: 'alpha.purple.15',
-        color: 'brand.purple.500',
+      gold: {
+        bg: 'alpha.gold.15',
+        color: 'brand.gold.500',
       },
       green: {
         bg: 'alpha.green.15',
@@ -48,7 +48,7 @@ export const badgeRecipe = defineRecipe({
   },
   defaultVariants: {
     variant: 'tag',
-    colorPalette: 'cyan',
+    colorPalette: 'blue',
   },
 });
 

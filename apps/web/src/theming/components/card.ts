@@ -39,16 +39,16 @@ export const cardRecipe = defineRecipe({
       },
     },
     colorPalette: {
-      cyan: {
+      blue: {
         _hover: {
-          borderColor: 'brand.cyan.500',
-          boxShadow: 'glow.cyan',
+          borderColor: 'brand.blue.500',
+          boxShadow: 'glow.blue',
         },
       },
-      purple: {
+      gold: {
         _hover: {
-          borderColor: 'brand.purple.500',
-          boxShadow: 'glow.purple',
+          borderColor: 'brand.gold.500',
+          boxShadow: 'glow.gold',
         },
       },
       green: {
@@ -61,7 +61,7 @@ export const cardRecipe = defineRecipe({
   },
   defaultVariants: {
     variant: 'category',
-    colorPalette: 'cyan',
+    colorPalette: 'blue',
   },
 });
 

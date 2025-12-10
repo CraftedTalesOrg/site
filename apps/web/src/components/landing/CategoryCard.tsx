@@ -6,14 +6,14 @@ interface CategoryCardProps {
   icon: JSX.Element;
   name: string;
   count: string;
-  colorPalette?: 'cyan' | 'purple' | 'green';
+  colorPalette?: 'blue' | 'gold' | 'green';
 }
 
 export default function CategoryCard({
   icon,
   name,
   count,
-  colorPalette = 'cyan',
+  colorPalette = 'blue',
 }: CategoryCardProps): JSX.Element {
   return (
     <Group asChild>

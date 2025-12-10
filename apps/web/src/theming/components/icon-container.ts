@@ -25,44 +25,44 @@ export const iconContainerRecipe = defineRecipe({
       },
     },
     colorPalette: {
-      cyan: {
+      blue: {
         bgGradient: 'to-br',
-        gradientFrom: 'alpha.cyan.15',
-        gradientTo: 'alpha.purple.15',
-        color: 'brand.cyan.500',
+        gradientFrom: 'alpha.blue.15',
+        gradientTo: 'alpha.gold.15',
+        color: 'brand.blue.500',
         _groupHover: {
           transform: 'scale(1.1) rotate(5deg)',
-          gradientFrom: 'alpha.cyan.25',
-          gradientTo: 'alpha.purple.25',
+          gradientFrom: 'alpha.blue.25',
+          gradientTo: 'alpha.gold.25',
         },
       },
-      purple: {
+      gold: {
         bgGradient: 'to-br',
-        gradientFrom: 'alpha.purple.15',
-        gradientTo: 'alpha.cyan.15',
-        color: 'brand.purple.500',
+        gradientFrom: 'alpha.gold.15',
+        gradientTo: 'alpha.blue.15',
+        color: 'brand.gold.500',
         _groupHover: {
           transform: 'scale(1.1) rotate(5deg)',
-          gradientFrom: 'alpha.purple.25',
-          gradientTo: 'alpha.cyan.25',
+          gradientFrom: 'alpha.gold.25',
+          gradientTo: 'alpha.blue.25',
         },
       },
       green: {
         bgGradient: 'to-br',
         gradientFrom: 'alpha.green.15',
-        gradientTo: 'alpha.cyan.15',
+        gradientTo: 'alpha.blue.15',
         color: 'brand.green.500',
         _groupHover: {
           transform: 'scale(1.1)',
           gradientFrom: 'alpha.green.25',
-          gradientTo: 'alpha.cyan.25',
+          gradientTo: 'alpha.blue.25',
         },
       },
     },
   },
   defaultVariants: {
     size: 'lg',
-    colorPalette: 'cyan',
+    colorPalette: 'blue',
   },
 });
 

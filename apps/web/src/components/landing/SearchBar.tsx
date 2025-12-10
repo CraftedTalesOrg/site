@@ -19,8 +19,8 @@ export default function SearchBar({ placeholder }: SearchBarProps): JSX.Element 
         px={4}
         transition={'all 0.3s ease'}
         _focusWithin={{
-          borderColor: 'brand.cyan.500',
-          boxShadow: 'glow.cyan',
+          borderColor: 'brand.blue.500',
+          boxShadow: 'glow.blue',
         }}
       >
         <Input
@@ -38,13 +38,13 @@ export default function SearchBar({ placeholder }: SearchBarProps): JSX.Element 
           as={'button'}
           bg={'transparent'}
           border={'none'}
-          color={'brand.cyan.500'}
+          color={'brand.blue.500'}
           cursor={'pointer'}
           p={2}
           display={'flex'}
           alignItems={'center'}
           transition={'all 0.3s ease'}
-          _hover={{ color: 'brand.cyan.400' }}
+          _hover={{ color: 'brand.blue.400' }}
         >
           <Search size={20} />
         </Box>

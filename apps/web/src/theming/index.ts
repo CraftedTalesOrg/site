@@ -24,29 +24,29 @@ const config = defineConfig({
       colors: {
         // Brand colors based on ModsTale design
         brand: {
-          cyan: {
-            50: { value: '#e6f9ff' },
-            100: { value: '#b3edff' },
-            200: { value: '#80e1ff' },
-            300: { value: '#4dd5ff' },
-            400: { value: '#1ac9ff' },
-            500: { value: '#00d4ff' }, // accent-cyan
-            600: { value: '#00a9cc' },
-            700: { value: '#007f99' },
-            800: { value: '#005566' },
-            900: { value: '#002a33' },
+          blue: {
+            50: { value: '#eef4fe' },
+            100: { value: '#dde9fd' },
+            200: { value: '#bbd3fb' },
+            300: { value: '#99bdf9' },
+            400: { value: '#77a7f7' },
+            500: { value: '#2769e1' }, // accent-blue
+            600: { value: '#1f54b4' },
+            700: { value: '#173f87' },
+            800: { value: '#102a5a' },
+            900: { value: '#08152d' },
           },
-          purple: {
-            50: { value: '#f5f3ff' },
-            100: { value: '#ede9fe' },
-            200: { value: '#ddd6fe' },
-            300: { value: '#c4b5fd' },
-            400: { value: '#a78bfa' },
-            500: { value: '#8b5cf6' }, // accent-purple
-            600: { value: '#7c3aed' },
-            700: { value: '#6d28d9' },
-            800: { value: '#5b21b6' },
-            900: { value: '#4c1d95' },
+          gold: {
+            50: { value: '#fef9f0' },
+            100: { value: '#fdf3e0' },
+            200: { value: '#fbe7c1' },
+            300: { value: '#f5d59f' },
+            400: { value: '#edb760' },
+            500: { value: '#e19f27' }, // accent-gold
+            600: { value: '#c98a1f' },
+            700: { value: '#a67018' },
+            800: { value: '#835811' },
+            900: { value: '#60400c' },
           },
           orange: {
             50: { value: '#fff7ed' },
@@ -93,15 +93,15 @@ const config = defineConfig({
         },
         // Alpha variants for backgrounds
         alpha: {
-          cyan: {
-            10: { value: 'rgba(0, 212, 255, 0.1)' },
-            15: { value: 'rgba(0, 212, 255, 0.15)' },
-            25: { value: 'rgba(0, 212, 255, 0.25)' },
+          blue: {
+            10: { value: 'rgba(39, 105, 225, 0.1)' },
+            15: { value: 'rgba(39, 105, 225, 0.15)' },
+            25: { value: 'rgba(39, 105, 225, 0.25)' },
           },
-          purple: {
-            10: { value: 'rgba(139, 92, 246, 0.1)' },
-            15: { value: 'rgba(139, 92, 246, 0.15)' },
-            25: { value: 'rgba(139, 92, 246, 0.25)' },
+          gold: {
+            10: { value: 'rgba(225, 159, 39, 0.1)' },
+            15: { value: 'rgba(225, 159, 39, 0.15)' },
+            25: { value: 'rgba(225, 159, 39, 0.25)' },
           },
           green: {
             10: { value: 'rgba(16, 185, 129, 0.1)' },
@@ -116,8 +116,8 @@ const config = defineConfig({
         },
       },
       fonts: {
-        heading: { value: '"Roboto", sans-serif' },
-        body: { value: '"Roboto", sans-serif' },
+        heading: { value: '"Lexend", sans-serif' },
+        body: { value: '"Lexend", sans-serif' },
       },
       fontSizes: {
         'xs': { value: '0.7rem' },
@@ -145,13 +145,13 @@ const config = defineConfig({
       },
       shadows: {
         'glow': {
-          cyan: { value: '0 0 30px rgba(0, 212, 255, 0.3)' },
-          purple: { value: '0 0 30px rgba(139, 92, 246, 0.3)' },
+          blue: { value: '0 0 30px rgba(39, 105, 225, 0.3)' },
+          gold: { value: '0 0 30px rgba(225, 159, 39, 0.3)' },
           green: { value: '0 0 30px rgba(16, 185, 129, 0.2)' },
         },
         'glow.hover': {
-          cyan: { value: '0 0 40px rgba(0, 212, 255, 0.5)' },
-          purple: { value: '0 0 40px rgba(139, 92, 246, 0.5)' },
+          blue: { value: '0 0 40px rgba(39, 105, 225, 0.5)' },
+          gold: { value: '0 0 40px rgba(225, 159, 39, 0.5)' },
           green: { value: '0 0 40px rgba(16, 185, 129, 0.4)' },
         },
         'card': {
@@ -159,34 +159,34 @@ const config = defineConfig({
         },
       },
       gradients: {
-        'primary': { value: 'linear-gradient(135deg, {colors.brand.cyan.500}, {colors.brand.purple.500})' },
-        'primary.subtle': { value: 'linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(139, 92, 246, 0.15))' },
-        'primary.subtle.hover': { value: 'linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(139, 92, 246, 0.25))' },
-        'feature': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(0, 212, 255, 0.15))' },
-        'feature.hover': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(0, 212, 255, 0.25))' },
+        'primary': { value: 'linear-gradient(135deg, {colors.brand.blue.500}, {colors.brand.gold.500})' },
+        'primary.subtle': { value: 'linear-gradient(135deg, rgba(39, 105, 225, 0.15), rgba(225, 159, 39, 0.15))' },
+        'primary.subtle.hover': { value: 'linear-gradient(135deg, rgba(39, 105, 225, 0.25), rgba(225, 159, 39, 0.25))' },
+        'feature': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(39, 105, 225, 0.15))' },
+        'feature.hover': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(39, 105, 225, 0.25))' },
       },
     },
     semanticTokens: {
       colors: {
-        // Cyan brand tokens
-        'brand.cyan': {
-          solid: { value: '{colors.brand.cyan.500}' },
+        // Blue brand tokens
+        'brand.blue': {
+          solid: { value: '{colors.brand.blue.500}' },
           contrast: { value: '{colors.text.primary}' },
-          fg: { value: '{colors.brand.cyan.500}' },
-          muted: { value: '{colors.brand.cyan.100}' },
-          subtle: { value: '{colors.brand.cyan.200}' },
-          emphasized: { value: '{colors.brand.cyan.300}' },
-          focusRing: { value: '{colors.brand.cyan.500}' },
+          fg: { value: '{colors.brand.blue.500}' },
+          muted: { value: '{colors.brand.blue.100}' },
+          subtle: { value: '{colors.brand.blue.200}' },
+          emphasized: { value: '{colors.brand.blue.300}' },
+          focusRing: { value: '{colors.brand.blue.500}' },
         },
-        // Purple brand tokens
-        'brand.purple': {
-          solid: { value: '{colors.brand.purple.500}' },
+        // Gold brand tokens
+        'brand.gold': {
+          solid: { value: '{colors.brand.gold.500}' },
           contrast: { value: '{colors.text.primary}' },
-          fg: { value: '{colors.brand.purple.500}' },
-          muted: { value: '{colors.brand.purple.100}' },
-          subtle: { value: '{colors.brand.purple.200}' },
-          emphasized: { value: '{colors.brand.purple.300}' },
-          focusRing: { value: '{colors.brand.purple.500}' },
+          fg: { value: '{colors.brand.gold.500}' },
+          muted: { value: '{colors.brand.gold.100}' },
+          subtle: { value: '{colors.brand.gold.200}' },
+          emphasized: { value: '{colors.brand.gold.300}' },
+          focusRing: { value: '{colors.brand.gold.500}' },
         },
         // Orange brand tokens
         'brand.orange': {

@@ -38,9 +38,9 @@ export default function HeroSection(): JSX.Element {
               {' '}
               <Box
                 as={'span'}
-                bgGradient={'to-r'}
-                gradientFrom={'brand.cyan.500'}
-                gradientTo={'brand.purple.500'}
+                bgGradient={'to-b'}
+                gradientFrom={'brand.gold.300'}
+                gradientTo={'brand.gold.500'}
                 bgClip={'text'}
               >
                 {t($ => $.LANDING.HERO.TITLE_HIGHLIGHT)}
@@ -68,7 +68,7 @@ export default function HeroSection(): JSX.Element {
                   fontFamily={'heading'}
                   fontSize={'2.5rem'}
                   fontWeight={'700'}
-                  color={'brand.cyan.500'}
+                  color={'brand.blue.500'}
                 >
                   {t($ => $.LANDING.HERO.STATS.MODS_COUNT)}
                 </Text>
@@ -86,7 +86,7 @@ export default function HeroSection(): JSX.Element {
                   fontFamily={'heading'}
                   fontSize={'2.5rem'}
                   fontWeight={'700'}
-                  color={'brand.cyan.500'}
+                  color={'brand.blue.500'}
                 >
                   {t($ => $.LANDING.HERO.STATS.DOWNLOADS_COUNT)}
                 </Text>
@@ -104,7 +104,7 @@ export default function HeroSection(): JSX.Element {
                   fontFamily={'heading'}
                   fontSize={'2.5rem'}
                   fontWeight={'700'}
-                  color={'brand.cyan.500'}
+                  color={'brand.blue.500'}
                 >
                   {t($ => $.LANDING.HERO.STATS.CREATORS_COUNT)}
                 </Text>

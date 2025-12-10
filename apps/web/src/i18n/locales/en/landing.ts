@@ -2,7 +2,7 @@ export default {
   HERO: {
     TITLE: 'Discover the best',
     TITLE_HIGHLIGHT: 'Mods for Hytale',
-    DESCRIPTION: 'Explore thousands of mods, plugins, and resource packs for Hytale. Join the #1 modding community in Spanish.',
+    DESCRIPTION: 'Explore thousands of mods, plugins, and resource packs for Hytale.',
     CTA_EXPLORE: 'Explore Mods',
     CTA_DISCORD: 'Join Discord',
     STATS: {

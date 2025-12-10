@@ -23,7 +23,7 @@ export default function ModCard({
   rating,
 }: ModCardProps): JSX.Element {
   return (
-    <Card variant={'mod'} colorPalette={'purple'}>
+    <Card variant={'mod'} colorPalette={'gold'}>
       <Box
         width={'100%'}
         height={'180px'}
@@ -45,7 +45,7 @@ export default function ModCard({
         )}
       </Box>
       <Box p={6}>
-        <Badge variant={'tag'} colorPalette={'purple'} mb={3}>
+        <Badge variant={'tag'} colorPalette={'gold'} mb={3}>
           {category}
         </Badge>
         <Text

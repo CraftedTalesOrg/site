@@ -69,7 +69,7 @@ export default function FloatingCards(): JSX.Element {
             {card.icon}
           </Box>
           <Box p={4}>
-            <Badge variant={'tag'} colorPalette={'cyan'} mb={2}>
+            <Badge variant={'tag'} colorPalette={'blue'} mb={2}>
               {card.tag}
             </Badge>
             <Text

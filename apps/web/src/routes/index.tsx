@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import type { JSX } from 'react';
 import { Box } from '@chakra-ui/react';
+import BackgroundEffects from '../components/BackgroundEffects';
 import HeroSection from '../components/landing/HeroSection';
 import CategoriesSection from '../components/landing/CategoriesSection';
 import FeaturedModsSection from '../components/landing/FeaturedModsSection';
@@ -11,17 +12,15 @@ export const Route = createFileRoute('/')({ component: Landing });
 
 function Landing(): JSX.Element {
   return (
-    <Box position={'relative'}>
-      {/* Background Pattern */}
-      <div className={'bg-pattern'} />
-      <div className={'grid-overlay'} />
-
-      {/* Content */}
-      <HeroSection />
-      <CategoriesSection />
-      <FeaturedModsSection />
-      <FeaturesSection />
-      <CTASection />
-    </Box>
+    <>
+      <BackgroundEffects />
+      <Box position={'relative'}>
+        <HeroSection />
+        <CategoriesSection />
+        <FeaturedModsSection />
+        <FeaturesSection />
+        <CTASection />
+      </Box>
+    </>
   );
 }

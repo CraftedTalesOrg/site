@@ -40,15 +40,15 @@ export default function Header(): JSX.Element {
           <Box
             w={'42px'}
             h={'42px'}
-            bgGradient={'to-br'}
-            gradientFrom={'brand.cyan.500'}
-            gradientTo={'brand.purple.500'}
+            bgGradient={'to-b'}
+            gradientFrom={'brand.gold.300'}
+            gradientTo={'brand.gold.500'}
             borderRadius={'10px'}
             display={'flex'}
             alignItems={'center'}
             justifyContent={'center'}
             fontSize={'2xl'}
-            boxShadow={'glow.cyan'}
+            boxShadow={'glow.blue'}
           >
             {'🎮'}
           </Box>
@@ -56,9 +56,9 @@ export default function Header(): JSX.Element {
             fontFamily={'heading'}
             fontSize={'2xl'}
             fontWeight={'bold'}
-            bgGradient={'to-br'}
-            gradientFrom={'brand.cyan.500'}
-            gradientTo={'brand.purple.500'}
+            bgGradient={'to-b'}
+            gradientFrom={'brand.gold.300'}
+            gradientTo={'brand.gold.500'}
             bgClip={'text'}
           >
             {t($ => $.COMMON.APP_NAME)}
@@ -129,11 +129,11 @@ export default function Header(): JSX.Element {
           </Button>
           <Button
             asChild
-            bgGradient={'to-br'}
-            gradientFrom={'brand.cyan.500'}
-            gradientTo={'brand.purple.500'}
+            bgGradient={'to-b'}
+            gradientFrom={'brand.gold.300'}
+            gradientTo={'brand.gold.500'}
             color={'text.primary'}
-            boxShadow={'glow.cyan'}
+            boxShadow={'glow.blue'}
           >
             <Link to={'/register'}>{t($ => $.COMMON.HEADER.CTA.GET_STARTED)}</Link>
           </Button>

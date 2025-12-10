@@ -24,7 +24,7 @@ export default function FeaturedModsSection(): JSX.Element {
     <Box as={'section'} position={'relative'} zIndex={1} py={24} px={8}>
       <Container maxWidth={'1200px'}>
         <Box textAlign={'center'} maxWidth={'700px'} mx={'auto'} mb={16}>
-          <Badge variant={'tag'} colorPalette={'cyan'} mb={4}>
+          <Badge variant={'tag'} colorPalette={'blue'} mb={4}>
             {t($ => $.LANDING.FEATURED.TAG)}
           </Badge>
           <Text

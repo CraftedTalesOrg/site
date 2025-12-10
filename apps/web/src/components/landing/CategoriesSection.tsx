@@ -32,7 +32,7 @@ export default function CategoriesSection(): JSX.Element {
     >
       <Container maxWidth={'1200px'}>
         <Box textAlign={'center'} maxWidth={'700px'} mx={'auto'} mb={16}>
-          <Badge variant={'tag'} colorPalette={'purple'} mb={4}>
+          <Badge variant={'tag'} colorPalette={'gold'} mb={4}>
             {t($ => $.LANDING.CATEGORIES.TAG)}
           </Badge>
           <Text
