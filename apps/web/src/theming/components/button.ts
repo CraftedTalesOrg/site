@@ -16,7 +16,7 @@ export const buttonRecipe = defineRecipe({
         boxShadow: 'glow.blue',
         fontWeight: '600',
         borderRadius: 'sm',
-        transition: 'all 0.3s ease',
+        transition: '{durations.fast}',
         cursor: 'pointer',
         border: 'none',
         _hover: {
@@ -34,7 +34,7 @@ export const buttonRecipe = defineRecipe({
         borderColor: 'border.default',
         fontWeight: '600',
         borderRadius: 'sm',
-        transition: 'all 0.3s ease',
+        transition: '{durations.fast}',
         cursor: 'pointer',
         _hover: {
           borderColor: 'brand.blue.500',

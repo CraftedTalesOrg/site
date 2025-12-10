@@ -28,7 +28,7 @@ export default function CTASection(): JSX.Element {
             width={'200%'}
             height={'200%'}
             background={'radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 50%)'}
-            animation={'pulse 4s ease-in-out infinite'}
+            animationStyle={'pulseGlow'}
             pointerEvents={'none'}
           />
           <Box position={'relative'} zIndex={1}>

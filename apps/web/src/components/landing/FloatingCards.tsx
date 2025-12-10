@@ -9,7 +9,7 @@ interface FloatingCard {
   title: string;
   meta: string;
   delay: number;
-  animationName: string;
+  animation: string;
 }
 
 const cards: FloatingCard[] = [
@@ -19,7 +19,7 @@ const cards: FloatingCard[] = [
     title: 'Epic Weapons Mod',
     meta: '2.5k downloads',
     delay: 0,
-    animationName: 'float1',
+    animation: 'floatingCard1',
   },
   {
     icon: <Wand2 size={48} />,
@@ -27,7 +27,7 @@ const cards: FloatingCard[] = [
     title: 'Spell Casting',
     meta: '1.8k downloads',
     delay: 1,
-    animationName: 'float2',
+    animation: 'floatingCard2',
   },
   {
     icon: <Package size={48} />,
@@ -35,7 +35,7 @@ const cards: FloatingCard[] = [
     title: 'Resource Pack',
     meta: '3.2k downloads',
     delay: 2,
-    animationName: 'float3',
+    animation: 'floatingCard3',
   },
 ];
 
@@ -52,7 +52,7 @@ export default function FloatingCards(): JSX.Element {
           left={index === 0 ? '0' : index === 2 ? '60px' : 'auto'}
           right={index === 1 ? '0' : 'auto'}
           zIndex={3 - index}
-          animation={`${card.animationName} ${6 + index}s ease-in-out infinite`}
+          animationStyle={card.animation}
         >
           <Box
             width={'100%'}

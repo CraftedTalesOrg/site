@@ -1,9 +1,3 @@
-/* Prevent animation flash on load */
-.t_unmounted * {
-  transition: none !important;
-  animation: none !important;
-}
-
 body {
   font-family:
     'Lexend',

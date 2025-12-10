@@ -50,10 +50,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
     scripts: [
-      {
-        // Prevent animation flash on load
-        children: 'document.documentElement.classList.add(\'t_unmounted\')',
-      },
     ],
   }),
 

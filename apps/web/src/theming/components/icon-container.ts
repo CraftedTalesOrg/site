@@ -7,7 +7,7 @@ export const iconContainerRecipe = defineRecipe({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    transition: 'all 0.4s ease',
+    transition: '{durations.medium}',
   },
   variants: {
     size: {

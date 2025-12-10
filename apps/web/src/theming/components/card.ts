@@ -9,7 +9,7 @@ export const cardRecipe = defineRecipe({
     borderColor: 'border.default',
     borderRadius: 'lg',
     overflow: 'hidden',
-    transition: 'all 0.4s ease',
+    transition: '{durations.medium}',
   },
   variants: {
     variant: {

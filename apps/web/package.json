@@ -11,7 +11,7 @@
     "format": "prettier",
     "check": "prettier --write . && eslint --fix",
     "start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs",
-    "typegen": "chakra-ui typegen ./src/theming/index.ts"
+    "typegen": "chakra typegen ./src/theming/index.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.30.0",
@@ -42,6 +42,7 @@
     "zod": "4.1.11"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^3.30.0",
     "@craftedtales/config": "workspace:*",
     "@tanstack/devtools-event-client": "^0.3.2",
     "@tanstack/devtools-vite": "^0.3.11",

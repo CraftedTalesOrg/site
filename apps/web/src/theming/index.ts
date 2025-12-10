@@ -10,6 +10,12 @@ import {
   headingRecipe,
   iconContainerRecipe,
 } from './components';
+import {
+  keyframes,
+  animationTokens,
+  transitionTokens,
+  animationStyles,
+} from './animations';
 
 const config = defineConfig({
   theme: {
@@ -165,6 +171,8 @@ const config = defineConfig({
         'feature': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(39, 105, 225, 0.15))' },
         'feature.hover': { value: 'linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(39, 105, 225, 0.25))' },
       },
+      animations: animationTokens,
+      durations: transitionTokens,
     },
     semanticTokens: {
       colors: {
@@ -210,28 +218,8 @@ const config = defineConfig({
         },
       },
     },
-    keyframes: {
-      spin: {
-        from: { transform: 'rotate(0deg)' },
-        to: { transform: 'rotate(360deg)' },
-      },
-      float1: {
-        '0%, 100%': { transform: 'translateY(0) rotate(-2deg)' },
-        '50%': { transform: 'translateY(-15px) rotate(0deg)' },
-      },
-      float2: {
-        '0%, 100%': { transform: 'translateY(0) rotate(3deg)' },
-        '50%': { transform: 'translateY(-20px) rotate(1deg)' },
-      },
-      float3: {
-        '0%, 100%': { transform: 'translateY(0) rotate(-1deg)' },
-        '50%': { transform: 'translateY(-10px) rotate(1deg)' },
-      },
-      pulse: {
-        '0%, 100%': { transform: 'scale(1)', opacity: '0.5' },
-        '50%': { transform: 'scale(1.1)', opacity: '1' },
-      },
-    },
+    keyframes,
+    animationStyles,
     recipes: {
       badge: badgeRecipe,
       button: buttonRecipe,
