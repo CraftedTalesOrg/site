@@ -11,6 +11,10 @@
 		"i18next documentation": {
 			"url": "https://www.i18next.com/~gitbook/mcp",
 			"type": "http"
+		},
+		"cloudflare": {
+			"command": "npx",
+			"args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
 		}
 	},
 	"inputs": []

@@ -126,7 +126,7 @@ export default {
         DESCRIPTION: 'Built in the open. Our platform code is transparent and community-driven, ensuring trust and continuous improvement.',
       },
       FEATURE_5: {
-        TITLE: 'Block by Block Expertise',
+        TITLE: 'Block Expertise',
         DESCRIPTION: 'Created by developers with years of Minecraft modding experience. We understand what creators and players need.',
       },
       FEATURE_6: {

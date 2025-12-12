@@ -1,0 +1,79 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "craftedtales-api-dev",
+	"main": "src/index.ts",
+	"compatibility_date": "2024-11-21",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"dev": {
+		"port": 8787
+	},
+	"vars": {
+		"SWAGGER_ENABLED": true,
+		"API_VERSION_PREFIX": "/api/v1",
+		"CORS_ORIGIN": "http://localhost:5173",
+		"SESSION_COOKIE_NAME": "ct_session",
+		"ENVIRONMENT": "development",
+		"SESSION_SECRET": ""
+	},
+	"d1_databases": [
+		{
+			"binding": "craftedtales_db_dev",
+			"database_name": "craftedtales-db-dev",
+			"database_id": "55f3cf71-e95c-40b8-b8e4-4f993a0297eb"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "craftedtales_rl_dev",
+			"id": "61373b869419439bb6dce3d7b4eba663"
+		}
+	],
+	"r2_buckets": [
+		{
+			"bucket_name": "craftedtales-mods-dev",
+			"binding": "craftedtales_mods_dev"
+		},
+		{
+			"bucket_name": "craftedtales-media-dev",
+			"binding": "craftedtales_media_dev"
+		}
+	],
+	"env": {
+		"production": {
+			"name": "craftedtales-api",
+			"vars": {
+				"SWAGGER_ENABLED": false,
+				"API_VERSION_PREFIX": "/api/v1",
+				"CORS_ORIGIN": "https://craftedtales.com",
+				"SESSION_COOKIE_NAME": "ct_session",
+				"ENVIRONMENT": "production",
+				"SESSION_SECRET": ""
+			},
+			"d1_databases": [
+				{
+					"binding": "craftedtales_db",
+					"database_name": "craftedtales-db",
+					"database_id": "6da4dd25-8219-4241-80c7-5aa92d864198"
+				}
+			],
+			"kv_namespaces": [
+				{
+					"binding": "craftedtales_rl",
+					"id": "3506411d74ac47759cedd1b7c5c4bd98"
+				}
+			],
+			"r2_buckets": [
+				{
+					"bucket_name": "craftedtales-mods",
+					"binding": "craftedtales_mods"
+				},
+				{
+					"bucket_name": "craftedtales-media",
+					"binding": "craftedtales_media"
+				}
+			]
+		}
+	}
+}
