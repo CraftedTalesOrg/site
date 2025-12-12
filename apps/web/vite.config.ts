@@ -9,7 +9,10 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     devtools(),
     // Only use cloudflare plugin for production builds
-    mode === 'production' && cloudflare({ viteEnvironment: { name: 'ssr' } }),
+    mode === 'production'
+    && cloudflare({
+      viteEnvironment: { name: 'ssr' },
+    }),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({ projects: ['./tsconfig.json'] }),
     tanstackStart(),

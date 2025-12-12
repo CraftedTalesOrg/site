@@ -4,11 +4,9 @@
   "scripts": {
     "dev": "wrangler dev",
     "build": "tsc",
-    "deploy": "wrangler deploy",
-    "deploy:production": "wrangler deploy --env production",
+    "deploy": "wrangler deploy --env production",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
-    "secret:production": "wrangler secret put --env production"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hono/session": "^0.2.0",

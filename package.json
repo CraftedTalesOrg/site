@@ -7,8 +7,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "deploy": "turbo run deploy",
-    "deploy:api": "pnpm --filter @craftedtales/api deploy",
-    "deploy:web": "pnpm --filter @craftedtales/web deploy"
+    "deploy:api": "pnpm --filter @craftedtales/api run deploy",
+    "deploy:web": "pnpm --filter @craftedtales/web run deploy"
   },
   "devDependencies": {
     "turbo": "^2.0.0",
