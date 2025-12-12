@@ -3,9 +3,21 @@ import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import FloatingCards from './FloatingCards';
 import { Button, Text } from '@/theming/components';
+import { toaster } from '../Toaster';
 
 export default function HeroSection(): JSX.Element {
   const { t } = useTranslation();
+
+  const handleClick = (): void => {
+    toaster.error({
+      title: `Nuh-uh`,
+      description: `There is no game yet, what do you expect to find here?`,
+    });
+  };
+
+  const handleDiscordClick = (): void => {
+    window.open('https://discord.gg/Rkm2tF4GWM', '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <Box
@@ -16,7 +28,8 @@ export default function HeroSection(): JSX.Element {
       display={'flex'}
       alignItems={'center'}
       py={{ base: 32, md: 16 }}
-      px={8}
+      px={{ base: 4, sm: 6, md: 8 }}
+      overflow={'hidden'}
     >
       <Container maxWidth={'1400px'}>
         <Grid
@@ -24,11 +37,20 @@ export default function HeroSection(): JSX.Element {
           gap={16}
           alignItems={'center'}
         >
-          <Box>
+          <Box
+            textAlign={{ base: 'center', lg: 'left' }}
+            display={'flex'}
+            flexDirection={'column'}
+            alignItems={{ base: 'center', lg: 'flex-start' }}
+            width={'100%'}
+            maxWidth={'100%'}
+          >
             <Text
               as={'h1'}
               variant={'heroTitle'}
               mb={6}
+              width={'100%'}
+              maxWidth={'100%'}
             >
               {t($ => $.LANDING.HERO.TITLE)}
               {' '}
@@ -44,20 +66,33 @@ export default function HeroSection(): JSX.Element {
             </Text>
             <Text
               variant={'heroSubtitle'}
-              mb={8}
-              maxWidth={'500px'}
+              maxWidth={{ base: '100%', md: '500px' }}
+              width={'100%'}
             >
               {t($ => $.LANDING.HERO.DESCRIPTION)}
             </Text>
-            <Flex gap={4} mb={12} flexWrap={'wrap'}>
-              <Button variant={'gradient'}>
+            <Text
+              variant={'caption'}
+              mb={8}
+              maxWidth={{ base: '100%', md: '500px' }}
+              width={'100%'}
+            >
+              {t($ => $.LANDING.HERO.DESCRIPTION_HIGHLIGHT)}
+            </Text>
+            <Flex gap={4} mb={12} flexWrap={'wrap'} justifyContent={{ base: 'center', lg: 'flex-start' }}>
+              <Button variant={'gradient'} onClick={handleClick}>
                 {t($ => $.LANDING.HERO.CTA_EXPLORE)}
               </Button>
-              <Button variant={'outline-hover'}>
+              <Button variant={'outline'} onClick={handleDiscordClick}>
                 {t($ => $.LANDING.HERO.CTA_DISCORD)}
               </Button>
             </Flex>
-            <Flex gap={12}>
+            {/* <Flex
+              gap={{ base: 6, sm: 8, md: 12 }}
+              justifyContent={{ base: 'center', lg: 'flex-start' }}
+              flexWrap={'wrap'}
+              width={'100%'}
+            >
               <Box textAlign={'center'}>
                 <Text variant={'statValue'}>
                   {t($ => $.LANDING.HERO.STATS.MODS_COUNT)}
@@ -82,7 +117,7 @@ export default function HeroSection(): JSX.Element {
                   {t($ => $.LANDING.HERO.STATS.CREATORS)}
                 </Text>
               </Box>
-            </Flex>
+            </Flex> */}
           </Box>
           <Box position={'relative'} display={{ base: 'none', lg: 'block' }}>
             <FloatingCards />

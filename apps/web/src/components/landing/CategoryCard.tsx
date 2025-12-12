@@ -1,22 +1,28 @@
 import { Card, IconContainer, Text } from '@/theming/components';
 import type { JSX } from 'react';
+import { toaster } from '../Toaster';
 
 interface CategoryCardProps {
   icon: JSX.Element;
   name: string;
   count: string;
-  colorPalette?: 'blue' | 'gold' | 'green';
 }
 
 export default function CategoryCard({
   icon,
   name,
   count,
-  colorPalette = 'blue',
 }: CategoryCardProps): JSX.Element {
+  const handleClick = (): void => {
+    toaster.error({
+      title: `Nuh-uh`,
+      description: `There is no game yet, what do you expect to find here?`,
+    });
+  };
+
   return (
-    <Card variant={'pressable'} colorPalette={colorPalette}>
-      <IconContainer size={'lg'} colorPalette={colorPalette} mx={'auto'} mb={6}>
+    <Card variant={'pressable'} colorPalette={'blue'} onClick={handleClick}>
+      <IconContainer size={'lg'} colorPalette={'blue'} mx={'auto'} mb={6}>
         {icon}
       </IconContainer>
       <Text variant={'cardTitle'} mb={2} textAlign={'center'}>

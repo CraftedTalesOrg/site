@@ -1,7 +1,10 @@
 import type { JSX } from 'react';
-import { Box, Flex, HStack, Button } from '@chakra-ui/react';
+import { Box, Flex, HStack, Menu, Portal } from '@chakra-ui/react';
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/theming/components';
+import { Menu as MenuIcon } from 'lucide-react';
+import { toaster } from './Toaster';
 
 export default function Header(): JSX.Element {
   const { t } = useTranslation();
@@ -60,6 +63,7 @@ export default function Header(): JSX.Element {
             gradientFrom={'brand.gold.300'}
             gradientTo={'brand.gold.500'}
             bgClip={'text'}
+            display={{ base: 'none', sm: 'block' }}
           >
             {t($ => $.COMMON.APP_NAME)}
           </Box>
@@ -69,6 +73,14 @@ export default function Header(): JSX.Element {
         <HStack gap={'10'} display={{ base: 'none', lg: 'flex' }}>
           <Link
             to={'/mods'}
+            onClick={(e) => {
+              e.preventDefault();
+              toaster.error({
+                title: 'Coming Soon',
+                description: 'This page is under construction.',
+                duration: 3000,
+              });
+            }}
             style={{
               color: 'var(--chakra-colors-text-secondary)',
               fontWeight: '500',
@@ -81,6 +93,14 @@ export default function Header(): JSX.Element {
           </Link>
           <Link
             to={'/categories'}
+            onClick={(e) => {
+              e.preventDefault();
+              toaster.error({
+                title: 'Coming Soon',
+                description: 'This page is under construction.',
+                duration: 3000,
+              });
+            }}
             style={{
               color: 'var(--chakra-colors-text-secondary)',
               fontWeight: '500',
@@ -93,6 +113,14 @@ export default function Header(): JSX.Element {
           </Link>
           <Link
             to={'/creators'}
+            onClick={(e) => {
+              e.preventDefault();
+              toaster.error({
+                title: 'Coming Soon',
+                description: 'This page is under construction.',
+                duration: 3000,
+              });
+            }}
             style={{
               color: 'var(--chakra-colors-text-secondary)',
               fontWeight: '500',
@@ -103,50 +131,132 @@ export default function Header(): JSX.Element {
           >
             {t($ => $.COMMON.HEADER.NAV.CREATORS)}
           </Link>
-          <Link
-            to={'/about'}
-            style={{
-              color: 'var(--chakra-colors-text-secondary)',
-              fontWeight: '500',
-              fontSize: '0.95rem',
-              position: 'relative',
-              textDecoration: 'none',
-            }}
-          >
-            {t($ => $.COMMON.HEADER.NAV.ABOUT)}
-          </Link>
         </HStack>
 
         {/* CTA Buttons */}
-        <HStack gap={'4'} display={{ base: 'none', md: 'flex' }}>
+        <HStack gap={'4'} display={{ base: 'none', lg: 'flex' }}>
           <Button
-            asChild
             variant={'outline'}
-            borderColor={'border.base'}
-            color={'text.primary'}
+            size={'sm'}
+            onClick={() => {
+              toaster.error({
+                title: 'Coming Soon',
+                description: 'This page is under construction.',
+                duration: 3000,
+              });
+            }}
           >
-            <Link to={'/login'}>{t($ => $.COMMON.HEADER.CTA.SIGN_IN)}</Link>
+            {t($ => $.COMMON.HEADER.CTA.SIGN_IN)}
           </Button>
           <Button
-            asChild
-            bgGradient={'to-b'}
-            gradientFrom={'brand.gold.300'}
-            gradientTo={'brand.gold.500'}
-            color={'text.primary'}
-            boxShadow={'glow.blue'}
+            variant={'gradient'}
+            size={'sm'}
+            onClick={() => {
+              toaster.error({
+                title: 'Coming Soon',
+                description: 'This page is under construction.',
+                duration: 3000,
+              });
+            }}
           >
-            <Link to={'/register'}>{t($ => $.COMMON.HEADER.CTA.GET_STARTED)}</Link>
+            {t($ => $.COMMON.HEADER.CTA.GET_STARTED)}
           </Button>
         </HStack>
 
         {/* Mobile Menu Button */}
-        <Button
-          display={{ base: 'flex', md: 'none' }}
-          variant={'ghost'}
-          fontSize={'xl'}
-        >
-          {'☰'}
-        </Button>
+        <Menu.Root>
+          <Menu.Trigger asChild>
+            <Button variant={'transparent'} display={{ base: 'flex', lg: 'none' }} size={'sm'}>
+              <MenuIcon />
+            </Button>
+          </Menu.Trigger>
+          <Portal>
+            <Menu.Positioner>
+              <Menu.Content minW={'200px'}>
+                <Menu.ItemGroup>
+                  <Menu.Item value={'mods'} asChild>
+                    <Link
+                      to={'/mods'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toaster.error({
+                          title: 'Coming Soon',
+                          description: 'This page is under construction.',
+                          duration: 3000,
+                        });
+                      }}
+                    >
+                      {t($ => $.COMMON.HEADER.NAV.MODS)}
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item value={'categories'} asChild>
+                    <Link
+                      to={'/categories'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toaster.error({
+                          title: 'Coming Soon',
+                          description: 'This page is under construction.',
+                          duration: 3000,
+                        });
+                      }}
+                    >
+                      {t($ => $.COMMON.HEADER.NAV.CATEGORIES)}
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item value={'creators'} asChild>
+                    <Link
+                      to={'/creators'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toaster.error({
+                          title: 'Coming Soon',
+                          description: 'This page is under construction.',
+                          duration: 3000,
+                        });
+                      }}
+                    >
+                      {t($ => $.COMMON.HEADER.NAV.CREATORS)}
+                    </Link>
+                  </Menu.Item>
+                </Menu.ItemGroup>
+                <Menu.Separator />
+                <Menu.ItemGroup>
+                  <Menu.Item value={'login'} asChild>
+                    <Link
+                      to={'/login'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toaster.error({
+                          title: 'Coming Soon',
+                          description: 'This page is under construction.',
+                          duration: 3000,
+                        });
+                      }}
+                    >
+                      {t($ => $.COMMON.HEADER.CTA.SIGN_IN)}
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item value={'register'} asChild>
+                    <Link
+                      to={'/register'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toaster.error({
+                          title: 'Coming Soon',
+                          description: 'This page is under construction.',
+                          duration: 3000,
+                        });
+                      }}
+                    >
+                      {t($ => $.COMMON.HEADER.CTA.GET_STARTED)}
+                    </Link>
+                  </Menu.Item>
+                </Menu.ItemGroup>
+              </Menu.Content>
+            </Menu.Positioner>
+          </Portal>
+        </Menu.Root>
       </Flex>
     </Box>
   );

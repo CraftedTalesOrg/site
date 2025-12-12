@@ -9,6 +9,9 @@ import {
   cardRecipe,
   iconContainerRecipe,
   textRecipe,
+  timelineTitleRecipe,
+  timelineDescriptionRecipe,
+  menuRecipe,
 } from './components';
 import {
   keyframes,
@@ -226,6 +229,11 @@ const config = defineConfig({
       card: cardRecipe,
       iconContainer: iconContainerRecipe,
       text: textRecipe,
+      timelineTitle: timelineTitleRecipe,
+      timelineDescription: timelineDescriptionRecipe,
+    },
+    slotRecipes: {
+      menu: menuRecipe,
     },
   },
 });

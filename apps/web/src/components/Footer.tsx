@@ -3,6 +3,8 @@ import { Box, Flex, Grid, HStack } from '@chakra-ui/react';
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { Text } from '@/theming/components';
+import { siDiscord, siGithub } from 'simple-icons';
+import { toaster } from './Toaster';
 
 interface FooterLinkProps {
   to: string;
@@ -10,9 +12,19 @@ interface FooterLinkProps {
 }
 
 function FooterLink({ to, children }: FooterLinkProps): JSX.Element {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>): void => {
+    e.preventDefault();
+    toaster.error({
+      title: 'Coming Soon',
+      description: 'This page is under construction.',
+      duration: 3000,
+    });
+  };
+
   return (
     <Link
       to={to}
+      onClick={handleClick}
       style={{
         color: 'var(--chakra-colors-text-secondary)',
         fontSize: '0.9rem',
@@ -26,7 +38,7 @@ function FooterLink({ to, children }: FooterLinkProps): JSX.Element {
 
 interface SocialLinkProps {
   href: string;
-  icon: string;
+  icon: JSX.Element;
 }
 
 function SocialLink({ href, icon }: SocialLinkProps): JSX.Element {
@@ -46,6 +58,15 @@ function SocialLink({ href, icon }: SocialLinkProps): JSX.Element {
         borderRadius: '10px',
         color: 'var(--chakra-colors-text-secondary)',
         textDecoration: 'none',
+        transition: 'all 0.2s',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--chakra-colors-brand-blue-500)';
+        e.currentTarget.style.color = 'var(--chakra-colors-brand-blue-500)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'var(--chakra-colors-border-base)';
+        e.currentTarget.style.color = 'var(--chakra-colors-text-secondary)';
       }}
     >
       {icon}
@@ -88,8 +109,7 @@ export default function Footer(): JSX.Element {
       title: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.TITLE),
       links: [
         { to: '/creators', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.CREATORS) },
-        { to: '/discord', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.DISCORD) },
-        { to: '/forums', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.FORUMS) },
+        { to: '/news', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.NEWS) },
         { to: '/blog', label: t($ => $.COMMON.FOOTER.SECTIONS.COMMUNITY.BLOG) },
       ],
     },
@@ -105,9 +125,34 @@ export default function Footer(): JSX.Element {
   ];
 
   const socialLinks = [
-    { href: 'https://twitter.com', icon: '𝕏' },
-    { href: 'https://discord.com', icon: '💬' },
-    { href: 'https://github.com', icon: '🐙' },
+    {
+      href: 'https://discord.gg/Rkm2tF4GWM',
+      icon: (
+        <svg
+          role={'img'}
+          viewBox={'0 0 24 24'}
+          width={'20'}
+          height={'20'}
+          fill={'currentColor'}
+        >
+          <path d={siDiscord.path} />
+        </svg>
+      ),
+    },
+    {
+      href: 'https://github.com/CraftedTalesOrg',
+      icon: (
+        <svg
+          role={'img'}
+          viewBox={'0 0 24 24'}
+          width={'20'}
+          height={'20'}
+          fill={'currentColor'}
+        >
+          <path d={siGithub.path} />
+        </svg>
+      ),
+    },
   ];
 
   return (
@@ -125,16 +170,16 @@ export default function Footer(): JSX.Element {
       <Box maxW={'1200px'} mx={'auto'}>
         {/* Footer Content */}
         <Grid
-          templateColumns={{ base: '1fr', md: '2fr 1fr 1fr 1fr' }}
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: '2fr 1fr 1fr 1fr' }}
           gap={'16'}
           mb={'12'}
+          textAlign={{ base: 'center', lg: 'left' }}
+          justifyItems={{ base: 'center', lg: 'start' }}
         >
           {/* Brand Section */}
           <Box>
-            <Flex align={'center'} gap={'3'} mb={'4'}>
+            <Flex align={'center'} justify={{ base: 'center', lg: 'start' }} gap={'3'} mb={'4'}>
               <Box
-                w={'42px'}
-                h={'42px'}
                 bgGradient={'to-b'}
                 gradientFrom={'brand.gold.300'}
                 gradientTo={'brand.gold.500'}
@@ -142,7 +187,7 @@ export default function Footer(): JSX.Element {
                 display={'flex'}
                 alignItems={'center'}
                 justifyContent={'center'}
-                fontSize={'2xl'}
+                fontSize={{ base: 'lg', md: '2xl' }}
                 boxShadow={'glow.blue'}
               >
                 {'🎮'}

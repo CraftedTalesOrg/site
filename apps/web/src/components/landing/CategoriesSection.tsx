@@ -43,7 +43,7 @@ export default function CategoriesSection(): JSX.Element {
           </Text>
         </Box>
         <Grid
-          templateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }}
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }}
           gap={6}
         >
           {categories.map(category => (

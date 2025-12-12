@@ -11,18 +11,18 @@ export const textRecipe = defineRecipe({
     variant: {
       // === UNIQUE CONTEXT-SPECIFIC VARIANTS ===
       heroTitle: {
-        fontSize: { base: '3rem', md: '4rem' },
+        fontSize: { base: '2.25rem', sm: '2.75rem', md: '4rem' },
         fontWeight: '700',
         fontFamily: 'heading',
         lineHeight: '1.1',
         color: 'text.primary',
       },
       heroSubtitle: {
-        fontSize: '1.2rem',
+        fontSize: { base: '1rem', md: '1.2rem' },
         color: 'text.secondary',
       },
       statValue: {
-        fontSize: '2.5rem',
+        fontSize: { base: '1.75rem', sm: '2rem', md: '2.5rem' },
         fontWeight: '700',
         fontFamily: 'heading',
         color: 'brand.blue.500',

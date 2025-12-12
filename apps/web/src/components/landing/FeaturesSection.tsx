@@ -1,7 +1,7 @@
 import { Box, Container, Grid } from '@chakra-ui/react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Zap, Shield, RefreshCw, Users, Download, Star } from 'lucide-react';
+import { Zap, Users, DollarSign, Code2, Wrench, Shield } from 'lucide-react';
 import FeatureCard from './FeatureCard';
 import { Badge, Text } from '@/theming/components';
 
@@ -9,11 +9,11 @@ type FeatureKey = 'FEATURE_1' | 'FEATURE_2' | 'FEATURE_3' | 'FEATURE_4' | 'FEATU
 
 const features: { icon: JSX.Element; key: FeatureKey }[] = [
   { icon: <Zap size={28} />, key: 'FEATURE_1' },
-  { icon: <Shield size={28} />, key: 'FEATURE_2' },
-  { icon: <RefreshCw size={28} />, key: 'FEATURE_3' },
-  { icon: <Users size={28} />, key: 'FEATURE_4' },
-  { icon: <Download size={28} />, key: 'FEATURE_5' },
-  { icon: <Star size={28} />, key: 'FEATURE_6' },
+  { icon: <Users size={28} />, key: 'FEATURE_2' },
+  { icon: <DollarSign size={28} />, key: 'FEATURE_3' },
+  { icon: <Code2 size={28} />, key: 'FEATURE_4' },
+  { icon: <Wrench size={28} />, key: 'FEATURE_5' },
+  { icon: <Shield size={28} />, key: 'FEATURE_6' },
 ];
 
 export default function FeaturesSection(): JSX.Element {

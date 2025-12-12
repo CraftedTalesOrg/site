@@ -5,7 +5,6 @@ export default {
       MODS: 'Mods',
       CATEGORIES: 'Categories',
       CREATORS: 'Creators',
-      ABOUT: 'About',
     },
     CTA: {
       SIGN_IN: 'Sign In',
@@ -14,7 +13,7 @@ export default {
   },
   FOOTER: {
     BRAND: {
-      DESCRIPTION: 'The #1 community for Hytale mods, plugins, and resource packs. Discover, download, and share amazing content.',
+      DESCRIPTION: 'The #1 site to find mods for Hytale. Discover, download, and share amazing content.',
     },
     SECTIONS: {
       EXPLORE: {
@@ -27,8 +26,7 @@ export default {
       COMMUNITY: {
         TITLE: 'Community',
         CREATORS: 'Creators',
-        DISCORD: 'Discord',
-        FORUMS: 'Forums',
+        NEWS: 'News',
         BLOG: 'Blog',
       },
       SUPPORT: {

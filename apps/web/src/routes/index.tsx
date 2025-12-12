@@ -1,12 +1,13 @@
+import { Box } from '@chakra-ui/react';
 import { createFileRoute } from '@tanstack/react-router';
 import type { JSX } from 'react';
-import { Box } from '@chakra-ui/react';
-import BackgroundEffects from '../components/BackgroundEffects';
-import HeroSection from '../components/landing/HeroSection';
-import CategoriesSection from '../components/landing/CategoriesSection';
-import FeaturedModsSection from '../components/landing/FeaturedModsSection';
-import FeaturesSection from '../components/landing/FeaturesSection';
-import CTASection from '../components/landing/CTASection';
+import {
+  BackgroundEffects,
+  CategoriesSection,
+  FeaturesSection,
+  HeroSection,
+  TimelineSection,
+} from '@/components/landing';
 
 export const Route = createFileRoute('/')({ component: Landing });
 
@@ -17,9 +18,10 @@ function Landing(): JSX.Element {
       <Box position={'relative'}>
         <HeroSection />
         <CategoriesSection />
-        <FeaturedModsSection />
+        {/* <FeaturedModsSection /> */}
+        <TimelineSection />
         <FeaturesSection />
-        <CTASection />
+        {/* <CTASection /> */}
       </Box>
     </>
   );

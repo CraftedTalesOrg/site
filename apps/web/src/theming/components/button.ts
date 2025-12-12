@@ -5,10 +5,7 @@ import { chakra, defineRecipe } from '@chakra-ui/react';
 export const buttonRecipe = defineRecipe({
   variants: {
     variant: {
-      'gradient': {
-        px: 8,
-        py: 4,
-        fontSize: 'md',
+      gradient: {
         bgGradient: 'to-b',
         gradientFrom: 'brand.gold.300',
         gradientTo: 'brand.gold.500',
@@ -24,10 +21,7 @@ export const buttonRecipe = defineRecipe({
           boxShadow: 'glow.hover.blue',
         },
       },
-      'outline-hover': {
-        px: 8,
-        py: 4,
-        fontSize: 'md',
+      outline: {
         bg: 'transparent',
         color: 'text.primary',
         border: '1px solid',
@@ -41,7 +35,42 @@ export const buttonRecipe = defineRecipe({
           color: 'brand.blue.500',
         },
       },
+      transparent: {
+        bg: 'transparent',
+        color: 'text.secondary',
+        border: 'none',
+        fontWeight: '500',
+        borderRadius: 'sm',
+        transition: '{durations.fast}',
+        cursor: 'pointer',
+        _hover: {
+          color: 'brand.blue.500',
+        },
+      },
     },
+    size: {
+      sm: {
+        px: 6,
+        py: 2,
+        fontSize: 'sm',
+        h: '10',
+      },
+      md: {
+        px: 8,
+        py: 4,
+        fontSize: 'md',
+        h: '14',
+      },
+      lg: {
+        px: 10,
+        py: 5,
+        fontSize: 'lg',
+        h: '20',
+      },
+    },
+  },
+  defaultVariants: {
+    size: 'md',
   },
 });
 

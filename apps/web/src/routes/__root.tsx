@@ -15,6 +15,7 @@ import type { JSX } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { Toaster } from '../components/Toaster';
 import i18n from '../i18n/config';
 import appCss from '../styles.css?url';
 
@@ -68,6 +69,7 @@ function RootDocument({ children }: { children: React.ReactNode }): JSX.Element 
             <Header />
             {children}
             <Footer />
+            <Toaster />
             <TanStackDevtools
               config={{ position: 'bottom-right' }}
               plugins={[
