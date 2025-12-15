@@ -7,17 +7,19 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "generate": "drizzle-kit generate:pg",
-    "push": "drizzle-kit push:pg"
+    "generate": "drizzle-kit generate",
+    "push": "drizzle-kit push",
+    "studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "drizzle-orm": "^0.30.0",
-    "postgres": "^3.0.0"
+    "drizzle-orm": "1.0.0-beta.2-58a4521"
   },
   "devDependencies": {
     "@craftedtales/config": "workspace:*",
+    "@types/node": "^22.10.2",
+    "dotenv": "^16.6.1",
+    "drizzle-kit": "1.0.0-beta.2-58a4521",
     "eslint": "^9.39.1",
-    "drizzle-kit": "^0.20.0",
     "typescript": "^5.0.0"
   }
 }

@@ -1,6 +1,7 @@
 {
   "extends": "@craftedtales/config/base.json",
   "include": [
-    "src"
+    "src",
+	"drizzle.config.ts"
   ]
 }

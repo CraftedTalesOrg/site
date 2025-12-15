@@ -1,14 +1,40 @@
-import { drizzle as drizzlePg } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1';
+import { relations } from './schema/relations';
 
-// Node/Postgres client (non-Workers)
-const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/hytale_mods';
-const client = postgres(connectionString);
-export const db = drizzlePg(client);
+// ============================================================================
+// Database Client for Cloudflare D1
+// ============================================================================
 
-// Cloudflare D1 client (Workers)
-export const createDbFromD1 = async(d1: D1Database) => {
-  const { drizzle } = await import('drizzle-orm/d1');
+/**
+ * Create a Drizzle database client from a Cloudflare D1 binding
+ * @param d1 - The D1Database binding from Cloudflare Workers
+ * @returns Drizzle database client with schema
+ *
+ * @example
+ * ```ts
+ * // In your Cloudflare Worker
+ * import { createDb } from '@craftedtales/db';
+ *
+ * export default {
+ *   async fetch(request: Request, env: Env) {
+ *     const db = createDb(env.craftedtales_db_dev);
+ *
+ *     // Query with relations
+ *     const usersWithMods = await db.query.users.findMany({
+ *       with: {
+ *         ownedMods: true,
+ *         modLikes: true,
+ *       },
+ *     });
+ *
+ *     return Response.json(usersWithMods);
+ *   }
+ * }
+ * ```
+ */
+export function createDb(d1: DrizzleD1Database): DrizzleD1Database {
+  return drizzle(d1, { relations });
+}
 
-  return drizzle(d1);
-};
+// Export type helper for the database client
+export type Database = ReturnType<typeof createDb>;
