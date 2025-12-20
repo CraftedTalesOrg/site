@@ -12,8 +12,8 @@ export const modVersions = sqliteTable('mod_versions', {
   channel: text({ enum: ['release', 'beta', 'alpha'] }).notNull().default('release'),
 
   // File info
-  fileUrl: text().notNull(),
-  fileSize: integer().notNull(), // Bytes
+  url: text().notNull(),
+  size: integer().notNull(), // Bytes
 
   // Metadata
   changelog: text().notNull().default(''),

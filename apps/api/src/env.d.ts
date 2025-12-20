@@ -1,3 +1,5 @@
+import type { users } from '@craftedtales/db';
+
 /**
  * Bindings interface for Cloudflare Workers
  * Matches wrangler.json configuration
@@ -32,4 +34,10 @@ export interface Bindings {
  */
 export interface Env {
   Bindings: Bindings;
+  Variables: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    session: any; // @hono/session type
+    userId?: string;
+    user?: typeof users.$inferSelect;
+  };
 }

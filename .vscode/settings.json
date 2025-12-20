@@ -49,5 +49,6 @@
 	"eslint.run": "onSave",
 	"eslint.enable": true,
 	"eslint.format.enable": true,
-	"npm.packageManager": "pnpm"
+	"npm.packageManager": "pnpm",
+	"typescript.experimental.useTsgo": true
 }

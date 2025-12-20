@@ -29,6 +29,15 @@ importers:
       '@hono/zod-openapi':
         specifier: ^0.17.1
         version: 0.17.1(hono@4.11.0)(zod@3.25.76)
+      bcryptjs:
+        specifier: ^2.4.3
+        version: 2.4.3
+      drizzle-orm:
+        specifier: 1.0.0-beta.2-58a4521
+        version: 1.0.0-beta.2-58a4521(@cloudflare/workers-types@4.20251213.0)(@opentelemetry/api@1.9.0)(@types/mssql@9.1.8)(@types/pg@8.15.6)(mssql@11.0.1)
+      drizzle-zod:
+        specifier: ^0.5.1
+        version: 0.5.1(drizzle-orm@1.0.0-beta.2-58a4521(@cloudflare/workers-types@4.20251213.0)(@opentelemetry/api@1.9.0)(@types/mssql@9.1.8)(@types/pg@8.15.6)(mssql@11.0.1))(zod@3.25.76)
       hono:
         specifier: ^4.6.6
         version: 4.11.0
@@ -42,9 +51,15 @@ importers:
       '@craftedtales/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@craftedtales/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.2
+      '@types/bcryptjs':
+        specifier: ^2.4.6
+        version: 2.4.6
       eslint:
         specifier: ^9.39.1
         version: 9.39.2
@@ -227,6 +242,9 @@ importers:
         specifier: 1.0.0-beta.2-58a4521
         version: 1.0.0-beta.2-58a4521(@cloudflare/workers-types@4.20251213.0)(@opentelemetry/api@1.9.0)(@types/mssql@9.1.8)(@types/pg@8.15.6)(mssql@11.0.1)
     devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20241127.0
+        version: 4.20251213.0
       '@craftedtales/config':
         specifier: workspace:*
         version: link:../config
@@ -2124,6 +2142,9 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
+  '@types/bcryptjs@2.4.6':
+    resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
+
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -2598,6 +2619,9 @@ packages:
     resolution: {integrity: sha512-k9xFKplee6KIio3IDbwj+uaCLpqzOwakOgmqzPezM0sFJlFKcg30vk2wOiAJtkTSfx0SSQDSe8q+mWA/fSH5Zg==}
     hasBin: true
 
+  bcryptjs@2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+
   bidi-js@1.0.3:
     resolution: {integrity: sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw==}
 
@@ -2949,6 +2973,12 @@ packages:
         optional: true
       sqlite3:
         optional: true
+
+  drizzle-zod@0.5.1:
+    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+    peerDependencies:
+      drizzle-orm: '>=0.23.13'
+      zod: '*'
 
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
@@ -6479,6 +6509,8 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.5
 
+  '@types/bcryptjs@2.4.6': {}
+
   '@types/chai@5.2.3':
     dependencies:
       '@types/deep-eql': 4.0.2
@@ -7320,6 +7352,8 @@ snapshots:
 
   baseline-browser-mapping@2.9.7: {}
 
+  bcryptjs@2.4.3: {}
+
   bidi-js@1.0.3:
     dependencies:
       require-from-string: 2.0.2
@@ -7599,6 +7633,11 @@ snapshots:
       '@cloudflare/workers-types': 4.20251213.0
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.15.6
+
+  drizzle-zod@0.5.1(drizzle-orm@1.0.0-beta.2-58a4521(@cloudflare/workers-types@4.20251213.0)(@opentelemetry/api@1.9.0)(@types/mssql@9.1.8)(@types/pg@8.15.6)(mssql@11.0.1))(zod@3.25.76):
+    dependencies:
+      drizzle-orm: 1.0.0-beta.2-58a4521(@cloudflare/workers-types@4.20251213.0)(@opentelemetry/api@1.9.0)(@types/mssql@9.1.8)(@types/pg@8.15.6)(mssql@11.0.1)
+      zod: 3.25.76
 
   ecdsa-sig-formatter@1.0.11:
     dependencies:

@@ -10,8 +10,8 @@ A downloadable release of a mod.
 | channel | String | Release channel (release, beta, alpha) |
 | publishedAt | Date | Release date |
 | downloads | Number | Download count for this version |
-| fileUrl | String | Download URL |
-| fileSize | Number | File size in bytes |
+| url | String | Download URL |
+| size | Number | File size in bytes |
 | changelog | String | Markdown changelog content describing changes in this version |
 
 ## Version Naming

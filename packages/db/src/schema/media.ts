@@ -5,9 +5,9 @@ export const media = sqliteTable('media', {
   id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
 
   // File info
-  fileName: text().notNull(),
-  fileUrl: text().notNull(),
-  fileSize: integer().notNull(), // Bytes
+  filename: text().notNull(),
+  url: text().notNull(),
+  size: integer().notNull(), // Bytes
   mimeType: text().notNull(), // e.g., image/png, image/jpeg, image/webp
 
   // Image dimensions

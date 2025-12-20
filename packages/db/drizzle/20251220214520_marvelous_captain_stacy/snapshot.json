@@ -1,7 +1,7 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "03dba78f-d6d0-4bba-a45e-3cfb46ed839f",
+  "id": "03572b82-e0dc-4ea2-b17c-ca50a956b154",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -11,15 +11,7 @@
       "entityType": "tables"
     },
     {
-      "name": "mod_likes",
-      "entityType": "tables"
-    },
-    {
-      "name": "reports",
-      "entityType": "tables"
-    },
-    {
-      "name": "media",
+      "name": "users",
       "entityType": "tables"
     },
     {
@@ -35,7 +27,15 @@
       "entityType": "tables"
     },
     {
-      "name": "users",
+      "name": "media",
+      "entityType": "tables"
+    },
+    {
+      "name": "mod_likes",
+      "entityType": "tables"
+    },
+    {
+      "name": "reports",
       "entityType": "tables"
     },
     {
@@ -76,17 +76,17 @@
       "generated": null,
       "name": "id",
       "entityType": "columns",
-      "table": "mod_likes"
+      "table": "users"
     },
     {
-      "type": "text",
+      "type": "text(255)",
       "notNull": true,
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "mod_id",
+      "name": "username",
       "entityType": "columns",
-      "table": "mod_likes"
+      "table": "users"
     },
     {
       "type": "text",
@@ -94,39 +94,69 @@
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "user_id",
+      "name": "bio",
       "entityType": "columns",
-      "table": "mod_likes"
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "avatar_id",
+      "entityType": "columns",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "'[]'",
+      "generated": null,
+      "name": "roles",
+      "entityType": "columns",
+      "table": "users"
+    },
+    {
+      "type": "text(255)",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "email",
+      "entityType": "columns",
+      "table": "users"
     },
     {
       "type": "integer",
       "notNull": true,
       "autoincrement": false,
+      "default": "0",
+      "generated": null,
+      "name": "email_verified",
+      "entityType": "columns",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "created_at",
+      "name": "password",
       "entityType": "columns",
-      "table": "mod_likes"
+      "table": "users"
     },
     {
       "type": "integer",
       "notNull": true,
       "autoincrement": false,
-      "default": null,
+      "default": "0",
       "generated": null,
-      "name": "updated_at",
+      "name": "two_factor_enabled",
       "entityType": "columns",
-      "table": "mod_likes"
-    },
-    {
-      "type": "integer",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "deleted_at",
-      "entityType": "columns",
-      "table": "mod_likes"
+      "table": "users"
     },
     {
       "type": "text",
@@ -134,189 +164,9 @@
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "id",
+      "name": "two_factor_secret",
       "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "reporter_id",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "target_type",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "target_id",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text(100)",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "reason",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "description",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": "'pending'",
-      "generated": null,
-      "name": "status",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "reviewed_by",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "resolution",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "integer",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "deleted_at",
-      "entityType": "columns",
-      "table": "reports"
-    },
-    {
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "id",
-      "entityType": "columns",
-      "table": "media"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "file_name",
-      "entityType": "columns",
-      "table": "media"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "file_url",
-      "entityType": "columns",
-      "table": "media"
-    },
-    {
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "file_size",
-      "entityType": "columns",
-      "table": "media"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "mime_type",
-      "entityType": "columns",
-      "table": "media"
-    },
-    {
-      "type": "integer",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "width",
-      "entityType": "columns",
-      "table": "media"
-    },
-    {
-      "type": "integer",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "height",
-      "entityType": "columns",
-      "table": "media"
+      "table": "users"
     },
     {
       "type": "integer",
@@ -326,7 +176,7 @@
       "generated": null,
       "name": "enabled",
       "entityType": "columns",
-      "table": "media"
+      "table": "users"
     },
     {
       "type": "integer",
@@ -336,7 +186,7 @@
       "generated": null,
       "name": "deleted",
       "entityType": "columns",
-      "table": "media"
+      "table": "users"
     },
     {
       "type": "integer",
@@ -346,7 +196,7 @@
       "generated": null,
       "name": "created_at",
       "entityType": "columns",
-      "table": "media"
+      "table": "users"
     },
     {
       "type": "integer",
@@ -356,7 +206,7 @@
       "generated": null,
       "name": "updated_at",
       "entityType": "columns",
-      "table": "media"
+      "table": "users"
     },
     {
       "type": "integer",
@@ -366,7 +216,7 @@
       "generated": null,
       "name": "deleted_at",
       "entityType": "columns",
-      "table": "media"
+      "table": "users"
     },
     {
       "type": "text",
@@ -475,6 +325,16 @@
       "default": "'public'",
       "generated": null,
       "name": "visibility",
+      "entityType": "columns",
+      "table": "mods"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "0",
+      "generated": null,
+      "name": "approved",
       "entityType": "columns",
       "table": "mods"
     },
@@ -684,7 +544,7 @@
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "file_url",
+      "name": "url",
       "entityType": "columns",
       "table": "mod_versions"
     },
@@ -694,7 +554,7 @@
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "file_size",
+      "name": "size",
       "entityType": "columns",
       "table": "mod_versions"
     },
@@ -786,97 +646,67 @@
       "generated": null,
       "name": "id",
       "entityType": "columns",
-      "table": "users"
-    },
-    {
-      "type": "text(255)",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "username",
-      "entityType": "columns",
-      "table": "users"
-    },
-    {
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "bio",
-      "entityType": "columns",
-      "table": "users"
-    },
-    {
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "avatar_id",
-      "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "text",
       "notNull": true,
       "autoincrement": false,
-      "default": "'[]'",
+      "default": null,
       "generated": null,
-      "name": "roles",
+      "name": "filename",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
-      "type": "text(255)",
+      "type": "text",
       "notNull": true,
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "email",
+      "name": "url",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "integer",
       "notNull": true,
       "autoincrement": false,
-      "default": "0",
+      "default": null,
       "generated": null,
-      "name": "email_verified",
+      "name": "size",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "text",
-      "notNull": false,
+      "notNull": true,
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "password",
+      "name": "mime_type",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": "0",
-      "generated": null,
-      "name": "two_factor_enabled",
-      "entityType": "columns",
-      "table": "users"
-    },
-    {
-      "type": "text",
       "notNull": false,
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "two_factor_secret",
+      "name": "width",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "height",
+      "entityType": "columns",
+      "table": "media"
     },
     {
       "type": "integer",
@@ -886,7 +716,7 @@
       "generated": null,
       "name": "enabled",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "integer",
@@ -896,7 +726,7 @@
       "generated": null,
       "name": "deleted",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "integer",
@@ -906,7 +736,7 @@
       "generated": null,
       "name": "created_at",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "integer",
@@ -916,7 +746,7 @@
       "generated": null,
       "name": "updated_at",
       "entityType": "columns",
-      "table": "users"
+      "table": "media"
     },
     {
       "type": "integer",
@@ -926,67 +756,202 @@
       "generated": null,
       "name": "deleted_at",
       "entityType": "columns",
+      "table": "media"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "mod_likes"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "mod_id",
+      "entityType": "columns",
+      "table": "mod_likes"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "table": "mod_likes"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "mod_likes"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "table": "mod_likes"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "deleted_at",
+      "entityType": "columns",
+      "table": "mod_likes"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "reporter_id",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "target_type",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "target_id",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text(100)",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "reason",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "description",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "'pending'",
+      "generated": null,
+      "name": "status",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "reviewed_by",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "resolution",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "deleted_at",
+      "entityType": "columns",
+      "table": "reports"
+    },
+    {
+      "columns": [
+        "avatar_id"
+      ],
+      "tableTo": "media",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "name": "fk_users_avatar_id_media_id_fk",
+      "entityType": "fks",
       "table": "users"
-    },
-    {
-      "columns": [
-        "mod_id"
-      ],
-      "tableTo": "mods",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "cascade",
-      "nameExplicit": false,
-      "name": "fk_mod_likes_mod_id_mods_id_fk",
-      "entityType": "fks",
-      "table": "mod_likes"
-    },
-    {
-      "columns": [
-        "user_id"
-      ],
-      "tableTo": "users",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "set null",
-      "nameExplicit": false,
-      "name": "fk_mod_likes_user_id_users_id_fk",
-      "entityType": "fks",
-      "table": "mod_likes"
-    },
-    {
-      "columns": [
-        "reporter_id"
-      ],
-      "tableTo": "users",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "set null",
-      "nameExplicit": false,
-      "name": "fk_reports_reporter_id_users_id_fk",
-      "entityType": "fks",
-      "table": "reports"
-    },
-    {
-      "columns": [
-        "reviewed_by"
-      ],
-      "tableTo": "users",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "set null",
-      "nameExplicit": false,
-      "name": "fk_reports_reviewed_by_users_id_fk",
-      "entityType": "fks",
-      "table": "reports"
     },
     {
       "columns": [
@@ -1065,18 +1030,63 @@
     },
     {
       "columns": [
-        "avatar_id"
+        "mod_id"
       ],
-      "tableTo": "media",
+      "tableTo": "mods",
       "columnsTo": [
         "id"
       ],
       "onUpdate": "NO ACTION",
-      "onDelete": "NO ACTION",
+      "onDelete": "cascade",
       "nameExplicit": false,
-      "name": "fk_users_avatar_id_media_id_fk",
+      "name": "fk_mod_likes_mod_id_mods_id_fk",
       "entityType": "fks",
-      "table": "users"
+      "table": "mod_likes"
+    },
+    {
+      "columns": [
+        "user_id"
+      ],
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "set null",
+      "nameExplicit": false,
+      "name": "fk_mod_likes_user_id_users_id_fk",
+      "entityType": "fks",
+      "table": "mod_likes"
+    },
+    {
+      "columns": [
+        "reporter_id"
+      ],
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "set null",
+      "nameExplicit": false,
+      "name": "fk_reports_reporter_id_users_id_fk",
+      "entityType": "fks",
+      "table": "reports"
+    },
+    {
+      "columns": [
+        "reviewed_by"
+      ],
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "set null",
+      "nameExplicit": false,
+      "name": "fk_reports_reviewed_by_users_id_fk",
+      "entityType": "fks",
+      "table": "reports"
     },
     {
       "columns": [
@@ -1092,26 +1102,8 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "mod_likes_pk",
-      "table": "mod_likes",
-      "entityType": "pks"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "reports_pk",
-      "table": "reports",
-      "entityType": "pks"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "media_pk",
-      "table": "media",
+      "name": "users_pk",
+      "table": "users",
       "entityType": "pks"
     },
     {
@@ -1146,8 +1138,26 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "users_pk",
-      "table": "users",
+      "name": "media_pk",
+      "table": "media",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "mod_likes_pk",
+      "table": "mod_likes",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "reports_pk",
+      "table": "reports",
       "entityType": "pks"
     },
     {
@@ -1170,15 +1180,6 @@
     },
     {
       "columns": [
-        "slug"
-      ],
-      "nameExplicit": false,
-      "name": "mods_slug_unique",
-      "entityType": "uniques",
-      "table": "mods"
-    },
-    {
-      "columns": [
         "username"
       ],
       "nameExplicit": false,
@@ -1194,6 +1195,15 @@
       "name": "users_email_unique",
       "entityType": "uniques",
       "table": "users"
+    },
+    {
+      "columns": [
+        "slug"
+      ],
+      "nameExplicit": false,
+      "name": "mods_slug_unique",
+      "entityType": "uniques",
+      "table": "mods"
     }
   ],
   "renames": []

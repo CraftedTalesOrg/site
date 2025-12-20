@@ -17,6 +17,7 @@ export const mods = sqliteTable('mods', {
   // Status & visibility
   status: text({ enum: ['draft', 'published'] }).notNull().default('draft'),
   visibility: text({ enum: ['public', 'unlisted', 'private'] }).notNull().default('public'),
+  approved: integer({ mode: 'boolean' }).notNull().default(false),
 
   // License
   license: text({ length: 100 }).notNull(),

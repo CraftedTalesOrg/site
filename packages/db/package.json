@@ -15,6 +15,7 @@
     "drizzle-orm": "1.0.0-beta.2-58a4521"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
     "@craftedtales/config": "workspace:*",
     "@types/node": "^22.10.2",
     "dotenv": "^16.6.1",

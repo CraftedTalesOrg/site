@@ -151,8 +151,8 @@ Data from [Version model](../models/version.md):
 | publishedAt | Date | Release date |
 | downloads | Number | Download count for this version |
 | channel | String | Release channel |
-| fileUrl | String | Download URL |
-| fileSize | Number | File size in bytes |
+| url | String | Download URL |
+| size | Number | File size in bytes |
 
 #### Layout
 
