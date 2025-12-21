@@ -1,8 +1,10 @@
 import { createDb as _createDb } from '@craftedtales/db';
+import type { Database as _Database } from '@craftedtales/db';
 import type { Bindings } from '../env';
 
-// Re-export createDb from the db package
+// Re-export
 export const createDb = _createDb;
+export type Database = _Database;
 
 /**
  * Get the appropriate database binding based on environment

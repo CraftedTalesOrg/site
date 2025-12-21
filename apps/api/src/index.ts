@@ -2,12 +2,12 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 import { createOpenApiApp, maybeRegisterSwaggerUI, registerOpenApiDocs } from './docs/openapi';
 import type { Env } from './env.d';
 import { createCors, createLogger, createPrettyJson, createRequestId, createSecurity, createSession } from './middleware';
-import { registerAdminRoutes } from './routes/v1/admin';
-import { registerAuthRoutes } from './routes/v1/auth';
-import { registerCategoriesRoutes } from './routes/v1/categories';
-import { registerModsRoutes } from './routes/v1/mods';
-import { registerReportRoutes } from './routes/v1/reports';
-import { registerUserRoutes } from './routes/v1/users';
+import { registerAuthRoutes } from './features/auth/auth.routes';
+import { registerCategoriesRoutes } from './features/categories/categories.routes';
+import { registerReportRoutes } from './features/reports/reports.routes';
+import { registerUserRoutes } from './features/users/users.routes';
+import { registerModsRoutes } from './features/mods/mods.routes';
+import { registerAdminRoutes } from './features/admin/admin.routes';
 
 const app = createOpenApiApp();
 
