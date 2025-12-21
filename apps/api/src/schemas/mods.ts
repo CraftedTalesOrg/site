@@ -2,57 +2,50 @@ import { z } from 'zod';
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { mods } from '@craftedtales/db';
 import { userSummarySchema } from './users';
-import { categorySchema } from './categories';
-import { modVersionSchema } from './versions';
-import { mediaSchema } from './media';
+import { publicCategorySchema } from './categories';
+import { publicModVersionSchema } from './versions';
+import { publicMediaSchema } from './media';
 
 /**
  * Mod schemas for API validation
+ *
+ * Schema hierarchy:
+ * - selectModSchema: Base Drizzle schema (all DB fields)
+ * - publicModSchema: Public API response (excludes deleted/deletedAt, includes relations)
+ * - ownerModSchema: Owner API response (same as public, all fields visible to owner)
  */
 
 // Base schemas from Drizzle
 export const selectModSchema = createSelectSchema(mods);
 export const insertModSchema = createInsertSchema(mods);
 
-// Public mod (excludes soft-delete fields)
-export const modSchema = selectModSchema
+/**
+ * Public mod schema - for use in list and detail views
+ * Excludes: deleted, deletedAt
+ * Includes: owner, icon, categories, versions (all relations)
+ */
+export const publicModSchema = selectModSchema
   .omit({
     deleted: true,
     deletedAt: true,
   })
-  .openapi('Mod');
+  .extend({
+    owner: userSummarySchema,
+    icon: publicMediaSchema.nullable(),
+    categories: z.array(publicCategorySchema),
+    versions: z.array(publicModVersionSchema),
+  })
+  .openapi('PublicMod');
 
-export type Mod = z.infer<typeof modSchema>;
+export type PublicMod = z.infer<typeof publicModSchema>;
 
-// Mod with relations (for detail view)
-export const modWithRelationsSchema = modSchema.extend({
-  owner: userSummarySchema,
-  icon: mediaSchema.nullable(),
-  categories: z.array(categorySchema),
-  versions: z.array(modVersionSchema),
-}).openapi('ModWithRelations');
+/**
+ * Owner mod schema - for use when the authenticated user is the owner
+ * Same as publicModSchema (all fields are visible to owner)
+ */
+export const ownerModSchema = publicModSchema.openapi('OwnerMod');
 
-export type ModWithRelations = z.infer<typeof modWithRelationsSchema>;
-
-// Mod summary (for list views)
-export const modSummarySchema = z.object({
-  id: z.string().uuid(),
-  slug: z.string(),
-  name: z.string(),
-  summary: z.string(),
-  iconId: z.string().nullable(),
-  status: z.enum(['draft', 'published']),
-  visibility: z.enum(['public', 'unlisted', 'private']),
-  approved: z.boolean(),
-  downloads: z.number().int(),
-  likes: z.number().int(),
-  owner: userSummarySchema,
-  categories: z.array(categorySchema),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-}).openapi('ModSummary');
-
-export type ModSummary = z.infer<typeof modSummarySchema>;
+export type OwnerMod = z.infer<typeof ownerModSchema>;
 
 // Create mod request
 export const createModRequestSchema = z.object({

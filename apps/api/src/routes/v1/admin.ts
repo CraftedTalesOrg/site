@@ -11,7 +11,7 @@ import {
   paginationQuerySchema,
   createPaginatedSchema,
 } from '../../schemas/common';
-import { modSummarySchema } from '../../schemas/mods';
+import { publicModSchema } from '../../schemas/mods';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Schemas
@@ -59,7 +59,7 @@ const listReviewQueueRoute = createRoute({
   responses: {
     200: {
       description: 'List of mods pending review',
-      content: { 'application/json': { schema: createPaginatedSchema(modSummarySchema) } },
+      content: { 'application/json': { schema: createPaginatedSchema(publicModSchema) } },
     },
     401: {
       description: 'Not authenticated',
@@ -247,10 +247,17 @@ export const registerAdminRoutes = (app: OpenAPIHono<Env>): void => {
             roles: true,
           },
         },
+        icon: {
+          where: { deleted: false },
+        },
         modCategories: {
           with: {
             category: true,
           },
+        },
+        modVersions: {
+          where: { deleted: false },
+          orderBy: { createdAt: 'desc' },
         },
       },
       limit,
@@ -267,22 +274,12 @@ export const registerAdminRoutes = (app: OpenAPIHono<Env>): void => {
     const totalPages = Math.ceil(totalItems / limit);
 
     const data = modsList.map(mod => ({
-      id: mod.id,
-      slug: mod.slug,
-      name: mod.name,
-      summary: mod.summary,
-      iconId: mod.iconId,
-      status: mod.status,
-      visibility: mod.visibility,
-      approved: mod.approved,
-      downloads: mod.downloads,
-      likes: mod.likes,
-      owner: mod.owner ?? { id: '', username: '', bio: null, avatarId: null, roles: [] },
+      ...mod,
+      owner: mod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
       categories: mod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
-      createdAt: mod.createdAt.toISOString(),
-      updatedAt: mod.updatedAt.toISOString(),
+      versions: mod.modVersions,
     }));
 
     return c.json({

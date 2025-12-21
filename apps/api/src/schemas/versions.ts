@@ -4,21 +4,38 @@ import { modVersions } from '@craftedtales/db';
 
 /**
  * Mod version schemas for API validation
+ *
+ * Schema hierarchy:
+ * - selectModVersionSchema: Base Drizzle schema (all DB fields)
+ * - publicModVersionSchema: Public API response (excludes deleted/deletedAt, NO circular mod reference)
+ * - ownerModVersionSchema: Owner API response (same as public)
  */
 
 // Base schemas from Drizzle
 export const selectModVersionSchema = createSelectSchema(modVersions);
 export const insertModVersionSchema = createInsertSchema(modVersions);
 
-// Public mod version (excludes soft-delete fields)
-export const modVersionSchema = selectModVersionSchema
+/**
+ * Public mod version schema - for use in mod.versions array
+ * Excludes: deleted, deletedAt
+ * Note: Does NOT include mod relation to avoid circular references
+ */
+export const publicModVersionSchema = selectModVersionSchema
   .omit({
     deleted: true,
     deletedAt: true,
   })
-  .openapi('ModVersion');
+  .openapi('PublicModVersion');
 
-export type ModVersion = z.infer<typeof modVersionSchema>;
+export type PublicModVersion = z.infer<typeof publicModVersionSchema>;
+
+/**
+ * Owner mod version schema - for use when the authenticated user is the mod owner
+ * Same as publicModVersionSchema (all fields are visible to owner)
+ */
+export const ownerModVersionSchema = publicModVersionSchema.openapi('OwnerModVersion');
+
+export type OwnerModVersion = z.infer<typeof ownerModVersionSchema>;
 
 // Create version request
 export const createModVersionRequestSchema = z.object({

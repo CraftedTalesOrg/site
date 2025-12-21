@@ -6,13 +6,13 @@ import type { Env } from '../../env.d';
 import { createDb, getDbBinding } from '../../utils/db';
 import { requireAuth } from '../../middleware';
 import {
-  modSummarySchema,
-  modWithRelationsSchema,
+  publicModSchema,
+  ownerModSchema,
   createModRequestSchema,
   updateModRequestSchema,
   modFiltersSchema,
 } from '../../schemas/mods';
-import { modVersionSchema } from '../../schemas/versions';
+import { publicModVersionSchema } from '../../schemas/versions';
 import {
   errorResponseSchema,
   successResponseSchema,
@@ -34,7 +34,7 @@ const listModsRoute = createRoute({
   responses: {
     200: {
       description: 'List of mods',
-      content: { 'application/json': { schema: createPaginatedSchema(modSummarySchema) } },
+      content: { 'application/json': { schema: createPaginatedSchema(publicModSchema) } },
     },
   },
   tags: ['mods'],
@@ -49,7 +49,7 @@ const getModRoute = createRoute({
   responses: {
     200: {
       description: 'Mod details',
-      content: { 'application/json': { schema: modWithRelationsSchema } },
+      content: { 'application/json': { schema: publicModSchema } },
     },
     404: {
       description: 'Mod not found',
@@ -72,7 +72,7 @@ const createModRoute = createRoute({
   responses: {
     201: {
       description: 'Mod created',
-      content: { 'application/json': { schema: modWithRelationsSchema } },
+      content: { 'application/json': { schema: ownerModSchema } },
     },
     400: {
       description: 'Validation error',
@@ -104,7 +104,7 @@ const updateModRoute = createRoute({
   responses: {
     200: {
       description: 'Mod updated',
-      content: { 'application/json': { schema: modWithRelationsSchema } },
+      content: { 'application/json': { schema: ownerModSchema } },
     },
     401: {
       description: 'Not authenticated',
@@ -189,7 +189,7 @@ const listModVersionsRoute = createRoute({
   responses: {
     200: {
       description: 'List of mod versions',
-      content: { 'application/json': { schema: createPaginatedSchema(modVersionSchema) } },
+      content: { 'application/json': { schema: createPaginatedSchema(publicModVersionSchema) } },
     },
     404: {
       description: 'Mod not found',
@@ -236,10 +236,17 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
             roles: true,
           },
         },
+        icon: {
+          where: { deleted: false },
+        },
         modCategories: {
           with: {
             category: true,
           },
+        },
+        modVersions: {
+          where: { deleted: false },
+          orderBy: { createdAt: 'desc' },
         },
       },
       limit,
@@ -275,24 +282,14 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
     const totalItems = allMods.length;
     const totalPages = Math.ceil(totalItems / limit);
 
-    // Map to summary format
+    // Transform to API format
     const data = filteredMods.map(mod => ({
-      id: mod.id,
-      slug: mod.slug,
-      name: mod.name,
-      summary: mod.summary,
-      iconId: mod.iconId,
-      status: mod.status,
-      visibility: mod.visibility,
-      approved: mod.approved,
-      downloads: mod.downloads,
-      likes: mod.likes,
-      owner: mod.owner ?? { id: '', username: '', bio: null, avatarId: null, roles: [] },
+      ...mod,
+      owner: mod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
       categories: mod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
-      createdAt: mod.createdAt.toISOString(),
-      updatedAt: mod.updatedAt.toISOString(),
+      versions: mod.modVersions,
     }));
 
     return c.json({
@@ -327,7 +324,9 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
             roles: true,
           },
         },
-        icon: true,
+        icon: {
+          where: { deleted: false },
+        },
         modCategories: {
           with: {
             category: true,
@@ -347,32 +346,10 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
       );
     }
 
-    // Map to response format
+    // Transform to API format
     const response = {
-      id: mod.id,
-      slug: mod.slug,
-      name: mod.name,
-      iconId: mod.iconId,
-      summary: mod.summary,
-      description: mod.description,
-      status: mod.status,
-      visibility: mod.visibility,
-      approved: mod.approved,
-      license: mod.license,
-      licenseUrl: mod.licenseUrl,
-      issueTrackerUrl: mod.issueTrackerUrl,
-      sourceCodeUrl: mod.sourceCodeUrl,
-      wikiUrl: mod.wikiUrl,
-      discordInviteUrl: mod.discordInviteUrl,
-      donationUrls: mod.donationUrls,
-      downloads: mod.downloads,
-      likes: mod.likes,
-      ownerId: mod.ownerId,
-      enabled: mod.enabled,
-      createdAt: mod.createdAt,
-      updatedAt: mod.updatedAt,
-      owner: mod.owner ?? { id: '', username: '', bio: null, avatarId: null, roles: [] },
-      icon: mod.icon,
+      ...mod,
+      owner: mod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
       categories: mod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
@@ -449,7 +426,9 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
             roles: true,
           },
         },
-        icon: true,
+        icon: {
+          where: { deleted: false },
+        },
         modCategories: {
           with: {
             category: true,
@@ -469,30 +448,8 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
     }
 
     const response = {
-      id: newMod.id,
-      slug: newMod.slug,
-      name: newMod.name,
-      iconId: newMod.iconId,
-      summary: newMod.summary,
-      description: newMod.description,
-      status: newMod.status,
-      visibility: newMod.visibility,
-      approved: newMod.approved,
-      license: newMod.license,
-      licenseUrl: newMod.licenseUrl,
-      issueTrackerUrl: newMod.issueTrackerUrl,
-      sourceCodeUrl: newMod.sourceCodeUrl,
-      wikiUrl: newMod.wikiUrl,
-      discordInviteUrl: newMod.discordInviteUrl,
-      donationUrls: newMod.donationUrls,
-      downloads: newMod.downloads,
-      likes: newMod.likes,
-      ownerId: newMod.ownerId,
-      enabled: newMod.enabled,
-      createdAt: newMod.createdAt,
-      updatedAt: newMod.updatedAt,
-      owner: newMod.owner ?? { id: '', username: '', bio: null, avatarId: null, roles: [] },
-      icon: newMod.icon,
+      ...newMod,
+      owner: newMod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
       categories: newMod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
@@ -582,7 +539,9 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
             roles: true,
           },
         },
-        icon: true,
+        icon: {
+          where: { deleted: false },
+        },
         modCategories: {
           with: {
             category: true,
@@ -602,30 +561,8 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
     }
 
     const response = {
-      id: updatedMod.id,
-      slug: updatedMod.slug,
-      name: updatedMod.name,
-      iconId: updatedMod.iconId,
-      summary: updatedMod.summary,
-      description: updatedMod.description,
-      status: updatedMod.status,
-      visibility: updatedMod.visibility,
-      approved: updatedMod.approved,
-      license: updatedMod.license,
-      licenseUrl: updatedMod.licenseUrl,
-      issueTrackerUrl: updatedMod.issueTrackerUrl,
-      sourceCodeUrl: updatedMod.sourceCodeUrl,
-      wikiUrl: updatedMod.wikiUrl,
-      discordInviteUrl: updatedMod.discordInviteUrl,
-      donationUrls: updatedMod.donationUrls,
-      downloads: updatedMod.downloads,
-      likes: updatedMod.likes,
-      ownerId: updatedMod.ownerId,
-      enabled: updatedMod.enabled,
-      createdAt: updatedMod.createdAt,
-      updatedAt: updatedMod.updatedAt,
-      owner: updatedMod.owner ?? { id: '', username: '', bio: null, avatarId: null, roles: [] },
-      icon: updatedMod.icon,
+      ...updatedMod,
+      owner: updatedMod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
       categories: updatedMod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),

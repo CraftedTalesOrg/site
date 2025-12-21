@@ -4,21 +4,37 @@ import { media } from '@craftedtales/db';
 
 /**
  * Media schemas for API validation
+ *
+ * Schema hierarchy:
+ * - selectMediaSchema: Base Drizzle schema (all DB fields)
+ * - publicMediaSchema: Public API response (excludes deleted/deletedAt)
+ * - ownerMediaSchema: Owner API response (same as public)
  */
 
 // Base schemas from Drizzle
 export const selectMediaSchema = createSelectSchema(media);
 export const insertMediaSchema = createInsertSchema(media);
 
-// Public media (excludes soft-delete fields)
-export const mediaSchema = selectMediaSchema
+/**
+ * Public media schema - for use in avatar, icon relations
+ * Excludes: deleted, deletedAt
+ */
+export const publicMediaSchema = selectMediaSchema
   .omit({
     deleted: true,
     deletedAt: true,
   })
-  .openapi('Media');
+  .openapi('PublicMedia');
 
-export type Media = z.infer<typeof mediaSchema>;
+export type PublicMedia = z.infer<typeof publicMediaSchema>;
+
+/**
+ * Owner media schema - for use when the authenticated user is the uploader
+ * Same as publicMediaSchema (all fields are visible to owner)
+ */
+export const ownerMediaSchema = publicMediaSchema.openapi('OwnerMedia');
+
+export type OwnerMedia = z.infer<typeof ownerMediaSchema>;
 
 // Media upload response
 export const mediaUploadResponseSchema = z.object({

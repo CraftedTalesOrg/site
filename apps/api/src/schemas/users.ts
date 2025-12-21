@@ -1,37 +1,70 @@
 import { z } from 'zod';
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { users } from '@craftedtales/db';
+import { publicMediaSchema } from './media';
 
 /**
  * User schemas for API validation
+ *
+ * Schema hierarchy:
+ * - selectUserSchema: Base Drizzle schema (all DB fields)
+ * - publicUserSchema: Public profile (excludes password, 2FA, deleted, includes avatar relation)
+ * - ownerUserSchema: Owner profile (extends public, includes email, emailVerified for account settings)
+ * - userSummarySchema: Minimal info for nested responses (derived from publicUserSchema)
  */
 
 // Base schemas from Drizzle
 export const selectUserSchema = createSelectSchema(users);
 export const insertUserSchema = createInsertSchema(users);
 
-// Public user profile (excludes sensitive fields)
+/**
+ * Public user schema - for viewing other users' profiles
+ * Excludes: password, emailVerified, twoFactorEnabled, twoFactorSecret, email, deleted, deletedAt
+ * Includes: avatar relation
+ */
 export const publicUserSchema = selectUserSchema
   .omit({
     password: true,
+    email: true,
     emailVerified: true,
     twoFactorEnabled: true,
     twoFactorSecret: true,
     deleted: true,
     deletedAt: true,
   })
+  .extend({
+    avatar: publicMediaSchema.nullable(),
+  })
   .openapi('PublicUser');
 
 export type PublicUser = z.infer<typeof publicUserSchema>;
 
-// Minimal user info (for nested responses)
-export const userSummarySchema = z.object({
-  id: z.string().uuid(),
-  username: z.string(),
-  bio: z.string().nullable(),
-  avatarId: z.string().nullable(),
-  roles: z.array(z.string()),
-}).openapi('UserSummary');
+/**
+ * Owner user schema - for viewing own profile
+ * Extends publicUserSchema and includes email, emailVerified for account settings
+ */
+export const ownerUserSchema = publicUserSchema
+  .extend({
+    email: z.string().email(),
+    emailVerified: z.boolean(),
+    twoFactorEnabled: z.boolean(),
+  })
+  .openapi('OwnerUser');
+
+export type OwnerUser = z.infer<typeof ownerUserSchema>;
+
+/**
+ * Minimal user info for nested responses (e.g., mod.owner)
+ * Derived from publicUserSchema using .omit()
+ */
+export const userSummarySchema = publicUserSchema
+  .omit({
+    avatar: true,
+    createdAt: true,
+    updatedAt: true,
+    enabled: true,
+  })
+  .openapi('UserSummary');
 
 export type UserSummary = z.infer<typeof userSummarySchema>;
 
@@ -84,7 +117,7 @@ export type ResetPasswordRequest = z.infer<typeof resetPasswordRequestSchema>;
 
 // Auth response with user and session
 export const authResponseSchema = z.object({
-  user: publicUserSchema,
+  user: ownerUserSchema,
   sessionId: z.string(),
 }).openapi('AuthResponse');
 

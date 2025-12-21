@@ -11,10 +11,11 @@ import {
   loginRequestSchema,
   registerRequestSchema,
   authResponseSchema,
-  publicUserSchema,
+  ownerUserSchema,
   forgotPasswordRequestSchema,
   resetPasswordRequestSchema,
   verifyEmailRequestSchema,
+  type OwnerUser,
 } from '../../schemas/users';
 import { errorResponseSchema, successResponseSchema } from '../../schemas/common';
 
@@ -27,31 +28,22 @@ async function sendEmail(to: string, subject: string, body: string): Promise<voi
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Helper to map user to public user response
+// Helper to map user to owner user response
 // ─────────────────────────────────────────────────────────────────────────────
-type PublicUserResponse = {
-  id: string;
-  username: string;
-  email: string;
-  bio: string | null;
-  avatarId: string | null;
-  roles: string[];
-  enabled: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-function toPublicUser(user: typeof users.$inferSelect): PublicUserResponse {
+function toOwnerUser(user: typeof users.$inferSelect): OwnerUser {
   return {
     id: user.id,
     username: user.username,
-    email: user.email,
     bio: user.bio,
     avatarId: user.avatarId,
     roles: user.roles,
     enabled: user.enabled,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
+    avatar: null, // Avatar will be fetched separately if needed
+    email: user.email,
+    emailVerified: user.emailVerified,
+    twoFactorEnabled: user.twoFactorEnabled,
   };
 }
 
@@ -131,7 +123,7 @@ const meRoute = createRoute({
   responses: {
     200: {
       description: 'Current user info',
-      content: { 'application/json': { schema: publicUserSchema } },
+      content: { 'application/json': { schema: ownerUserSchema } },
     },
     401: {
       description: 'Not authenticated',
@@ -302,7 +294,7 @@ export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
       );
     }
 
-    return c.json({ user: toPublicUser(newUser), sessionId: session.sessionId }, 201);
+    return c.json({ user: toOwnerUser(newUser), sessionId: session.sessionId }, 201);
   });
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -348,7 +340,7 @@ export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
 
     session.set('userId', user.id);
 
-    return c.json({ user: toPublicUser(user), sessionId: session.sessionId }, 200);
+    return c.json({ user: toOwnerUser(user), sessionId: session.sessionId }, 200);
   });
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -369,7 +361,7 @@ export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
   app.openapi(meRoute, async (c) => {
     const user = c.get('user')!;
 
-    return c.json(toPublicUser(user), 200);
+    return c.json(toOwnerUser(user), 200);
   });
 
   // ─────────────────────────────────────────────────────────────────────────
