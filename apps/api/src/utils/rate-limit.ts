@@ -96,6 +96,9 @@ export const RATE_LIMITS = {
   // File upload endpoints (strict)
   UPLOAD_MEDIA: { maxRequests: 10, windowSeconds: 300, identifier: 'upload:media' },
   UPLOAD_MOD: { maxRequests: 5, windowSeconds: 3600, identifier: 'upload:mod' },
+
+  // Report endpoints (moderate-strict)
+  REPORTS: { maxRequests: 10, windowSeconds: 3600, identifier: 'reports:create' },
 } as const;
 
 /**
