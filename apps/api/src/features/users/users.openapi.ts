@@ -1,5 +1,4 @@
-import { createRoute } from '@hono/zod-openapi';
-import { z } from 'zod';
+import { createRoute, z } from '@hono/zod-openapi';
 import {
   publicUserSchema,
   privateUserSchema,
@@ -62,6 +61,10 @@ export const updateMeRoute = createRoute({
     },
     401: {
       description: 'Not authenticated',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    500: {
+      description: 'Internal server error',
       content: { 'application/json': { schema: errorResponseSchema } },
     },
   },

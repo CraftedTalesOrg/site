@@ -1,30 +1,45 @@
-import { z } from 'zod';
-import { createSelectSchema } from 'drizzle-zod';
+import { z } from '@hono/zod-openapi';
+import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { media } from '@craftedtales/db';
 
-/**
- * Media schemas for API validation
- *
- * Schema hierarchy:
- * - selectMediaSchema: Base Drizzle schema (all DB fields)
- * - publicMediaSchema: Public API response (excludes deleted/deletedAt)
- */
-
-// ============================================================================
-// Base Drizzle Schema
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
+// Base
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const selectMediaSchema = createSelectSchema(media);
+export const insertMediaSchema = createInsertSchema(media);
 
-// ============================================================================
-// Public Media Schema
-// ============================================================================
-
-export const publicMediaSchema = selectMediaSchema
+/**
+ * Media schema
+ */
+export const mediaSchema = selectMediaSchema
   .omit({
+    enabled: true,
     deleted: true,
+    createdAt: true,
+    updatedAt: true,
     deletedAt: true,
   })
-  .openapi('PublicMedia');
+  .openapi('Media');
 
-export type PublicMedia = z.infer<typeof publicMediaSchema>;
+export type Media = z.infer<typeof mediaSchema>;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mutations
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Create media request
+ */
+export const createMediaRequestSchema = insertMediaSchema
+  .omit({
+    id: true,
+    enabled: true,
+    deleted: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .openapi('CreateMediaRequest');
+
+export type CreateMediaRequest = z.infer<typeof createMediaRequestSchema>;

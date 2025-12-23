@@ -62,70 +62,87 @@ import { tableName } from '@craftedtales/db';
 import { z } from 'zod';
 ```
 
-### 2. **Base Drizzle Schemas**
+### 2. **File Structure & Section Dividers**
 
-Use `drizzle-zod` to generate base schemas from database tables:
+Schema files follow a consistent structure with clear section dividers:
 
 ```typescript
-// ============================================================================
-// Base Drizzle Schemas
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
+// Base
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Base drizzle schemas and derived response schemas
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mutations (or "Requests" for auth-related features)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Create/Update request schemas
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Filter and list query schemas
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Responses
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Custom response schemas (optional, only if needed)
+```
+
+### 3. **Base Schemas**
+
+Use `drizzle-zod` to generate base schemas, then derive public/private response schemas:
+
+```typescript
+// ─────────────────────────────────────────────────────────────────────────────
+// Base
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const selectUserSchema = createSelectSchema(users);
 export const insertUserSchema = createInsertSchema(users);
-```
-
-**Available functions:**
-- `createSelectSchema(table)` — Schema matching SELECT query results
-- `createInsertSchema(table)` — Schema for INSERT operations
-- `createUpdateSchema(table)` — Schema for UPDATE operations (all fields optional)
-
-### 3. **Public vs Private Schemas**
-
-Always create separate schemas for public and private API responses:
-
-```typescript
-// ============================================================================
-// Public Schema (external users see this)
-// ============================================================================
 
 /**
- * Public user schema - for public profiles
- * Excludes: password, email, emailVerified, twoFactorSecret, deleted
+ * Public user
  */
 export const publicUserSchema = selectUserSchema
   .omit({
     password: true,
     email: true,
     emailVerified: true,
+    twoFactorEnabled: true,
     twoFactorSecret: true,
+    enabled: true,
     deleted: true,
+    updatedAt: true,
     deletedAt: true,
+    avatarId: true,
+    roles: true,
   })
   .extend({
-    avatar: publicMediaSchema.nullable().optional(),
+    avatar: mediaSchema.nullable(),
   })
   .openapi('PublicUser');
 
 export type PublicUser = z.infer<typeof publicUserSchema>;
 
-// ============================================================================
-// Private Schema (owner/authenticated user sees this)
-// ============================================================================
-
 /**
- * Private user schema - for authenticated user's own profile
- * Includes email but excludes password and internal fields
+ * Private user
  */
 export const privateUserSchema = selectUserSchema
   .omit({
     password: true,
+    emailVerified: true,
     twoFactorSecret: true,
+    enabled: true,
     deleted: true,
     deletedAt: true,
+    avatarId: true,
   })
   .extend({
-    avatar: publicMediaSchema.nullable().optional(),
+    avatar: mediaSchema.nullable(),
   })
   .openapi('PrivateUser');
 
@@ -133,99 +150,121 @@ export type PrivateUser = z.infer<typeof privateUserSchema>;
 ```
 
 **Key principles:**
-- **Public schemas** exclude sensitive data (`password`, `email`, `deleted`, etc.)
+- **Public schemas** exclude sensitive data (`password`, `email`, `deleted`, internal flags, etc.)
 - **Private schemas** include more data for the resource owner
+- Replace foreign key IDs (e.g., `avatarId`) with resolved relations (e.g., `avatar: mediaSchema.nullable()`)
 - Always use `.openapi('SchemaName')` to register in OpenAPI components
 
-### 4. **Summary Schemas for Relations**
+### 4. **Simple Entity Schemas**
 
-Create lightweight schemas for nested relations:
+For entities without public/private distinction, derive directly from base:
 
+```typescript
+// ─────────────────────────────────────────────────────────────────────────────
+// Base
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const selectCategorySchema = createSelectSchema(categories);
+export const insertCategorySchema = createInsertSchema(categories);
+
+/**
+ * Category
+ */
+export const categorySchema = selectCategorySchema.openapi('Category');
+
+export type Category = z.infer<typeof categorySchema>;
+```
+
+### 5. **Mutation Schemas**
+
+Build create/update request schemas using `.pick()` or `.omit()`:
+
+**Using `.pick()` (preferred for create requests):**
+```typescript
+// ─────────────────────────────────────────────────────────────────────────────
+// Mutations
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Create report request
+ */
+export const createReportRequestSchema = insertReportSchema
+  .pick({
+    targetType: true,
+    targetId: true,
+    reason: true,
+    description: true,
+  })
+  .openapi('CreateReportRequest');
+
+export type CreateReportRequest = z.infer<typeof createReportRequestSchema>;
+```
+
+**Using `.omit()` + `.partial()` (for update requests):**
 ```typescript
 /**
- * User summary schema - minimal user info for nested relations (e.g., mod.owner)
+ * Update profile request
  */
-export const userSummarySchema = z
-  .object({
-    id: z.string().uuid(),
-    username: z.string(),
-    bio: z.string().nullable(),
-    avatarId: z.string().uuid().nullable(),
-    roles: z.array(z.string()),
-  })
-  .openapi('UserSummary');
-
-export type UserSummary = z.infer<typeof userSummarySchema>;
-```
-
-### 5. **Request Schemas**
-
-Build request schemas by omitting auto-generated fields from insert schemas:
-
-```typescript
-// ============================================================================
-// Request Schemas
-// ============================================================================
-
-export const createModRequestSchema = insertModSchema
-  .omit({
-    id: true,              // Auto-generated
-    ownerId: true,         // Set from auth context
-    iconId: true,          // Set via separate upload
-    downloads: true,       // Defaults to 0
-    likes: true,           // Defaults to 0
-    approved: true,        // Defaults to false
-    deleted: true,         // Soft-delete field
-    deletedAt: true,       // Soft-delete timestamp
-    createdAt: true,       // Auto-generated
-    updatedAt: true,       // Auto-generated
-  })
-  .extend({
-    // Add fields not in the base table
-    categoryIds: z.array(z.string().uuid()).min(1).max(5),
-  })
-  .openapi('CreateModRequest');
-
-export type CreateModRequest = z.infer<typeof createModRequestSchema>;
-```
-
-**Update schemas** should make all fields optional with `.partial()`:
-
-```typescript
-export const updateModRequestSchema = insertModSchema
+export const updateProfileRequestSchema = insertUserSchema
   .omit({
     id: true,
-    ownerId: true,
-    // ... omit auto-managed fields
-  })
-  .extend({
-    categoryIds: z.array(z.string().uuid()).min(1).max(5).optional(),
+    password: true,
+    emailVerified: true,
+    twoFactorSecret: true,
+    enabled: true,
+    deleted: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+    roles: true,
   })
   .partial()
-  .openapi('UpdateModRequest');
+  .openapi('UpdateProfileRequest');
 
-export type UpdateModRequest = z.infer<typeof updateModRequestSchema>;
+export type UpdateProfileRequest = z.infer<typeof updateProfileRequestSchema>;
 ```
 
-### 6. **Query/Filter Schemas**
+**Standalone request schemas (for auth flows):**
+```typescript
+/**
+ * Login request
+ */
+export const loginRequestSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string(),
+  })
+  .openapi('LoginRequest');
 
-Use `z.coerce` for query string parameters (they arrive as strings):
+export type LoginRequest = z.infer<typeof loginRequestSchema>;
+```
+
+### 6. **Query Schemas**
+
+Use `z.coerce` for numeric query parameters and `.merge()` for pagination:
 
 ```typescript
-export const modFiltersSchema = z
+// ─────────────────────────────────────────────────────────────────────────────
+// Queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * List mods query
+ */
+export const listModsQuerySchema = z
   .object({
-    categoryId: z.string().uuid().optional(),
-    ownerId: z.string().uuid().optional(),
+    categoryIds: z.array(categorySchema).optional(),
+    gameVersions: z.array(z.string().max(50)).optional(),
     search: z.string().max(255).optional(),
     sortBy: z
       .enum(['downloads', 'likes', 'createdAt', 'updatedAt'])
       .default('createdAt'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
   })
-  .merge(paginationQuerySchema)  // Reuse common pagination
-  .openapi('ModFilters');
+  .merge(paginationQuerySchema)
+  .openapi('ListModsQuery');
 
-export type ModFilters = z.infer<typeof modFiltersSchema>;
+export type ListModsQuery = z.infer<typeof listModsQuerySchema>;
 ```
 
 **Pagination pattern** (from `_shared/common.schemas.ts`):
@@ -237,7 +276,37 @@ export const paginationQuerySchema = z.object({
 });
 ```
 
-### 7. **Path Parameter Schemas**
+### 7. **Response Schemas**
+
+Create custom response schemas when needed for specific endpoints:
+
+```typescript
+// ─────────────────────────────────────────────────────────────────────────────
+// Responses
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const authResponseSchema = z
+  .object({
+    user: privateUserSchema,
+    sessionId: z.string(),
+  })
+  .openapi('AuthResponse');
+
+export type AuthResponse = z.infer<typeof authResponseSchema>;
+
+export const likeToggleResponseSchema = z
+  .object({
+    liked: z.boolean(),
+    likes: z.number().int(),
+  })
+  .openapi('LikeToggleResponse');
+
+export type LikeToggleResponse = z.infer<typeof likeToggleResponseSchema>;
+```
+
+### 8. **Path Parameter Schemas**
+
+Define in `_shared/common.schemas.ts` for reuse:
 
 ```typescript
 export const slugParamSchema = z.object({
@@ -275,6 +344,8 @@ export const publicUserSchema = userSchema.openapi('PublicUser');
 
 ### Response Schemas with Error Types
 
+Located in `_shared/common.schemas.ts`:
+
 ```typescript
 export const errorResponseSchema = z.object({
   error: z.string().openapi({ example: 'Resource not found' }),
@@ -286,6 +357,13 @@ export const errorResponseSchema = z.object({
 });
 
 export type ErrorResponse = z.infer<typeof errorResponseSchema>;
+
+export const successResponseSchema = z.object({
+  success: z.boolean().openapi({ example: true }),
+  message: z.string().optional().openapi({ example: 'Operation completed successfully' }),
+});
+
+export type SuccessResponse = z.infer<typeof successResponseSchema>;
 ```
 
 ---
@@ -313,7 +391,7 @@ export type User = z.infer<typeof userSchema>;
 
 // ✅ GOOD - Use proper schema reference
 .extend({
-  avatar: publicMediaSchema.nullable(),
+  avatar: mediaSchema.nullable(),
 })
 ```
 
@@ -338,7 +416,27 @@ export const publicUserSchema = selectUserSchema.omit({
   password: true,
   email: true,
   deleted: true,
+  enabled: true,
 });
+```
+
+### ❌ DON'T: Keep foreign key IDs when relation is extended
+
+```typescript
+// ❌ BAD - Returns both avatarId and avatar object
+export const publicUserSchema = selectUserSchema
+  .extend({
+    avatar: mediaSchema.nullable(),
+  });
+
+// ✅ GOOD - Omit the ID, keep only the resolved relation
+export const publicUserSchema = selectUserSchema
+  .omit({
+    avatarId: true,
+  })
+  .extend({
+    avatar: mediaSchema.nullable(),
+  });
 ```
 
 ### ❌ DON'T: Duplicate schema definitions
@@ -346,10 +444,10 @@ export const publicUserSchema = selectUserSchema.omit({
 ```typescript
 // ❌ BAD - Duplicating between features
 // In mods/mods.schemas.ts
-const userSummarySchema = z.object({ id: z.string(), username: z.string() });
+const mediaSchema = z.object({ id: z.string(), url: z.string() });
 
 // ✅ GOOD - Import from the owning feature
-import { userSummarySchema } from '../auth/auth.schemas';
+import { mediaSchema } from '../_shared/media.schemas';
 ```
 
 ---
@@ -361,10 +459,10 @@ Import shared schemas from `_shared/` and domain schemas from their owning featu
 ```typescript
 // Shared utilities
 import { paginationQuerySchema, errorResponseSchema } from '../_shared/common.schemas';
-import { publicMediaSchema } from '../_shared/media.schemas';
+import { mediaSchema } from '../_shared/media.schemas';
 
 // Domain schemas (import from owning feature)
-import { userSummarySchema } from '../auth/auth.schemas';
+import { publicUserSchema, privateUserSchema } from '../auth/auth.schemas';
 import { categorySchema } from '../categories/categories.schemas';
 ```
 
@@ -375,11 +473,13 @@ import { categorySchema } from '../categories/categories.schemas';
 Before committing a schema file, verify:
 
 - [ ] All schemas have corresponding `type` exports using `z.infer<>`
-- [ ] Public schemas omit sensitive/internal fields (`password`, `deleted`, etc.)
+- [ ] Public schemas omit sensitive/internal fields (`password`, `deleted`, `enabled`, etc.)
+- [ ] Foreign key IDs are omitted when extended with resolved relations
 - [ ] Schemas used in OpenAPI routes call `.openapi('Name')`
 - [ ] Query params use `z.coerce` for numeric values
-- [ ] Request schemas omit auto-generated fields (`id`, `createdAt`, etc.)
+- [ ] Request schemas use `.pick()` or `.omit()` to select only needed fields
+- [ ] Update request schemas use `.partial()` to make fields optional
 - [ ] Relations use imported schemas, not `z.any()`
-- [ ] JSDoc comments explain schema hierarchy
-- [ ] Section dividers organize the file
+- [ ] JSDoc comments describe each schema
+- [ ] Section dividers (Base, Mutations/Requests, Queries, Responses) organize the file
 - [ ] No duplicate schemas across features

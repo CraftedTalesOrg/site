@@ -1,8 +1,4 @@
-import { z } from 'zod';
-
-/**
- * Common schemas shared across API features
- */
+import { z } from '@hono/zod-openapi';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Pagination
@@ -15,29 +11,22 @@ export const paginationQuerySchema = z.object({
 
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 
-export const paginationMetaSchema = z.object({
-  currentPage: z.number().int().openapi({ example: 1 }),
-  totalPages: z.number().int().openapi({ example: 5 }),
-  totalItems: z.number().int().openapi({ example: 87 }),
-  itemsPerPage: z.number().int().openapi({ example: 20 }),
-  hasNextPage: z.boolean().openapi({ example: true }),
-  hasPreviousPage: z.boolean().openapi({ example: false }),
-});
-
-export type PaginationMeta = z.infer<typeof paginationMetaSchema>;
-
-// TODO check for better typings
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function createPaginatedSchema<T extends z.ZodTypeAny>(dataSchema: T) {
+/**
+ * Creates a paginated response schema for a given data schema.
+ * Use this to wrap API responses that return paginated data.
+ */
+export function createPaginatedSchema<T extends z.ZodTypeAny>(
+  dataSchema: T,
+): z.ZodObject<{
+  data: z.ZodArray<T>;
+  totalItems: z.ZodNumber;
+}> {
   return z.object({
     data: z.array(dataSchema),
-    pagination: paginationMetaSchema,
+    totalItems: z.number().int().openapi({ example: 87 }),
   });
 }
 
-/**
- * Generic paginated response type for query functions
- */
 export interface PaginatedResponse<T> {
   data: T[];
   totalItems: number;
@@ -54,14 +43,14 @@ export const errorResponseSchema = z.object({
   details: z.record(z.any()).optional().openapi({
     example: { field: 'email', message: 'Invalid email format' },
   }),
-});
+}).openapi('ErrorResponse');
 
 export type ErrorResponse = z.infer<typeof errorResponseSchema>;
 
 export const successResponseSchema = z.object({
   success: z.boolean().openapi({ example: true }),
   message: z.string().optional().openapi({ example: 'Operation completed successfully' }),
-});
+}).openapi('SuccessResponse');
 
 export type SuccessResponse = z.infer<typeof successResponseSchema>;
 

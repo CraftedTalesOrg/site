@@ -1,81 +1,66 @@
-import { z } from 'zod';
+import { z } from '@hono/zod-openapi';
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { users } from '@craftedtales/db';
-
-/**
- * User and Auth schemas for API validation
- *
- * Schema hierarchy:
- * - selectUserSchema: Base Drizzle schema (all DB fields)
- * - publicUserSchema: Public profiles - excludes sensitive fields
- * - privateUserSchema: Private/owner's profile - includes email/emailVerified
- * - userSummarySchema: Minimal nested info (e.g., in mod.owner)
- */
+import { mediaSchema } from '../_shared/media.schemas';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Base User Schemas
+// Base
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const selectUserSchema = createSelectSchema(users);
 export const insertUserSchema = createInsertSchema(users);
 
 /**
- * Public user schema - for public profiles
- * Excludes: password, email, emailVerified, twoFactorSecret, deleted
+ * Public user
  */
 export const publicUserSchema = selectUserSchema
   .omit({
     password: true,
     email: true,
     emailVerified: true,
+    twoFactorEnabled: true,
     twoFactorSecret: true,
+    enabled: true,
     deleted: true,
+    updatedAt: true,
+    deletedAt: true,
+    avatarId: true,
+    roles: true,
   })
   .extend({
-    avatar: z.any().nullable().optional(),
+    avatar: mediaSchema.nullable(),
   })
   .openapi('PublicUser');
 
 export type PublicUser = z.infer<typeof publicUserSchema>;
 
 /**
- * Private user schema - for authenticated user's own profile
- * Extends public schema with email/emailVerified/twoFactorEnabled
+ * Private user
  */
 export const privateUserSchema = selectUserSchema
   .omit({
     password: true,
     emailVerified: true,
     twoFactorSecret: true,
+    enabled: true,
     deleted: true,
+    deletedAt: true,
+    avatarId: true,
   })
   .extend({
-    avatar: z.any().nullable().optional(),
+    avatar: mediaSchema.nullable(),
   })
   .openapi('PrivateUser');
 
 export type PrivateUser = z.infer<typeof privateUserSchema>;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Requests
+// ─────────────────────────────────────────────────────────────────────────────
+
 /**
- * User summary schema - minimal user info for nested relations (e.g., mod.owner)
- * Omits: avatar, timestamps, enabled
+ * Register request
  */
-export const userSummarySchema = z
-  .object({
-    id: z.string().uuid(),
-    username: z.string(),
-    bio: z.string().nullable(),
-    avatarId: z.string().uuid().nullable(),
-    roles: z.array(z.string()),
-  })
-  .openapi('UserSummary');
-
-export type UserSummary = z.infer<typeof userSummarySchema>;
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Auth Request/Response Schemas
-// ─────────────────────────────────────────────────────────────────────────────
-
 export const registerRequestSchema = z
   .object({
     username: z
@@ -90,6 +75,9 @@ export const registerRequestSchema = z
 
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 
+/**
+ * Login request
+ */
 export const loginRequestSchema = z
   .object({
     email: z.string().email(),
@@ -99,15 +87,9 @@ export const loginRequestSchema = z
 
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 
-export const authResponseSchema = z
-  .object({
-    user: privateUserSchema,
-    sessionId: z.string(),
-  })
-  .openapi('AuthResponse');
-
-export type AuthResponse = z.infer<typeof authResponseSchema>;
-
+/**
+ * Verify email request
+ */
 export const verifyEmailRequestSchema = z
   .object({
     token: z.string(),
@@ -116,6 +98,9 @@ export const verifyEmailRequestSchema = z
 
 export type VerifyEmailRequest = z.infer<typeof verifyEmailRequestSchema>;
 
+/**
+ * Forgot password request
+ */
 export const forgotPasswordRequestSchema = z
   .object({
     email: z.string().email(),
@@ -124,6 +109,9 @@ export const forgotPasswordRequestSchema = z
 
 export type ForgotPasswordRequest = z.infer<typeof forgotPasswordRequestSchema>;
 
+/**
+ * Reset password request
+ */
 export const resetPasswordRequestSchema = z
   .object({
     token: z.string(),
@@ -133,15 +121,36 @@ export const resetPasswordRequestSchema = z
 
 export type ResetPasswordRequest = z.infer<typeof resetPasswordRequestSchema>;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// User Profile Schemas
-// ─────────────────────────────────────────────────────────────────────────────
-
-// TODO UPDATE REST OF FIELDS (AVATAR, USERNAME ETC)
-export const updateProfileRequestSchema = z
-  .object({
-    bio: z.string().max(500).optional(),
+/**
+ * Update profile request
+ */
+export const updateProfileRequestSchema = insertUserSchema
+  .omit({
+    id: true,
+    password: true,
+    emailVerified: true,
+    twoFactorSecret: true,
+    enabled: true,
+    deleted: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+    roles: true,
   })
+  .partial()
   .openapi('UpdateProfileRequest');
 
 export type UpdateProfileRequest = z.infer<typeof updateProfileRequestSchema>;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Responses
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const authResponseSchema = z
+  .object({
+    user: privateUserSchema,
+    sessionId: z.string(),
+  })
+  .openapi('AuthResponse');
+
+export type AuthResponse = z.infer<typeof authResponseSchema>;

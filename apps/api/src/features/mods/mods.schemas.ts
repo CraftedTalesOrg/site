@@ -1,58 +1,65 @@
-import { z } from 'zod';
+import { z } from '@hono/zod-openapi';
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { mods, modVersions } from '@craftedtales/db';
-import { userSummarySchema } from '../auth/auth.schemas';
+import { privateUserSchema,
+  publicUserSchema } from '../auth/auth.schemas';
 import { categorySchema } from '../categories/categories.schemas';
-import { publicMediaSchema } from '../_shared/media.schemas';
+import { mediaSchema } from '../_shared/media.schemas';
 import { paginationQuerySchema } from '../_shared/common.schemas';
 
-/**
- * Mod schemas for API validation
- *
- * Schema hierarchy:
- * - selectModSchema: Base Drizzle schema (all DB fields)
- * - publicModSchema: Public API response (excludes deleted/deletedAt, includes relations)
- * - privateModSchema: Private/owner API response (same as public, all fields visible to owner)
- */
-
-// ============================================================================
-// Base Drizzle Schemas
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
+// Base
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const selectModSchema = createSelectSchema(mods);
 export const insertModSchema = createInsertSchema(mods);
 export const selectModVersionSchema = createSelectSchema(modVersions);
+export const insertModVersionSchema = createInsertSchema(modVersions);
 
-// ============================================================================
-// Public Mod Version Schema
-// ============================================================================
-
+/**
+ * Public mod version
+ */
 export const publicModVersionSchema = selectModVersionSchema
   .omit({
+    enabled: true,
     deleted: true,
+    // Use publishedAt for display
+    createdAt: true,
     deletedAt: true,
   })
   .openapi('PublicModVersion');
 
 export type PublicModVersion = z.infer<typeof publicModVersionSchema>;
 
-// ============================================================================
-// Public Mod Schema
-// ============================================================================
-
 /**
- * Public mod schema - for use in list and detail views
- * Excludes: deleted, deletedAt
- * Includes: owner, icon, categories, versions (all relations)
+ * Private mod version
  */
-export const publicModSchema = selectModSchema
+export const privateModVersionSchema = selectModVersionSchema
   .omit({
+    enabled: true,
     deleted: true,
     deletedAt: true,
   })
+  .openapi('PrivateModVersion');
+
+export type PrivateModVersion = z.infer<typeof privateModVersionSchema>;
+
+/**
+ * Public mod
+ */
+export const publicModSchema = selectModSchema
+  .omit({
+    enabled: true,
+    deleted: true,
+    deletedAt: true,
+    approved: true,
+    visibility: true,
+    iconId: true,
+    ownerId: true,
+  })
   .extend({
-    owner: userSummarySchema,
-    icon: publicMediaSchema.nullable(),
+    owner: publicUserSchema,
+    icon: mediaSchema.nullable(),
     categories: z.array(categorySchema),
     versions: z.array(publicModVersionSchema),
   })
@@ -61,62 +68,98 @@ export const publicModSchema = selectModSchema
 export type PublicMod = z.infer<typeof publicModSchema>;
 
 /**
- * Private mod schema - for use when the authenticated user is the owner
- * Same as publicModSchema (all fields are visible to owner)
+ * Private mod
  */
-export const privateModSchema = publicModSchema.openapi('PrivateMod');
+export const privateModSchema = selectModSchema
+  .omit({
+    enabled: true,
+    deleted: true,
+    deletedAt: true,
+    iconId: true,
+    ownerId: true,
+  })
+  .extend({
+    owner: privateUserSchema,
+    icon: mediaSchema.nullable(),
+    categories: z.array(categorySchema),
+    versions: z.array(privateModVersionSchema),
+  })
+  .openapi('PrivateMod');
 
 export type PrivateMod = z.infer<typeof privateModSchema>;
 
-// ============================================================================
-// Request Schemas
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
+// Mutations
+// ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * Create mod request
+ */
 export const createModRequestSchema = insertModSchema
-  .omit({
-    id: true,
-    ownerId: true,
-    iconId: true,
-    downloads: true,
-    likes: true,
-    approved: true,
-    deleted: true,
-    deletedAt: true,
-    createdAt: true,
-    updatedAt: true,
-  })
-  .extend({
-    categoryIds: z.array(z.string().uuid()).min(1).max(5),
+  .pick({
+    name: true,
+    slug: true,
+    visibility: true,
+    summary: true,
   })
   .openapi('CreateModRequest');
 
 export type CreateModRequest = z.infer<typeof createModRequestSchema>;
 
+/**
+ * Update mod request
+ */
 export const updateModRequestSchema = insertModSchema
   .omit({
     id: true,
     ownerId: true,
-    iconId: true,
     downloads: true,
     likes: true,
     approved: true,
+    enabled: true,
     deleted: true,
     deletedAt: true,
     createdAt: true,
     updatedAt: true,
   })
   .extend({
-    categoryIds: z.array(z.string().uuid()).min(1).max(5).optional(),
+    categoryIds: z.array(categorySchema).min(1).max(5).optional(),
   })
   .partial()
   .openapi('UpdateModRequest');
 
 export type UpdateModRequest = z.infer<typeof updateModRequestSchema>;
 
-export const modFiltersSchema = z
+/**
+ * Create mod version request
+ * Note: modId is from path param, url and size are from upload handler
+ * TODO CHECK FURTHER
+ */
+export const createModVersionRequestSchema = insertModVersionSchema
+  .pick({
+    name: true,
+    gameVersions: true,
+    channel: true,
+    changelog: true,
+    publishedAt: true,
+  })
+  .openapi('CreateModVersionRequest');
+
+export type CreateModVersionRequest = z.infer<
+  typeof createModVersionRequestSchema
+>;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * List mods query
+ */
+export const listModsQuerySchema = z
   .object({
-    categoryId: z.string().uuid().optional(),
-    ownerId: z.string().uuid().optional(),
+    categoryIds: z.array(categorySchema).optional(),
+    gameVersions: z.array(z.string().max(50)).optional(),
     search: z.string().max(255).optional(),
     sortBy: z
       .enum(['downloads', 'likes', 'createdAt', 'updatedAt'])
@@ -124,13 +167,25 @@ export const modFiltersSchema = z
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
   })
   .merge(paginationQuerySchema)
-  .openapi('ModFilters');
+  .openapi('ListModsQuery');
 
-export type ModFilters = z.infer<typeof modFiltersSchema>;
+export type ListModsQuery = z.infer<typeof listModsQuerySchema>;
 
-// ============================================================================
-// Like Toggle Response Schema
-// ============================================================================
+/**
+ * Review mods query
+ */
+export const reviewModsQuerySchema = z
+  .object({
+    approved: z.enum(['true', 'false', 'all']).default('false'),
+  })
+  .merge(paginationQuerySchema)
+  .openapi('ReviewModsQuery');
+
+export type ReviewModsQuery = z.infer<typeof reviewModsQuerySchema>;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Responses
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const likeToggleResponseSchema = z
   .object({

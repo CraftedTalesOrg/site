@@ -1,5 +1,5 @@
 import { createRoute, z } from '@hono/zod-openapi';
-import { publicModSchema, privateModSchema, createModRequestSchema, updateModRequestSchema, modFiltersSchema, publicModVersionSchema } from './mods.schemas';
+import { publicModSchema, privateModSchema, createModRequestSchema, updateModRequestSchema, listModsQuerySchema, publicModVersionSchema } from './mods.schemas';
 import {
   errorResponseSchema,
   successResponseSchema,
@@ -15,7 +15,7 @@ export const listModsRoute = createRoute({
   method: 'get',
   path: '/mods',
   request: {
-    query: modFiltersSchema,
+    query: listModsQuerySchema,
   },
   responses: {
     200: {

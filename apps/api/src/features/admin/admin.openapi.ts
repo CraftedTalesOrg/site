@@ -1,17 +1,15 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
-  adminModsQuerySchema,
-  reportResolveSchema,
-  adminReportSchema,
-  adminReportsQuerySchema,
-  adminActionSchema,
-} from './admin.schemas';
-import {
   errorResponseSchema,
   successResponseSchema,
   createPaginatedSchema,
 } from '../_shared/common.schemas';
-import { publicModSchema } from '../mods/mods.schemas';
+import { publicModSchema, reviewModsQuerySchema } from '../mods/mods.schemas';
+import {
+  reportSchema,
+  reviewReportsQuerySchema,
+  resolveReportRequestSchema,
+} from '../reports/reports.schemas';
 
 /**
  * GET /admin/review-queue - List mods pending approval
@@ -20,7 +18,7 @@ export const listReviewQueueRoute = createRoute({
   method: 'get',
   path: '/admin/review-queue',
   request: {
-    query: adminModsQuerySchema,
+    query: reviewModsQuerySchema,
   },
   responses: {
     200: {
@@ -53,7 +51,9 @@ export const reviewModRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: adminActionSchema,
+          schema: z.object({
+            reason: z.string().min(1).max(500).optional(),
+          }),
         },
       },
       required: false,
@@ -94,7 +94,9 @@ export const userActionRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: adminActionSchema,
+          schema: z.object({
+            reason: z.string().min(1).max(500).optional(),
+          }),
         },
       },
       required: false,
@@ -128,12 +130,12 @@ export const listReportsRoute = createRoute({
   method: 'get',
   path: '/admin/reports',
   request: {
-    query: adminReportsQuerySchema,
+    query: reviewReportsQuerySchema,
   },
   responses: {
     200: {
       description: 'List of reports',
-      content: { 'application/json': { schema: createPaginatedSchema(adminReportSchema) } },
+      content: { 'application/json': { schema: createPaginatedSchema(reportSchema) } },
     },
     401: {
       description: 'Not authenticated',
@@ -156,7 +158,7 @@ export const resolveReportRoute = createRoute({
   request: {
     params: z.object({ id: z.string().uuid() }),
     body: {
-      content: { 'application/json': { schema: reportResolveSchema } },
+      content: { 'application/json': { schema: resolveReportRequestSchema } },
     },
   },
   responses: {

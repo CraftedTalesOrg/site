@@ -1,13 +1,13 @@
 import type { Database } from '../../utils/db';
 import { mods, users, reports } from '@craftedtales/db';
 import { eq } from 'drizzle-orm';
-import type { AdminModsQuery, AdminReportsQuery, AdminReport, ReportResolve } from './admin.schemas';
-import type { PublicMod } from '../mods/mods.schemas';
+import type { PublicMod, ReviewModsQuery } from '../mods/mods.schemas';
+import type { ReviewReportsQuery, Report, ResolveReportRequest } from '../reports/reports.schemas';
 import type { PaginatedResponse } from '../_shared/common.schemas';
 
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
 // Admin Queries
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const adminQueries = {
   /**
@@ -15,7 +15,7 @@ export const adminQueries = {
    */
   async listReviewQueue(
     db: Database,
-    query: AdminModsQuery,
+    query: ReviewModsQuery,
   ): Promise<PaginatedResponse<PublicMod>> {
     const { approved, page, limit } = query;
 
@@ -30,8 +30,12 @@ export const adminQueries = {
             id: true,
             username: true,
             bio: true,
-            avatarId: true,
             roles: true,
+          },
+          with: {
+            avatar: {
+              where: { deleted: false },
+            },
           },
         },
         icon: {
@@ -65,7 +69,9 @@ export const adminQueries = {
     const data = modsList.map(mod => ({
       ...mod,
       icon: mod.icon ?? null,
-      owner: mod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
+      owner: mod.owner
+        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
+        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
       categories: mod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
@@ -170,8 +176,8 @@ export const adminQueries = {
    */
   async listReports(
     db: Database,
-    query: AdminReportsQuery,
-  ): Promise<PaginatedResponse<AdminReport>> {
+    query: ReviewReportsQuery,
+  ): Promise<PaginatedResponse<Report>> {
     const { status, targetType, page, limit } = query;
 
     const reportsList = await db.query.reports.findMany({
@@ -206,7 +212,7 @@ export const adminQueries = {
     db: Database,
     reportId: string,
     adminId: string,
-    resolution: ReportResolve,
+    resolution: ResolveReportRequest,
   ): Promise<{ success: boolean; message: string } | null> {
     const report = await db.query.reports.findFirst({
       where: { id: reportId },

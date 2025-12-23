@@ -5,15 +5,15 @@ import type { PaginatedResponse } from '../_shared/common.schemas';
 import type {
   CreateModRequest,
   LikeToggleResponse,
-  ModFilters,
+  ListModsQuery,
   PublicMod,
   PublicModVersion,
   UpdateModRequest,
 } from './mods.schemas';
 
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
 // Mods Queries
-// ============================================================================
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const modsQueries = {
   /**
@@ -21,7 +21,7 @@ export const modsQueries = {
    */
   async listWithFilters(
     db: Database,
-    filters: ModFilters,
+    filters: ListModsQuery,
   ): Promise<PaginatedResponse<PublicMod>> {
     const { page, limit, categoryId, search, sortBy, sortOrder, ownerId } = filters;
 
@@ -40,8 +40,12 @@ export const modsQueries = {
             id: true,
             username: true,
             bio: true,
-            avatarId: true,
             roles: true,
+          },
+          with: {
+            avatar: {
+              where: { deleted: false },
+            },
           },
         },
         icon: {
@@ -100,7 +104,9 @@ export const modsQueries = {
     const data = filteredMods.map(mod => ({
       ...mod,
       icon: mod.icon ?? null,
-      owner: mod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
+      owner: mod.owner
+        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
+        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
       categories: mod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
@@ -122,8 +128,12 @@ export const modsQueries = {
             id: true,
             username: true,
             bio: true,
-            avatarId: true,
             roles: true,
+          },
+          with: {
+            avatar: {
+              where: { deleted: false },
+            },
           },
         },
         icon: {
@@ -148,7 +158,9 @@ export const modsQueries = {
     return {
       ...mod,
       icon: mod.icon ?? null,
-      owner: mod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
+      owner: mod.owner
+        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
+        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
       categories: mod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
@@ -272,8 +284,12 @@ export const modsQueries = {
             id: true,
             username: true,
             bio: true,
-            avatarId: true,
             roles: true,
+          },
+          with: {
+            avatar: {
+              where: { deleted: false },
+            },
           },
         },
         icon: {
@@ -297,7 +313,9 @@ export const modsQueries = {
     return {
       ...mod,
       icon: mod.icon ?? null,
-      owner: mod.owner ?? { id: '', username: '[deleted]', bio: null, avatarId: null, roles: [] },
+      owner: mod.owner
+        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
+        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
       categories: mod.modCategories
         .map(mc => mc.category)
         .filter((cat): cat is NonNullable<typeof cat> => cat !== null),

@@ -1,4 +1,4 @@
-import { createRoute } from '@hono/zod-openapi';
+import { createRoute, z } from '@hono/zod-openapi';
 import {
   registerRequestSchema,
   loginRequestSchema,
@@ -9,8 +9,6 @@ import {
   resetPasswordRequestSchema,
 } from './auth.schemas';
 import { errorResponseSchema, successResponseSchema } from '../_shared/common.schemas';
-import { z } from 'zod';
-
 /**
  * OpenAPI route definitions for auth feature
  */
@@ -36,6 +34,10 @@ export const registerRoute = createRoute({
     },
     429: {
       description: 'Rate limit exceeded',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    500: {
+      description: 'Internal server error',
       content: { 'application/json': { schema: errorResponseSchema } },
     },
   },
