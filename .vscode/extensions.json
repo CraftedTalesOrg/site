@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"typescriptteam.native-preview",
+		"aaron-bond.better-comments",
+		"dbaeumer.vscode-eslint",
+		"vitest.explorer"
+	]
+}

@@ -3,7 +3,7 @@ import type { Database as _Database } from '@craftedtales/db';
 import type { Bindings } from '../env';
 
 // Re-export
-export const createDb = _createDb;
+export const createDb = (env: Bindings): Database => _createDb(getDbBinding(env));
 export type Database = _Database;
 
 /**

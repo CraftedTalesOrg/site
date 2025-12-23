@@ -6,7 +6,7 @@ import { prettyJSON } from 'hono/pretty-json';
 import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
 import { HTTPException } from 'hono/http-exception';
-import { createDb, getDbBinding, getRateLimitKV } from './utils/db';
+import { createDb, getRateLimitKV } from './utils/db';
 import { checkRateLimit, getClientIdentifier, type RateLimitConfig } from './utils/rate-limit';
 import type { Env } from './env';
 
@@ -53,7 +53,7 @@ export const requireAuth = (): MiddlewareHandler<Env> => async (c, next) => {
   }
 
   // Fetch user from database to ensure they still exist and aren't deleted
-  const db = createDb(getDbBinding(c.env));
+  const db = createDb(c.env);
   const user = await db.query.users.findFirst({
     where: { id: userId, deleted: false },
   });

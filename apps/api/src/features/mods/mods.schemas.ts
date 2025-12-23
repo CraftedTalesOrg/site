@@ -2,8 +2,9 @@ import { z } from 'zod';
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { mods, modVersions } from '@craftedtales/db';
 import { userSummarySchema } from '../auth/auth.schemas';
-import { categorySchema as publicCategorySchema } from '../categories/categories.schemas';
+import { categorySchema } from '../categories/categories.schemas';
 import { publicMediaSchema } from '../_shared/media.schemas';
+import { paginationQuerySchema } from '../_shared/common.schemas';
 
 /**
  * Mod schemas for API validation
@@ -52,7 +53,7 @@ export const publicModSchema = selectModSchema
   .extend({
     owner: userSummarySchema,
     icon: publicMediaSchema.nullable(),
-    categories: z.array(publicCategorySchema),
+    categories: z.array(categorySchema),
     versions: z.array(publicModVersionSchema),
   })
   .openapi('PublicMod');
@@ -122,6 +123,20 @@ export const modFiltersSchema = z
       .default('createdAt'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
   })
+  .merge(paginationQuerySchema)
   .openapi('ModFilters');
 
 export type ModFilters = z.infer<typeof modFiltersSchema>;
+
+// ============================================================================
+// Like Toggle Response Schema
+// ============================================================================
+
+export const likeToggleResponseSchema = z
+  .object({
+    liked: z.boolean(),
+    likes: z.number().int(),
+  })
+  .openapi('LikeToggleResponse');
+
+export type LikeToggleResponse = z.infer<typeof likeToggleResponseSchema>;

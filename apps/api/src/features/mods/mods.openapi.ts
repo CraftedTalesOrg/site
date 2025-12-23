@@ -15,7 +15,7 @@ export const listModsRoute = createRoute({
   method: 'get',
   path: '/mods',
   request: {
-    query: modFiltersSchema.merge(paginationQuerySchema),
+    query: modFiltersSchema,
   },
   responses: {
     200: {

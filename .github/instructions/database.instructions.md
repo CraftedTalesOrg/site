@@ -1,10 +1,10 @@
 ---
-applyTo: "packages/db/**"
+applyTo: "packages/db/**,apps/api/**/*.queries.ts"
 ---
 
-# Database Package (@craftedtales/db) Instructions
+# Database & Query Layer Instructions
 
-This package provides the Drizzle ORM database layer for the CraftedTales platform, configured for Cloudflare D1 (SQLite). All database schema, relations, and migration logic live here.
+This document covers the Drizzle ORM database layer (`@craftedtales/db`) and the query functions in the API (`apps/api/src/features/**/*.queries.ts`). Both work together to provide type-safe database access.
 
 ---
 
@@ -16,14 +16,17 @@ This package provides the Drizzle ORM database layer for the CraftedTales platfo
 - **TypeScript** (strict mode)
 
 **Core Concepts:**
-- Schema files define tables using `sqliteTable`
+- Schema files define tables using `sqliteTable` (in `packages/db`)
 - Relations are defined separately in `relations.ts` using `defineRelations`
 - Migrations are generated via `drizzle-kit` and stored in `drizzle/`
+- Query functions encapsulate database operations (in `apps/api/src/features/**/*.queries.ts`)
 - The `createDb` function wraps D1 bindings with schema context
 
 ---
 
 ## 📂 File Organization
+
+### Database Package (`packages/db`)
 
 ```
 packages/db/src/schema/
@@ -35,6 +38,24 @@ packages/db/src/schema/
 ├── interactions.ts    # mod_likes, reports
 ├── relations.ts       # Drizzle relational mappings
 └── column.helpers.ts  # Reusable patterns (timestamps, state)
+```
+
+### API Query Files (`apps/api/src/features/*/*.queries.ts`)
+
+```
+apps/api/src/features/
+├── auth/
+│   └── auth.queries.ts        # User auth queries (login, register)
+├── users/
+│   └── users.queries.ts       # User profile queries
+├── mods/
+│   └── mods.queries.ts        # Mod CRUD queries
+├── categories/
+│   └── categories.queries.ts  # Category listing queries
+├── reports/
+│   └── reports.queries.ts     # Report submission queries
+└── admin/
+    └── admin.queries.ts       # Admin moderation queries
 ```
 
 **Key Design Patterns:**
@@ -325,7 +346,243 @@ const deletedUsers = await db.query.users.findMany({
 
 ---
 
+## � Query Files (`*.queries.ts`) Patterns
+
+Query files in `apps/api/src/features/**/*.queries.ts` encapsulate all database operations for a feature. They provide a clean separation between route handlers and database logic.
+
+### File Structure
+
+```typescript
+import type { Database } from '../../utils/db';
+import { tableName } from '@craftedtales/db';
+import { eq, and } from 'drizzle-orm';
+import type { SomeSchema } from './feature.schemas';
+import type { PaginatedResponse } from '../_shared/common.schemas';
+
+/**
+ * Database queries for feature
+ */
+export const featureQueries = {
+  async queryName(db: Database, ...args): Promise<ReturnType> {
+    // Query implementation
+  },
+};
+```
+
+### Key Patterns
+
+#### 1. **Export as Object with Methods**
+
+```typescript
+// ✅ GOOD - Export as named object
+export const modsQueries = {
+  async listWithFilters(db: Database, filters: ModFilters): Promise<...> { ... },
+  async getBySlug(db: Database, slug: string): Promise<...> { ... },
+  async create(db: Database, userId: string, data: CreateModRequest): Promise<string> { ... },
+};
+
+// Usage in routes:
+import { modsQueries } from './mods.queries';
+const mods = await modsQueries.listWithFilters(db, filters);
+```
+
+#### 2. **Database as First Parameter**
+
+Always pass the `Database` instance as the first parameter:
+
+```typescript
+// ✅ GOOD - db is first parameter
+async getUserById(db: Database, userId: string): Promise<...> {
+  return await db.query.users.findFirst({
+    where: { id: userId, deleted: false },
+  });
+}
+
+// ❌ BAD - db not passed, uses global/closure
+async getUserById(userId: string): Promise<...> {
+  return await globalDb.query.users.findFirst({ ... });
+}
+```
+
+#### 3. **Always Filter Soft-Deleted Records**
+
+```typescript
+// ✅ GOOD - Always include deleted: false in where clause
+async findUserByEmail(db: Database, email: string) {
+  return await db.query.users.findFirst({
+    where: { email, deleted: false },
+    with: {
+      avatar: {
+        where: { deleted: false },  // Also filter relations
+      },
+    },
+  });
+}
+```
+
+#### 4. **Use Typed Return Values**
+
+Import types from schema files and use explicit return types:
+
+```typescript
+import type { PublicMod } from './mods.schemas';
+import type { PaginatedResponse } from '../_shared/common.schemas';
+
+async listWithFilters(
+  db: Database,
+  filters: ModFilters,
+): Promise<PaginatedResponse<PublicMod>> {
+  // ...
+}
+```
+
+#### 5. **Transform Junction Table Results**
+
+When querying many-to-many relations, transform the junction table structure:
+
+```typescript
+async getBySlug(db: Database, slug: string): Promise<PublicMod | null> {
+  const mod = await db.query.mods.findFirst({
+    where: { slug, deleted: false },
+    with: {
+      modCategories: {
+        with: { category: true },
+      },
+    },
+  });
+
+  if (!mod) return null;
+
+  // Transform junction table to flat array
+  return {
+    ...mod,
+    categories: mod.modCategories
+      .map(mc => mc.category)
+      .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
+  };
+}
+```
+
+#### 6. **Pagination Pattern**
+
+```typescript
+async listWithFilters(
+  db: Database,
+  filters: ModFilters & PaginationQuery,
+): Promise<PaginatedResponse<PublicMod>> {
+  const { page, limit, ...otherFilters } = filters;
+
+  // Get paginated results
+  const items = await db.query.mods.findMany({
+    where: { deleted: false, ...otherFilters },
+    limit,
+    offset: (page - 1) * limit,
+    orderBy: { createdAt: 'desc' },
+  });
+
+  // Get total count (lightweight query)
+  const allItems = await db.query.mods.findMany({
+    where: { deleted: false, ...otherFilters },
+    columns: { id: true },
+  });
+
+  return {
+    data: items,
+    totalItems: allItems.length,
+  };
+}
+```
+
+#### 7. **Create Operations Return ID**
+
+```typescript
+async create(db: Database, userId: string, data: CreateModRequest): Promise<string> {
+  const modId = crypto.randomUUID();
+
+  await db.insert(mods).values({
+    id: modId,
+    ownerId: userId,
+    ...data,
+  });
+
+  return modId;  // Return the new ID
+}
+```
+
+#### 8. **Update Operations with Current Values**
+
+Pass current record when updates need to merge with existing data:
+
+```typescript
+async update(
+  db: Database,
+  modId: string,
+  data: UpdateModRequest,
+  currentMod: typeof mods.$inferSelect,  // Pass current record
+): Promise<void> {
+  await db
+    .update(mods)
+    .set({
+      name: data.name ?? currentMod.name,
+      summary: data.summary ?? currentMod.summary,
+      updatedAt: new Date(),
+    })
+    .where(eq(mods.id, modId));
+}
+```
+
+#### 9. **Verify Existence Before Operations**
+
+```typescript
+async verifyTargetExists(
+  db: Database,
+  targetType: 'mod' | 'user',
+  targetId: string,
+): Promise<boolean> {
+  if (targetType === 'mod') {
+    const mod = await db.query.mods.findFirst({
+      where: { id: targetId, deleted: false },
+      columns: { id: true },  // Lightweight - only fetch id
+    });
+    return !!mod;
+  }
+  // ...
+}
+```
+
+#### 10. **JSDoc Comments for Each Query**
+
+```typescript
+export const authQueries = {
+  /**
+   * Find user by email (for login, password reset, registration check)
+   */
+  async findUserByEmail(db: Database, email: string) { ... },
+
+  /**
+   * Create a new user
+   */
+  async createUser(db: Database, userId: string, data: RegisterRequest, hashedPassword: string) { ... },
+};
+```
+
+### Query File Naming Conventions
+
+| Query Type      | Naming Pattern              | Example                          |
+| --------------- | --------------------------- | -------------------------------- |
+| List/Find many  | `list*`, `findMany*`        | `listWithFilters`, `listAll`     |
+| Get single      | `get*`, `find*`             | `getBySlug`, `findUserByEmail`   |
+| Check existence | `*Exists`, `has*`, `verify*`| `slugExists`, `hasPendingReport` |
+| Create          | `create*`                   | `createUser`, `createReport`     |
+| Update          | `update*`                   | `updateProfile`, `updatePassword`|
+| Delete          | `delete*`, `softDelete*`    | `softDeleteMod`                  |
+| Toggle          | `toggle*`                   | `toggleLike`                     |
+
+---
+
 ## 🚫 What NOT to Do
+
+### Schema (packages/db)
 
 - ❌ Do NOT edit files in `drizzle/` — they are auto-generated
 - ❌ Do NOT skip migration generation after schema changes
@@ -334,9 +591,16 @@ const deletedUsers = await db.query.users.findMany({
 - ❌ Do NOT forget `onDelete: 'cascade'` for child foreign keys (unless using SET NULL for soft-delete)
 - ❌ Do NOT use `any` types — leverage Drizzle's type inference
 - ❌ Do NOT create duplicate junction tables — check existing schema first
+
+### Queries (apps/api/**/*.queries.ts)
+
 - ❌ **Do NOT forget to filter `deleted = false` in API queries** — Drizzle doesn't auto-filter soft-deletes
 - ❌ **Do NOT hard-delete users, mods, versions, or media** — always soft-delete with `deleted: true, deletedAt: new Date()`
 - ❌ **Do NOT forget to set BOTH `deleted` and `deletedAt` fields** when soft-deleting
+- ❌ Do NOT put database logic directly in route handlers — encapsulate in query files
+- ❌ Do NOT forget to pass `db: Database` as the first parameter
+- ❌ Do NOT return raw junction table structures — transform `modCategories[].category` to `categories[]`
+- ❌ Do NOT forget explicit return types on query methods
 
 ---
 
@@ -360,6 +624,8 @@ const deletedUsers = await db.query.users.findMany({
    - Columns: camelCase (e.g., `createdAt`, `ownerId`)
 5. **Junction tables** should be exported in the same file as the primary entity
 6. **When in doubt**, refer to existing tables like `mods.ts` or `users.ts` for patterns
+7. **For query files**, follow patterns in existing files like `mods.queries.ts` or `auth.queries.ts`
+8. **Always transform junction table results** before returning from queries
 
 ---
 
@@ -368,4 +634,4 @@ const deletedUsers = await db.query.users.findMany({
 2. Referential integrity
 3. Consistent naming
 4. Migration generation
-5. Documentation updates (README.md if adding major features)
+

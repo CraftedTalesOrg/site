@@ -35,6 +35,14 @@ export function createPaginatedSchema<T extends z.ZodTypeAny>(dataSchema: T) {
   });
 }
 
+/**
+ * Generic paginated response type for query functions
+ */
+export interface PaginatedResponse<T> {
+  data: T[];
+  totalItems: number;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Response Types
 // ─────────────────────────────────────────────────────────────────────────────

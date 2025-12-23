@@ -8,7 +8,7 @@ import { paginationQuerySchema } from '../_shared/common.schemas';
  */
 export const adminModsQuerySchema = z
   .object({
-    status: z.enum(['pending', 'approved', 'all']).default('pending'),
+    approved: z.enum(['true', 'false', 'all']).default('false'),
   })
   .merge(paginationQuerySchema);
 
