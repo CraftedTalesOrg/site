@@ -7,7 +7,7 @@ export const users = sqliteTable('users', {
 
   // Public fields
   username: text({ length: 255 }).notNull().unique(),
-  bio: text(),
+  bio: text().notNull().default(''),
   avatarId: text().references(() => media.id),
   // TODO ROLES CHECK AGAIN IMPLEMENTATION
   roles: text({ mode: 'json' }).$type<string[]>().notNull().default([]),

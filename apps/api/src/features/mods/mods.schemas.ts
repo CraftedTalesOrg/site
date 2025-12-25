@@ -58,7 +58,7 @@ export const publicModSchema = selectModSchema
     ownerId: true,
   })
   .extend({
-    owner: publicUserSchema,
+    owner: publicUserSchema.nullable(),
     icon: mediaSchema.nullable(),
     categories: z.array(categorySchema),
     versions: z.array(publicModVersionSchema),
@@ -79,7 +79,7 @@ export const privateModSchema = selectModSchema
     ownerId: true,
   })
   .extend({
-    owner: privateUserSchema,
+    owner: privateUserSchema.nullable(),
     icon: mediaSchema.nullable(),
     categories: z.array(categorySchema),
     versions: z.array(privateModVersionSchema),
@@ -158,7 +158,7 @@ export type CreateModVersionRequest = z.infer<
  */
 export const listModsQuerySchema = z
   .object({
-    categoryIds: z.array(categorySchema).optional(),
+    categories: z.array(categorySchema).optional(),
     gameVersions: z.array(z.string().max(50)).optional(),
     search: z.string().max(255).optional(),
     sortBy: z

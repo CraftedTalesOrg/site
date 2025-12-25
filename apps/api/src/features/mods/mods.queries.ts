@@ -1,4 +1,4 @@
-import { modCategories, modLikes, mods } from '@craftedtales/db';
+import { modCategories, modLikes, mods, modVersions } from '@craftedtales/db';
 import { and, eq } from 'drizzle-orm';
 import type { Database } from '../../utils/db';
 import type { PaginatedResponse } from '../_shared/common.schemas';
@@ -6,14 +6,11 @@ import type {
   CreateModRequest,
   LikeToggleResponse,
   ListModsQuery,
+  PrivateMod,
   PublicMod,
   PublicModVersion,
   UpdateModRequest,
 } from './mods.schemas';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Mods Queries
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const modsQueries = {
   /**
@@ -23,16 +20,30 @@ export const modsQueries = {
     db: Database,
     filters: ListModsQuery,
   ): Promise<PaginatedResponse<PublicMod>> {
-    const { page, limit, categoryId, search, sortBy, sortOrder, ownerId } = filters;
+    const { page, limit, categories, search, sortBy, sortOrder } = filters;
 
-    // Get mods with relations
+    const searchFilter
+      = search?.trim()
+        ? {
+            OR: [
+              { name: { ilike: `%${search}%` } },
+              { summary: { ilike: `%${search}%` } },
+            ],
+          }
+        : {};
+
     const modsList = await db.query.mods.findMany({
       where: {
         deleted: false,
         status: 'published',
         visibility: 'public',
         approved: true,
-        ownerId: ownerId,
+        categories: {
+          id: {
+            in: (categories && categories.length > 0) ? categories.map(c => c.id) : undefined,
+          },
+        },
+        ...searchFilter,
       },
       with: {
         owner: {
@@ -40,80 +51,35 @@ export const modsQueries = {
             id: true,
             username: true,
             bio: true,
-            roles: true,
+            createdAt: true,
           },
           with: {
-            avatar: {
-              where: { deleted: false },
-            },
+            avatar: true,
           },
         },
-        icon: {
-          where: { deleted: false },
-        },
-        modCategories: {
-          with: {
-            category: true,
-          },
-        },
-        modVersions: {
-          where: { deleted: false },
-          orderBy: { createdAt: 'desc' },
-        },
+        icon: true,
+        categories: true,
+        versions: true,
       },
       limit,
       offset: (page - 1) * limit,
       orderBy: { [sortBy]: sortOrder },
     });
 
-    // Filter by category if specified (post-query filter)
-    let filteredMods = modsList;
+    const totalItems = await db.$count(
+      mods,
+      and(
+        eq(mods.deleted, false),
+        eq(mods.status, 'published'),
+        eq(mods.visibility, 'public'),
+        eq(mods.approved, true),
+      ),
+    );
 
-    if (categoryId) {
-      filteredMods = modsList.filter(mod =>
-        mod.modCategories.some(mc => mc.category?.id === categoryId),
-      );
-    }
-
-    // Filter by search term if specified
-    if (search) {
-      const searchLower = search.toLowerCase();
-
-      filteredMods = filteredMods.filter(
-        mod =>
-          mod.name.toLowerCase().includes(searchLower)
-          || mod.summary.toLowerCase().includes(searchLower),
-      );
-    }
-
-    // Get total count
-    const allMods = await db.query.mods.findMany({
-      where: {
-        deleted: false,
-        status: 'published',
-        visibility: 'public',
-        approved: true,
-        ownerId: ownerId,
-      },
-      columns: { id: true },
-    });
-
-    const totalItems = allMods.length;
-
-    // Transform to API format
-    const data = filteredMods.map(mod => ({
-      ...mod,
-      icon: mod.icon ?? null,
-      owner: mod.owner
-        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
-        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
-      categories: mod.modCategories
-        .map(mc => mc.category)
-        .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
-      versions: mod.modVersions,
-    }));
-
-    return { data, totalItems };
+    return {
+      data: modsList,
+      totalItems,
+    };
   },
 
   /**
@@ -128,44 +94,19 @@ export const modsQueries = {
             id: true,
             username: true,
             bio: true,
-            roles: true,
+            createdAt: true,
           },
           with: {
-            avatar: {
-              where: { deleted: false },
-            },
+            avatar: true,
           },
         },
-        icon: {
-          where: { deleted: false },
-        },
-        modCategories: {
-          with: {
-            category: true,
-          },
-        },
-        modVersions: {
-          where: { deleted: false },
-          orderBy: { createdAt: 'desc' },
-        },
+        icon: true,
+        categories: true,
+        versions: true,
       },
     });
 
-    if (!mod) {
-      return null;
-    }
-
-    return {
-      ...mod,
-      icon: mod.icon ?? null,
-      owner: mod.owner
-        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
-        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
-      categories: mod.modCategories
-        .map(mc => mc.category)
-        .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
-      versions: mod.modVersions,
-    };
+    return mod ?? null;
   },
 
   /**
@@ -181,41 +122,19 @@ export const modsQueries = {
   },
 
   /**
-   * Create a new mod with categories
+   * Create a new mod
    */
-  async create(db: Database, userId: string, data: CreateModRequest): Promise<string> {
-    const modId = crypto.randomUUID();
-
-    await db.insert(mods).values({
-      id: modId,
+  async create(db: Database, userId: string, data: CreateModRequest): Promise<PrivateMod | null> {
+    const [result] = await db.insert(mods).values({
       slug: data.slug,
       name: data.name,
       summary: data.summary,
-      description: data.description,
-      license: data.license,
-      licenseUrl: data.licenseUrl,
-      issueTrackerUrl: data.issueTrackerUrl,
-      sourceCodeUrl: data.sourceCodeUrl,
-      wikiUrl: data.wikiUrl,
-      discordInviteUrl: data.discordInviteUrl,
-      donationUrls: data.donationUrls,
       visibility: data.visibility,
       status: 'draft',
       ownerId: userId,
-    });
+    }).returning();
 
-    // Add categories
-    if (data.categoryIds && data.categoryIds.length > 0) {
-      await db.insert(modCategories).values(
-        data.categoryIds.map(categoryId => ({
-          id: crypto.randomUUID(),
-          modId,
-          categoryId,
-        })),
-      );
-    }
-
-    return modId;
+    return await this.getById(db, result.id);
   },
 
   /**
@@ -234,38 +153,37 @@ export const modsQueries = {
     db: Database,
     modId: string,
     data: UpdateModRequest,
-    currentMod: typeof mods.$inferSelect,
   ): Promise<void> {
     await db
       .update(mods)
       .set({
-        name: data.name ?? currentMod.name,
-        summary: data.summary ?? currentMod.summary,
-        description: data.description ?? currentMod.description,
-        license: data.license ?? currentMod.license,
-        licenseUrl: data.licenseUrl !== undefined ? data.licenseUrl : currentMod.licenseUrl,
-        issueTrackerUrl: data.issueTrackerUrl !== undefined ? data.issueTrackerUrl : currentMod.issueTrackerUrl,
-        sourceCodeUrl: data.sourceCodeUrl !== undefined ? data.sourceCodeUrl : currentMod.sourceCodeUrl,
-        wikiUrl: data.wikiUrl !== undefined ? data.wikiUrl : currentMod.wikiUrl,
-        discordInviteUrl: data.discordInviteUrl !== undefined ? data.discordInviteUrl : currentMod.discordInviteUrl,
-        donationUrls: data.donationUrls !== undefined ? data.donationUrls : currentMod.donationUrls,
-        visibility: data.visibility ?? currentMod.visibility,
-        status: data.status ?? currentMod.status,
+        name: data.name,
+        summary: data.summary,
+        description: data.description,
+        license: data.license,
+        licenseUrl: data.licenseUrl,
+        issueTrackerUrl: data.issueTrackerUrl,
+        sourceCodeUrl: data.sourceCodeUrl,
+        wikiUrl: data.wikiUrl,
+        discordInviteUrl: data.discordInviteUrl,
+        donationUrls: data.donationUrls,
+        visibility: data.visibility,
+        status: data.status,
       })
       .where(eq(mods.id, modId));
 
     // Update categories if provided
     if (data.categoryIds) {
-    // Delete existing categories
+      // Delete existing categories
       await db.delete(modCategories).where(eq(modCategories.modId, modId));
 
       // Add new categories
       if (data.categoryIds.length > 0) {
         await db.insert(modCategories).values(
-          data.categoryIds.map(categoryId => ({
+          data.categoryIds.map(category => ({
             id: crypto.randomUUID(),
             modId,
-            categoryId,
+            categoryId: category.id,
           })),
         );
       }
@@ -273,60 +191,39 @@ export const modsQueries = {
   },
 
   /**
-   * Get updated mod by ID with all relations
+   * Get mod by ID with all relations
    */
-  async getById(db: Database, modId: string): Promise<PublicMod | null> {
+  async getById(db: Database, modId: string): Promise<PrivateMod | null> {
     const mod = await db.query.mods.findFirst({
       where: { id: modId },
       with: {
         owner: {
           columns: {
             id: true,
+            email: true,
             username: true,
             bio: true,
             roles: true,
+            createdAt: true,
+            twoFactorEnabled: true,
           },
           with: {
-            avatar: {
-              where: { deleted: false },
-            },
+            avatar: true,
           },
         },
-        icon: {
-          where: { deleted: false },
-        },
-        modCategories: {
-          with: {
-            category: true,
-          },
-        },
-        modVersions: {
-          where: { deleted: false },
-        },
+        icon: true,
+        categories: true,
+        versions: true,
       },
     });
 
-    if (!mod) {
-      return null;
-    }
-
-    return {
-      ...mod,
-      icon: mod.icon ?? null,
-      owner: mod.owner
-        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
-        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
-      categories: mod.modCategories
-        .map(mc => mc.category)
-        .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
-      versions: mod.modVersions,
-    };
+    return mod ?? null;
   },
 
   /**
-   * Soft delete a mod
+   * Delete a mod (soft delete)
    */
-  async softDelete(db: Database, modId: string): Promise<void> {
+  async delete(db: Database, modId: string): Promise<void> {
     await db
       .update(mods)
       .set({ deleted: true, deletedAt: new Date() })
@@ -392,14 +289,13 @@ export const modsQueries = {
       orderBy: { createdAt: 'desc' },
     });
 
-    const allVersions = await db.query.modVersions.findMany({
-      where: { modId, deleted: false },
-      columns: { id: true },
-    });
+    // Get total count efficiently
+    const totalItems = await db.$count(
+      modVersions,
+      and(eq(modVersions.modId, modId), eq(modVersions.deleted, false)),
+    );
 
-    const totalItems = allVersions.length;
-
-    return { data: versions, totalItems };
+    return { data: versions as PublicModVersion[], totalItems };
   },
 
   /**
@@ -412,5 +308,57 @@ export const modsQueries = {
     });
 
     return mod?.id ?? null;
+  },
+
+  /**
+   * Get user's published mods (paginated)
+   */
+  async listByOwner(
+    db: Database,
+    userId: string,
+    options: { page: number; limit: number },
+  ): Promise<PaginatedResponse<PublicMod>> {
+    const { page, limit } = options;
+
+    const data = await db.query.mods.findMany({
+      where: {
+        ownerId: userId,
+        deleted: false,
+        status: 'published',
+        visibility: 'public',
+      },
+      with: {
+        owner: {
+          columns: {
+            id: true,
+            username: true,
+            bio: true,
+            createdAt: true,
+          },
+          with: {
+            avatar: true,
+          },
+        },
+        icon: true,
+        categories: true,
+        versions: true,
+      },
+      limit,
+      offset: (page - 1) * limit,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Get total count efficiently
+    const totalItems = await db.$count(
+      mods,
+      and(
+        eq(mods.ownerId, userId),
+        eq(mods.deleted, false),
+        eq(mods.status, 'published'),
+        eq(mods.visibility, 'public'),
+      ),
+    );
+
+    return { data, totalItems };
   },
 };

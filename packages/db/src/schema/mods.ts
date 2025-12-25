@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { categories } from './categories';
 import { users } from './users';
 import { state, timestamps } from './column.helpers';
@@ -12,7 +12,7 @@ export const mods = sqliteTable('mods', {
   name: text({ length: 255 }).notNull(),
   iconId: text().references(() => media.id),
   summary: text().notNull(),
-  description: text().notNull(),
+  description: text().notNull().default(''),
 
   // Status & visibility
   status: text({ enum: ['draft', 'published'] }).notNull().default('draft'),
@@ -20,7 +20,7 @@ export const mods = sqliteTable('mods', {
   approved: integer({ mode: 'boolean' }).notNull().default(false),
 
   // License
-  license: text({ length: 100 }).notNull(),
+  license: text({ length: 100 }),
   licenseUrl: text(),
 
   // External links
@@ -32,7 +32,7 @@ export const mods = sqliteTable('mods', {
 
   // Metadata
   downloads: integer().notNull().default(0), // TODO Total downloads across all versions, should it be calculated?
-  likes: integer().notNull().default(0),
+  likes: integer().notNull().default(0), // TODO It is in a relation, should it be calculated?
 
   // Relationships
   ownerId: text().notNull().references(() => users.id, { onDelete: 'cascade' }),
@@ -41,8 +41,10 @@ export const mods = sqliteTable('mods', {
   ...timestamps,
 });
 
-export const modCategories = sqliteTable('mod_categories', {
-  id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
-  modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
-  categoryId: text().notNull().references(() => categories.id, { onDelete: 'cascade' }),
-});
+export const modCategories = sqliteTable('mod_categories',
+  {
+    modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
+    categoryId: text().notNull().references(() => categories.id, { onDelete: 'cascade' }),
+  },
+  t => [primaryKey({ columns: [t.modId, t.categoryId] })],
+);

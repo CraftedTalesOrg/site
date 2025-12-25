@@ -1,6 +1,6 @@
 import type { Database } from '../../utils/db';
 import { mods, users, reports } from '@craftedtales/db';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import type { PublicMod, ReviewModsQuery } from '../mods/mods.schemas';
 import type { ReviewReportsQuery, Report, ResolveReportRequest } from '../reports/reports.schemas';
 import type { PaginatedResponse } from '../_shared/common.schemas';
@@ -19,7 +19,7 @@ export const adminQueries = {
   ): Promise<PaginatedResponse<PublicMod>> {
     const { approved, page, limit } = query;
 
-    const modsList = await db.query.mods.findMany({
+    const data = await db.query.mods.findMany({
       where: {
         deleted: false,
         approved: approved === 'all' ? undefined : approved === 'true',
@@ -33,50 +33,28 @@ export const adminQueries = {
             roles: true,
           },
           with: {
-            avatar: {
-              where: { deleted: false },
-            },
+            avatar: true,
           },
         },
-        icon: {
-          where: { deleted: false },
-        },
-        modCategories: {
-          with: {
-            category: true,
-          },
-        },
-        modVersions: {
-          where: { deleted: false },
-          orderBy: { createdAt: 'desc' },
-        },
+        icon: true,
+        categories: true,
+        versions: true,
       },
       limit,
       offset: (page - 1) * limit,
       orderBy: { createdAt: 'asc' },
     });
 
-    const allMods = await db.query.mods.findMany({
-      where: {
-        deleted: false,
-        approved: approved === 'all' ? undefined : approved === 'true',
-      },
-      columns: { id: true },
-    });
-
-    const totalItems = allMods.length;
-
-    const data = modsList.map(mod => ({
-      ...mod,
-      icon: mod.icon ?? null,
-      owner: mod.owner
-        ? { ...mod.owner, avatar: mod.owner.avatar ?? null }
-        : { id: '', username: '[deleted]', bio: null, roles: [], avatar: null },
-      categories: mod.modCategories
-        .map(mc => mc.category)
-        .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
-      versions: mod.modVersions,
-    }));
+    // Get total count efficiently
+    const totalItems = await db.$count(
+      mods,
+      approved === 'all'
+        ? eq(mods.deleted, false)
+        : and(
+            eq(mods.deleted, false),
+            eq(mods.approved, approved === 'true'),
+          ),
+    );
 
     return { data, totalItems };
   },
@@ -180,7 +158,7 @@ export const adminQueries = {
   ): Promise<PaginatedResponse<Report>> {
     const { status, targetType, page, limit } = query;
 
-    const reportsList = await db.query.reports.findMany({
+    const data = await db.query.reports.findMany({
       where: {
         status: status !== 'all' ? status : undefined,
         targetType: targetType,
@@ -190,17 +168,18 @@ export const adminQueries = {
       orderBy: { createdAt: 'desc' },
     });
 
-    const allReports = await db.query.reports.findMany({
-      where: {
-        status: status !== 'all' ? status : undefined,
-        targetType: targetType,
-      },
-      columns: { id: true },
-    });
-
-    const totalItems = allReports.length;
-
-    const data = reportsList;
+    // Get total count efficiently
+    const totalItems = await db.$count(
+      reports,
+      status !== 'all'
+        ? and(
+            eq(reports.status, status),
+            targetType ? eq(reports.targetType, targetType) : undefined,
+          )
+        : targetType
+          ? eq(reports.targetType, targetType)
+          : undefined,
+    );
 
     return { data, totalItems };
   },

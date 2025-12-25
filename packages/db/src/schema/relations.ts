@@ -25,18 +25,12 @@ export const relations = defineRelations(
       avatar: r.one.media({
         from: r.users.avatarId,
         to: r.media.id,
+        where: { deleted: false },
       }),
       ownedMods: r.many.mods(),
       modLikes: r.many.modLikes(),
       submittedReports: r.many.reports({ alias: 'submittedReports' }),
       reviewedReports: r.many.reports({ alias: 'reviewedReports' }),
-    },
-
-    // ========================================================================
-    // Categories Relations
-    // ========================================================================
-    categories: {
-      modCategories: r.many.modCategories(),
     },
 
     // ========================================================================
@@ -46,28 +40,21 @@ export const relations = defineRelations(
       icon: r.one.media({
         from: r.mods.iconId,
         to: r.media.id,
+        where: { deleted: false },
       }),
       owner: r.one.users({
         from: r.mods.ownerId,
         to: r.users.id,
+        where: { deleted: false },
       }),
-      modCategories: r.many.modCategories(),
-      modVersions: r.many.modVersions(),
+      categories: r.many.categories({
+        from: r.mods.id.through(r.modCategories.modId),
+        to: r.categories.id.through(r.modCategories.categoryId),
+      }),
+      versions: r.many.modVersions({
+        where: { deleted: false },
+      }),
       modLikes: r.many.modLikes(),
-    },
-
-    // ========================================================================
-    // Mod Categories (Junction) Relations
-    // ========================================================================
-    modCategories: {
-      mod: r.one.mods({
-        from: r.modCategories.modId,
-        to: r.mods.id,
-      }),
-      category: r.one.categories({
-        from: r.modCategories.categoryId,
-        to: r.categories.id,
-      }),
     },
 
     // ========================================================================

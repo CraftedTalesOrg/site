@@ -3,81 +3,38 @@ import { eq } from 'drizzle-orm';
 import type { Database } from '../../utils/db';
 import type { PrivateUser, RegisterRequest } from './auth.schemas';
 
-/**
- * Database queries for auth feature
- *
- * All queries return API-ready types (PrivateUser) with proper transformations
- */
-
-/**
- * Transform DB user with avatar to PrivateUser
- */
-function toPrivateUser(
-  user: typeof users.$inferSelect & {
-    avatar?: typeof import('@craftedtales/db').media.$inferSelect | null;
-  },
-): PrivateUser {
-  return {
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    bio: user.bio,
-    twoFactorEnabled: !!user.twoFactorSecret,
-    roles: user.roles,
-    enabled: user.enabled,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-    avatar: user.avatar ?? null,
-  };
-}
-
-/**
- * Internal type for DB user with password (needed for login verification)
- */
-export type UserWithPassword = PrivateUser & { password: string | null };
-
-/**
- * Transform DB user to UserWithPassword (for login)
- */
-function toUserWithPassword(
-  user: typeof users.$inferSelect & {
-    avatar?: typeof import('@craftedtales/db').media.$inferSelect | null;
-  },
-): UserWithPassword {
-  return {
-    ...toPrivateUser(user),
-    password: user.password,
-  };
-}
-
 export const authQueries = {
   /**
-   * Find user by email (for login, password reset)
-   * Returns UserWithPassword to allow password verification
+   * Find user by email
    */
-  async findUserByEmail(db: Database, email: string): Promise<UserWithPassword | null> {
+  async findUserByEmail(db: Database, email: string): Promise<PrivateUser | null> {
     const user = await db.query.users.findFirst({
       where: { email, deleted: false },
+      columns: {
+        id: true,
+        username: true,
+        email: true,
+        bio: true,
+        twoFactorEnabled: true,
+        roles: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       with: {
-        avatar: {
-          where: { deleted: false },
-        },
+        avatar: true,
       },
     });
 
-    if (!user) {
-      return null;
-    }
-
-    return toUserWithPassword(user);
+    return user ?? null;
   },
 
   /**
-   * Find user by username (for registration check)
+   * Find user by username
    */
   async findUserByUsername(db: Database, username: string): Promise<{ id: string } | null> {
     const user = await db.query.users.findFirst({
-      where: { username, deleted: false },
+      // Not filtering with deleted: false to allow checking usernames of deleted accounts
+      where: { username },
       columns: { id: true },
     });
 
@@ -85,46 +42,44 @@ export const authQueries = {
   },
 
   /**
-   * Find user by ID - returns PrivateUser
+   * Find user by ID
    */
   async findUserById(db: Database, userId: string): Promise<PrivateUser | null> {
     const user = await db.query.users.findFirst({
       where: { id: userId, deleted: false },
+      columns: {
+        id: true,
+        username: true,
+        email: true,
+        bio: true,
+        twoFactorEnabled: true,
+        roles: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       with: {
-        avatar: {
-          where: { deleted: false },
-        },
+        avatar: true,
       },
     });
 
-    if (!user) {
-      return null;
-    }
-
-    return toPrivateUser(user);
+    return user ?? null;
   },
 
   /**
-   * Create a new user - returns PrivateUser
+   * Create a new user
    */
   async createUser(
     db: Database,
-    userId: string,
     data: RegisterRequest,
     hashedPassword: string,
   ): Promise<PrivateUser | null> {
-    await db.insert(users).values({
-      id: userId,
+    const [insertedUser] = await db.insert(users).values({
       username: data.username,
       email: data.email,
       password: hashedPassword,
-      bio: '',
-      emailVerified: false,
-      enabled: true,
-      roles: ['user'],
-    });
+    }).returning({ id: users.id });
 
-    return await authQueries.findUserById(db, userId);
+    return await authQueries.findUserById(db, insertedUser.id);
   },
 
   /**
