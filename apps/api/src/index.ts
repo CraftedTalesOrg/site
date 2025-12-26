@@ -1,13 +1,12 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { createOpenApiApp, maybeRegisterSwaggerUI, registerOpenApiDocs } from './docs/openapi';
 import type { Env } from './env.d';
-import { createCors, createLogger, createPrettyJson, createRequestId, createSecurity, createSession } from './middleware';
+import { createCors, createLogger, createPrettyJson, createRequestId, createSecurity } from './middleware';
 import { registerAuthRoutes } from './features/auth/auth.routes';
 import { registerCategoriesRoutes } from './features/categories/categories.routes';
 import { registerReportRoutes } from './features/reports/reports.routes';
 import { registerUserRoutes } from './features/users/users.routes';
 import { registerModsRoutes } from './features/mods/mods.routes';
-import { registerAdminRoutes } from './features/admin/admin.routes';
 
 const app = createOpenApiApp();
 
@@ -17,7 +16,6 @@ app.use('*', createLogger());
 app.use('*', createSecurity());
 app.use('*', createCors());
 app.use('*', createPrettyJson());
-app.use('*', createSession());
 
 // Health root
 app.get('/health', c => c.json({ ok: true }));
@@ -26,12 +24,11 @@ app.get('/health', c => c.json({ ok: true }));
 const v1Prefix = '/api/v1';
 const v1 = new OpenAPIHono<Env>();
 
-registerModsRoutes(v1);
 registerAuthRoutes(v1);
 registerUserRoutes(v1);
-registerCategoriesRoutes(v1);
-registerAdminRoutes(v1);
 registerReportRoutes(v1);
+registerModsRoutes(v1);
+registerCategoriesRoutes(v1);
 
 // Mount v1 router under the prefix so OpenAPI aggregates paths
 app.route(v1Prefix, v1);

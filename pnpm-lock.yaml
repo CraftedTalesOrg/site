@@ -20,9 +20,6 @@ importers:
 
   apps/api:
     dependencies:
-      '@hono/session':
-        specifier: ^0.2.0
-        version: 0.2.0(hono@4.11.0)
       '@hono/swagger-ui':
         specifier: ^0.5.1
         version: 0.5.2(hono@4.11.0)
@@ -1188,11 +1185,6 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
-
-  '@hono/session@0.2.0':
-    resolution: {integrity: sha512-tn9OVxZb7PiQXwDFu4nSju9Mcjy0NP3ozrdGM/41YKTubW9kfjnBaib1kpygyU1lCuScP6PjCQ0AEfSDyEnr6A==}
-    peerDependencies:
-      hono: '>=4.0.0'
 
   '@hono/swagger-ui@0.5.2':
     resolution: {integrity: sha512-7wxLKdb8h7JTdZ+K8DJNE3KXQMIpJejkBTQjrYlUWF28Z1PGOKw6kUykARe5NTfueIN37jbyG/sBYsbzXzG53A==}
@@ -3369,9 +3361,6 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  jose@6.1.3:
-    resolution: {integrity: sha512-0TpaTfihd4QMNwrz/ob2Bp7X04yuxJkjRGi4aKmOqwhov54i6u79oCv7T+C7lo70MKH6BesI3vscD1yb/yzKXQ==}
-
   js-md4@0.3.2:
     resolution: {integrity: sha512-/GDnfQYsltsjRswQhN9fhv3EMw2sCpUdrdxyWDOUK7eyD++r3gRhzgiQgc/x4MAv2i1iuQ4lxO5mvqM3vj4bwA==}
 
@@ -5380,11 +5369,6 @@ snapshots:
       '@floating-ui/utils': 0.2.10
 
   '@floating-ui/utils@0.2.10': {}
-
-  '@hono/session@0.2.0(hono@4.11.0)':
-    dependencies:
-      hono: 4.11.0
-      jose: 6.1.3
 
   '@hono/swagger-ui@0.5.2(hono@4.11.0)':
     dependencies:
@@ -8086,8 +8070,6 @@ snapshots:
   isbot@5.1.32: {}
 
   isexe@2.0.0: {}
-
-  jose@6.1.3: {}
 
   js-md4@0.3.2: {}
 

@@ -1,10 +1,9 @@
-import { createRoute, z } from '@hono/zod-openapi';
-import { categorySchema } from './categories.schemas';
+import { createRoute } from '@hono/zod-openapi';
+import { listCategoriesResponseSchema } from './categories.schemas';
 
 /**
- * OpenAPI route definitions for categories feature
+ * GET /categories
  */
-
 export const listCategoriesRoute = createRoute({
   method: 'get',
   path: '/categories',
@@ -13,9 +12,7 @@ export const listCategoriesRoute = createRoute({
       description: 'List of categories',
       content: {
         'application/json': {
-          schema: z.object({
-            data: z.array(categorySchema),
-          }),
+          schema: listCategoriesResponseSchema,
         },
       },
     },

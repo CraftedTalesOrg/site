@@ -1,4 +1,4 @@
-import type { users } from '@craftedtales/db';
+import type { JwtVariables } from 'hono/jwt';
 
 /**
  * Bindings interface for Cloudflare Workers
@@ -23,10 +23,14 @@ export interface Bindings {
   SWAGGER_ENABLED: string;
   API_VERSION_PREFIX: string;
   CORS_ORIGIN: string;
-  SESSION_COOKIE_NAME: string;
   ENVIRONMENT: string;
-  SESSION_SECRET: string;
+  JWT_SECRET: string;
 }
+
+export type Variables = JwtVariables<{
+  userId: string;
+  roles: string[];
+}>;
 
 /**
  * Hono environment type with Bindings
@@ -34,10 +38,5 @@ export interface Bindings {
  */
 export interface Env {
   Bindings: Bindings;
-  Variables: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    session: any; // @hono/session type
-    userId?: string;
-    user?: typeof users.$inferSelect;
-  };
+  Variables: Variables;
 }

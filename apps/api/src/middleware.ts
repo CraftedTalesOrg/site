@@ -1,4 +1,3 @@
-import { useSession } from '@hono/session';
 import type { MiddlewareHandler } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
@@ -9,6 +8,8 @@ import { HTTPException } from 'hono/http-exception';
 import { createDb, getRateLimitKV } from './utils/db';
 import { checkRateLimit, getClientIdentifier, type RateLimitConfig } from './utils/rate-limit';
 import type { Env } from './env';
+import { jwt } from 'hono/jwt';
+import { usersQueries } from './features/users/users.queries';
 
 // CORS middleware
 export const createCors = (): MiddlewareHandler => (c, next) => {
@@ -32,62 +33,46 @@ export const createLogger = (): MiddlewareHandler => logger();
 export const createPrettyJson = (): MiddlewareHandler => prettyJSON();
 export const createRequestId = (): MiddlewareHandler => requestId();
 
-// Session
-export type SessionEnv = { SESSION_SECRET?: string; SESSION_COOKIE_NAME?: string };
-
-export const createSession = (): MiddlewareHandler => (c, next) => {
-  const secret = c.env?.SESSION_SECRET ?? 'dev-secret-change-me';
-
-  return useSession({ duration: { absolute: 60 * 60 * 24 * 7 }, secret })(c, next);
-};
-
 /**
- * Authentication middleware - requires user to be logged in
+ * Authentication middleware - requires user to be logged in via JWT Bearer token
  */
 export const requireAuth = (): MiddlewareHandler<Env> => async (c, next) => {
-  const session = c.get('session');
-  const userId = session?.get('userId');
+  const middleware = jwt({ secret: c.env?.JWT_SECRET ?? 'dev-secret-change-me' });
 
-  if (!userId) {
-    throw new HTTPException(401, { message: 'Authentication required' });
-  }
-
-  // Fetch user from database to ensure they still exist and aren't deleted
-  const db = createDb(c.env);
-  const user = await db.query.users.findFirst({
-    where: { id: userId, deleted: false },
-  });
-
-  if (!user) {
-    // Clear invalid session
-    session?.deleteSession();
-    throw new HTTPException(401, { message: 'Invalid or expired session' });
-  }
-
-  // Attach user to context
-  c.set('userId', userId);
-  c.set('user', user);
-
-  await next();
+  return middleware(c, next);
 };
 
 /**
  * Role-based access control middleware
+ * Fetches user from DB and verifies roles match the JWT payload
  */
-export const requireRole = (allowedRoles: string[]): MiddlewareHandler<Env> => async (c, next) => {
-  const user = c.get('user');
+export const requireAnyRole = (allowedRoles: string[]): MiddlewareHandler<Env> => async (c, next) => {
+  const payload = c.get('jwtPayload');
+
+  if (!payload.userId || !Array.isArray(payload.roles)) {
+    throw new HTTPException(401, { message: 'Invalid token payload' });
+  }
+
+  const db = createDb(c.env);
+  const user = await usersQueries.findById(db, payload.userId);
 
   if (!user) {
-    throw new HTTPException(401, { message: 'Authentication required' });
+    throw new HTTPException(401, { message: 'User not found' });
+  }
+
+  // Verify roles in JWT match the database
+  const jwtRoles = [...payload.roles].sort();
+  const dbRoles = [...user.roles].sort();
+
+  if (jwtRoles.length !== dbRoles.length || !jwtRoles.every((role, i) => role === dbRoles[i])) {
+    throw new HTTPException(401, { message: 'Token roles mismatch. Please re-authenticate.' });
   }
 
   // Check if user has any of the allowed roles
   const hasRole = user.roles.some(role => allowedRoles.includes(role));
 
   if (!hasRole) {
-    throw new HTTPException(403, {
-      message: `Access denied.`,
-    });
+    throw new HTTPException(403, { message: 'Access denied.' });
   }
 
   await next();
@@ -98,7 +83,9 @@ export const requireRole = (allowedRoles: string[]): MiddlewareHandler<Env> => a
  */
 export const rateLimit = (config: RateLimitConfig): MiddlewareHandler<Env> => async (c, next) => {
   const kv = getRateLimitKV(c.env);
-  const userId = c.get('userId');
+
+  // There may be or may not be a userId if this is applied without auth middleware
+  const { userId } = c.get('jwtPayload');
   const clientId = getClientIdentifier(c.req.raw, userId);
 
   const result = await checkRateLimit(kv, clientId, config);

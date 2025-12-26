@@ -1,6 +1,4 @@
-/**
- * Rate limiting utilities using Cloudflare KV
- */
+import bcrypt from 'bcryptjs';
 
 interface RateLimitData {
   count: number;
@@ -8,11 +6,8 @@ interface RateLimitData {
 }
 
 export interface RateLimitConfig {
-  /** Maximum number of requests allowed */
   maxRequests: number;
-  /** Time window in seconds */
   windowSeconds: number;
-  /** Identifier for the rate limit (e.g., 'auth:login', 'mods:create') */
   identifier: string;
 }
 
@@ -101,6 +96,8 @@ export const RATE_LIMITS = {
   REPORTS: { maxRequests: 10, windowSeconds: 3600, identifier: 'reports:create' },
 } as const;
 
+const SALT_ROUNDS = 10;
+
 /**
  * Get client identifier (IP address or user ID if authenticated)
  */
@@ -113,14 +110,7 @@ export function getClientIdentifier(request: Request, userId?: string): string {
   const cfConnectingIp = request.headers.get('CF-Connecting-IP');
 
   if (cfConnectingIp) {
-    return `ip:${cfConnectingIp}`;
-  }
-
-  // Fallback to X-Forwarded-For
-  const xForwardedFor = request.headers.get('X-Forwarded-For');
-
-  if (xForwardedFor) {
-    return `ip:${xForwardedFor.split(',')[0].trim()}`;
+    return `ip:${bcrypt.hash(cfConnectingIp, SALT_ROUNDS)}`;
   }
 
   // Last resort - use a default (not ideal for rate limiting)

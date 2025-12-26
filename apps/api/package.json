@@ -9,7 +9,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hono/session": "^0.2.0",
     "@hono/swagger-ui": "^0.5.1",
     "@hono/zod-openapi": "^0.17.1",
     "bcryptjs": "^2.4.3",

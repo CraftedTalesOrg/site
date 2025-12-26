@@ -1,4 +1,4 @@
 # These are SECRETS - never commit .dev.vars to git!
 
-# Session secret for JWT signing (generate with: openssl rand -base64 32)
-SESSION_SECRET=generate-a-random-secret-key-minimum-32-chars
+# JWT secret for signing (generate with: openssl rand -base64 32)
+JWT_SECRET=

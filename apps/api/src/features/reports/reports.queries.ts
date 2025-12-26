@@ -1,16 +1,30 @@
 import { reports } from '@craftedtales/db';
+import { eq, and } from 'drizzle-orm';
 import type { Database } from '../../utils/db';
-import type { CreateReportRequest } from './reports.schemas';
-
-/**
- * Database queries for reports feature
- */
+import type {
+  CreateReportRequest,
+  Report,
+  ReviewReportsQuery,
+  ResolveReportRequest,
+} from './reports.schemas';
+import type { PaginatedResponse } from '../_shared/common.schemas';
 
 export const reportsQueries = {
   /**
+   * Find report by ID
+   */
+  async findById(db: Database, reportId: string): Promise<Report | null> {
+    const report = await db.query.reports.findFirst({
+      where: { id: reportId },
+    });
+
+    return report ?? null;
+  },
+
+  /**
    * Verify target exists (mod or user) and is not deleted
    */
-  async verifyTargetExists(
+  async existsTarget(
     db: Database,
     targetType: 'mod' | 'user',
     targetId: string,
@@ -56,7 +70,7 @@ export const reportsQueries = {
   /**
    * Create a new report
    */
-  async createReport(
+  async create(
     db: Database,
     reporterId: string,
     data: CreateReportRequest,
@@ -77,11 +91,72 @@ export const reportsQueries = {
   },
 
   /**
-   * Get report by ID
+   * List reports
    */
-  async getReportById(db: Database, reportId: string): Promise<typeof reports.$inferSelect | undefined> {
-    return await db.query.reports.findFirst({
+  async list(
+    db: Database,
+    query: ReviewReportsQuery,
+  ): Promise<PaginatedResponse<Report>> {
+    const { status, targetType, page, limit } = query;
+
+    const reportsList = await db.query.reports.findMany({
+      where: {
+        status: status !== 'all' ? status : undefined,
+        targetType: targetType,
+      },
+      limit,
+      offset: (page - 1) * limit,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Build filter conditions for count
+    const filters = [];
+
+    if (status !== 'all') {
+      filters.push(eq(reports.status, status));
+    }
+
+    if (targetType) {
+      filters.push(eq(reports.targetType, targetType));
+    }
+
+    // Get total count efficiently
+    const totalItems = await db.$count(
+      reports,
+      filters.length > 0 ? and(...filters) : undefined,
+    );
+
+    return { data: reportsList, totalItems };
+  },
+
+  /**
+   * Resolve a report
+   */
+  async resolve(
+    db: Database,
+    reportId: string,
+    adminId: string,
+    resolution: ResolveReportRequest,
+  ): Promise<{ success: boolean; message: string } | null> {
+    const report = await db.query.reports.findFirst({
       where: { id: reportId },
     });
+
+    if (!report) {
+      return null;
+    }
+
+    await db
+      .update(reports)
+      .set({
+        status: resolution.resolution,
+        reviewedBy: adminId,
+        resolution: resolution.notes,
+      })
+      .where(eq(reports.id, reportId));
+
+    console.info(`[AUDIT] Report ${reportId} resolved as ${resolution.resolution} by ${adminId}`);
+
+    return { success: true, message: `Report ${resolution.resolution} successfully` };
   },
 };

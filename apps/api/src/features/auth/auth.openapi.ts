@@ -1,18 +1,19 @@
-import { createRoute, z } from '@hono/zod-openapi';
+import { createRoute } from '@hono/zod-openapi';
 import {
   registerRequestSchema,
   loginRequestSchema,
   authResponseSchema,
-  privateUserSchema,
   verifyEmailRequestSchema,
   forgotPasswordRequestSchema,
   resetPasswordRequestSchema,
 } from './auth.schemas';
 import { errorResponseSchema, successResponseSchema } from '../_shared/common.schemas';
-/**
- * OpenAPI route definitions for auth feature
- */
+import { requireAuth, rateLimit } from '../../middleware';
+import { RATE_LIMITS } from '../../utils/rate-limit';
 
+/**
+ * POST /auth/register
+ */
 export const registerRoute = createRoute({
   method: 'post',
   path: '/auth/register',
@@ -42,8 +43,12 @@ export const registerRoute = createRoute({
     },
   },
   tags: ['auth'],
+  middleware: [rateLimit(RATE_LIMITS.AUTH_REGISTER)],
 });
 
+/**
+ * POST /auth/login
+ */
 export const loginRoute = createRoute({
   method: 'post',
   path: '/auth/login',
@@ -69,40 +74,12 @@ export const loginRoute = createRoute({
     },
   },
   tags: ['auth'],
+  middleware: [rateLimit(RATE_LIMITS.AUTH_LOGIN)],
 });
 
-export const logoutRoute = createRoute({
-  method: 'post',
-  path: '/auth/logout',
-  responses: {
-    200: {
-      description: 'Logout successful',
-      content: { 'application/json': { schema: successResponseSchema } },
-    },
-  },
-  tags: ['auth'],
-});
-
-export const meRoute = createRoute({
-  method: 'get',
-  path: '/auth/me',
-  responses: {
-    200: {
-      description: 'Current user profile',
-      content: {
-        'application/json': {
-          schema: z.object({ user: privateUserSchema }),
-        },
-      },
-    },
-    401: {
-      description: 'Not authenticated',
-      content: { 'application/json': { schema: errorResponseSchema } },
-    },
-  },
-  tags: ['auth'],
-});
-
+/**
+ * POST /auth/forgot-password
+ */
 export const forgotPasswordRoute = createRoute({
   method: 'post',
   path: '/auth/forgot-password',
@@ -124,8 +101,12 @@ export const forgotPasswordRoute = createRoute({
     },
   },
   tags: ['auth'],
+  middleware: [rateLimit(RATE_LIMITS.AUTH_FORGOT_PASSWORD)],
 });
 
+/**
+ * POST /auth/reset-password
+ */
 export const resetPasswordRoute = createRoute({
   method: 'post',
   path: '/auth/reset-password',
@@ -149,6 +130,9 @@ export const resetPasswordRoute = createRoute({
   tags: ['auth'],
 });
 
+/**
+ * POST /auth/verify-email
+ */
 export const verifyEmailRoute = createRoute({
   method: 'post',
   path: '/auth/verify-email',
@@ -172,6 +156,9 @@ export const verifyEmailRoute = createRoute({
   tags: ['auth'],
 });
 
+/**
+ * POST /auth/resend-verification
+ */
 // TODO Check, will this work? Where do we get the email to resend to? The user is not logged
 export const resendVerificationRoute = createRoute({
   method: 'post',
@@ -191,4 +178,5 @@ export const resendVerificationRoute = createRoute({
     },
   },
   tags: ['auth'],
+  middleware: [requireAuth()],
 });

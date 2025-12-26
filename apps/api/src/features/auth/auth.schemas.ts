@@ -7,7 +7,10 @@ import { mediaSchema } from '../_shared/media.schemas';
 // Base
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const selectUserSchema = createSelectSchema(users);
+export const selectUserSchema = createSelectSchema(users, {
+  // cannot infer roles because it is saved as json so we define it manually
+  roles: z.array(z.string()).default([]),
+});
 export const insertUserSchema = createInsertSchema(users);
 
 /**
@@ -149,7 +152,7 @@ export type UpdateProfileRequest = z.infer<typeof updateProfileRequestSchema>;
 export const authResponseSchema = z
   .object({
     user: privateUserSchema,
-    sessionId: z.string(),
+    accessToken: z.string(),
   })
   .openapi('AuthResponse');
 

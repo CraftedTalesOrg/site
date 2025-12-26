@@ -13,9 +13,8 @@
 		"SWAGGER_ENABLED": true,
 		"API_VERSION_PREFIX": "/api/v1",
 		"CORS_ORIGIN": "http://localhost:5173",
-		"SESSION_COOKIE_NAME": "ct_session",
 		"ENVIRONMENT": "development",
-		"SESSION_SECRET": ""
+		"JWT_SECRET": ""
 	},
 	"d1_databases": [
 		{
@@ -47,9 +46,8 @@
 				"SWAGGER_ENABLED": false,
 				"API_VERSION_PREFIX": "/api/v1",
 				"CORS_ORIGIN": "https://craftedtales.com",
-				"SESSION_COOKIE_NAME": "ct_session",
 				"ENVIRONMENT": "production",
-				"SESSION_SECRET": ""
+				"JWT_SECRET": ""
 			},
 			"d1_databases": [
 				{

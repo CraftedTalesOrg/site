@@ -1,5 +1,13 @@
 import { createRoute, z } from '@hono/zod-openapi';
-import { publicModSchema, privateModSchema, createModRequestSchema, updateModRequestSchema, listModsQuerySchema, publicModVersionSchema } from './mods.schemas';
+import {
+  publicModSchema,
+  privateModSchema,
+  createModRequestSchema,
+  updateModRequestSchema,
+  listModsQuerySchema,
+  reviewModsQuerySchema,
+  publicModVersionSchema,
+} from './mods.schemas';
 import {
   errorResponseSchema,
   successResponseSchema,
@@ -7,9 +15,10 @@ import {
   paginationQuerySchema,
   createPaginatedSchema,
 } from '../_shared/common.schemas';
+import { requireAuth, requireAnyRole } from '../../middleware';
 
 /**
- * GET /mods - List mods with filters
+ * GET /mods
  */
 export const listModsRoute = createRoute({
   method: 'get',
@@ -27,7 +36,7 @@ export const listModsRoute = createRoute({
 });
 
 /**
- * GET /mods/{slug} - Get single mod
+ * GET /mods/{slug}
  */
 export const getModRoute = createRoute({
   method: 'get',
@@ -49,7 +58,7 @@ export const getModRoute = createRoute({
 });
 
 /**
- * POST /mods - Create new mod
+ * POST /mods
  */
 export const createModRoute = createRoute({
   method: 'post',
@@ -80,10 +89,11 @@ export const createModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  middleware: [requireAuth()],
 });
 
 /**
- * PATCH /mods/{slug} - Update mod
+ * PATCH /mods/{slug}
  */
 export const updateModRoute = createRoute({
   method: 'patch',
@@ -115,10 +125,11 @@ export const updateModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  middleware: [requireAuth()],
 });
 
 /**
- * DELETE /mods/{slug} - Soft delete mod
+ * DELETE /mods/{slug}
  */
 export const deleteModRoute = createRoute({
   method: 'delete',
@@ -145,10 +156,11 @@ export const deleteModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  middleware: [requireAuth()],
 });
 
 /**
- * POST /mods/{slug}/like - Toggle like on mod
+ * POST /mods/{slug}/like
  */
 export const likeModRoute = createRoute({
   method: 'post',
@@ -178,10 +190,11 @@ export const likeModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  middleware: [requireAuth()],
 });
 
 /**
- * GET /mods/{slug}/versions - List mod versions
+ * GET /mods/{slug}/versions
  */
 export const listModVersionsRoute = createRoute({
   method: 'get',
@@ -201,4 +214,75 @@ export const listModVersionsRoute = createRoute({
     },
   },
   tags: ['mods'],
+});
+
+/**
+ * GET /mods/review-queue
+ */
+export const listReviewQueueRoute = createRoute({
+  method: 'get',
+  path: '/mods/review-queue',
+  request: {
+    query: reviewModsQuerySchema,
+  },
+  responses: {
+    200: {
+      description: 'List of mods pending review',
+      content: { 'application/json': { schema: createPaginatedSchema(publicModSchema) } },
+    },
+    401: {
+      description: 'Not authenticated',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    403: {
+      description: 'Not authorized',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+  },
+  tags: ['mods'],
+  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])],
+});
+
+/**
+ * POST /mods/{id}/review/{action}
+ */
+export const reviewModRoute = createRoute({
+  method: 'post',
+  path: '/mods/{id}/review/{action}',
+  request: {
+    params: z.object({
+      id: z.string().uuid(),
+      action: z.enum(['approve', 'reject']),
+    }),
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            reason: z.string().min(1).max(500).optional(),
+          }),
+        },
+      },
+      required: false,
+    },
+  },
+  responses: {
+    200: {
+      description: 'Mod reviewed',
+      content: { 'application/json': { schema: successResponseSchema } },
+    },
+    401: {
+      description: 'Not authenticated',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    403: {
+      description: 'Not authorized',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    404: {
+      description: 'Mod not found',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+  },
+  tags: ['mods'],
+  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])],
 });

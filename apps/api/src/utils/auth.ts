@@ -1,10 +1,12 @@
 import bcrypt from 'bcryptjs';
+import { sign } from 'hono/jwt';
 
 /**
  * Authentication utilities
  */
 
 const SALT_ROUNDS = 10;
+const JWT_EXPIRY_DAYS = 7;
 
 /**
  * Hash a plain text password
@@ -72,4 +74,26 @@ export async function consumeToken(
   }
 
   return userId;
+}
+
+/**
+ * Sign a JWT access token with userId and roles
+ * Token expires in 7 days
+ */
+export async function signAccessToken(
+  userId: string,
+  roles: string[],
+  secret: string,
+): Promise<string> {
+  const now = Math.floor(Date.now() / 1000);
+  const exp = now + JWT_EXPIRY_DAYS * 24 * 60 * 60;
+
+  const payload = {
+    sub: userId,
+    roles,
+    iat: now,
+    exp,
+  };
+
+  return sign(payload, secret);
 }

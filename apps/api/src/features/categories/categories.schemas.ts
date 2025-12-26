@@ -42,3 +42,15 @@ export const updateCategoryRequestSchema = insertCategorySchema
   .openapi('UpdateCategoryRequest');
 
 export type UpdateCategoryRequest = z.infer<typeof updateCategoryRequestSchema>;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Responses
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const listCategoriesResponseSchema = z
+  .object({
+    data: z.array(categorySchema),
+  })
+  .openapi('ListCategoriesResponse');
+
+export type ListCategoriesResponse = z.infer<typeof listCategoriesResponseSchema>;

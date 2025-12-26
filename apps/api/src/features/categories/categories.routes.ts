@@ -10,7 +10,7 @@ import { categoriesQueries } from './categories.queries';
 export const registerCategoriesRoutes = (app: OpenAPIHono<Env>): void => {
   app.openapi(listCategoriesRoute, async (c) => {
     const db = createDb(c.env);
-    const categories = await categoriesQueries.listAll(db);
+    const categories = await categoriesQueries.list(db);
 
     return c.json({ data: categories }, 200);
   });
