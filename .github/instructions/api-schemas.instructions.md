@@ -253,7 +253,7 @@ Use `z.coerce` for numeric query parameters and `.merge()` for pagination:
  */
 export const listModsQuerySchema = z
   .object({
-    categoryIds: z.array(categorySchema).optional(),
+    categories: z.array(categorySchema).optional(),
     gameVersions: z.array(z.string().max(50)).optional(),
     search: z.string().max(255).optional(),
     sortBy: z
@@ -350,7 +350,6 @@ Located in `_shared/common.schemas.ts`:
 export const errorResponseSchema = z.object({
   error: z.string().openapi({ example: 'Resource not found' }),
   code: z.string().openapi({ example: 'NOT_FOUND' }),
-  statusCode: z.number().int().openapi({ example: 404 }),
   details: z.record(z.any()).optional().openapi({
     example: { field: 'email', message: 'Invalid email format' },
   }),

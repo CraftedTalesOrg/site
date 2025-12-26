@@ -82,6 +82,9 @@ import {
   paginationQuerySchema,
   createPaginatedSchema,
 } from '../_shared/common.schemas';
+
+// Import middleware (for protected routes)
+import { requireAuth, requireAnyRole } from '../../middleware';
 ```
 
 ### 2. **Basic Route Definition**
@@ -167,10 +170,61 @@ export const createModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  security: [{ Bearer: [] }],
+  middleware: [requireAuth()] as const,
 });
 ```
 
-### 5. **Optional Request Body**
+### 5. **Authenticated Routes with Middleware**
+
+For routes that require authentication, add both `security` and `middleware` properties:
+
+```typescript
+/**
+ * PATCH /mods/{slug} - Update mod (owner only)
+ */
+export const updateModRoute = createRoute({
+  method: 'patch',
+  path: '/mods/{slug}',
+  request: {
+    params: slugParamSchema,
+    body: {
+      content: {
+        'application/json': { schema: updateModRequestSchema },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Mod updated',
+      content: { 'application/json': { schema: privateModSchema } },
+    },
+    401: {
+      description: 'Not authenticated',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    403: {
+      description: 'Not owner of mod',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    404: {
+      description: 'Mod not found',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+  },
+  tags: ['mods'],
+  security: [{ Bearer: [] }],
+  middleware: [requireAuth()] as const,
+});
+```
+
+**Key points:**
+- `security: [{ Bearer: [] }]` declares the route requires Bearer token authentication in OpenAPI docs
+- `middleware: [requireAuth()] as const` actually enforces authentication at runtime
+- Always include both properties for authenticated routes
+- Use `requireAnyRole(['admin', 'moderator'])` for role-based access
+
+### 6. **Optional Request Body**
 
 For routes where the body is optional:
 
@@ -200,7 +254,7 @@ export const reviewModRoute = createRoute({
 });
 ```
 
-### 6. **Multiple Path Parameters**
+### 7. **Multiple Path Parameters**
 
 ```typescript
 export const userActionRoute = createRoute({
@@ -512,3 +566,4 @@ Before committing an openapi file, verify:
 - [ ] Routes follow the naming convention `{verb}{Resource}Route`
 - [ ] Paginated endpoints use `createPaginatedSchema()`
 - [ ] Request body uses `content: { 'application/json': { schema: ... } }` structure
+- [ ] Authenticated routes include both `security: [{ Bearer: [] }]` and `middleware: [requireAuth()] as const`

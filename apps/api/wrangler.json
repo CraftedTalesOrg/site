@@ -10,7 +10,6 @@
 		"port": 8787
 	},
 	"vars": {
-		"SWAGGER_ENABLED": true,
 		"API_VERSION_PREFIX": "/api/v1",
 		"CORS_ORIGIN": "http://localhost:5173",
 		"ENVIRONMENT": "development",
@@ -43,7 +42,6 @@
 		"production": {
 			"name": "craftedtales-api",
 			"vars": {
-				"SWAGGER_ENABLED": false,
 				"API_VERSION_PREFIX": "/api/v1",
 				"CORS_ORIGIN": "https://craftedtales.com",
 				"ENVIRONMENT": "production",

@@ -88,42 +88,41 @@ users: {
 - `mods.ownerId` (column) → `mods.owner` (relation)
 
 ### 2. **Many-to-Many Relations Pattern**
-For many-to-many relationships, define the junction table in the same file as the primary entity:
+For many-to-many relationships, define the junction table in the same file as the primary entity using composite primary key:
 
 ```typescript
 // In mods.ts
-export const modCategories = sqliteTable('mod_categories', {
-  id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
-  modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
-  categoryId: text().notNull().references(() => categories.id, { onDelete: 'cascade' }),
-});
+export const modCategories = sqliteTable('mod_categories',
+  {
+    modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
+    categoryId: text().notNull().references(() => categories.id, { onDelete: 'cascade' }),
+  },
+  t => [primaryKey({ columns: [t.modId, t.categoryId] })],
+);
 ```
 
-Then in `relations.ts`, define the relations through the junction:
+Then in `relations.ts`, define the direct many-to-many relations using `.through()` syntax:
 ```typescript
 mods: {
-  modCategories: r.many.modCategories(), // Access junction
+  categories: r.many.categories({
+    from: r.mods.id.through(r.modCategories.modId),
+    to: r.categories.id.through(r.modCategories.categoryId),
+  }),
+  versions: r.many.modVersions({
+    where: { deleted: false },
+  }),
 },
-categories: {
-  modCategories: r.many.modCategories(), // Access junction
-},
-modCategories: {
-  mod: r.one.mods({ from: r.modCategories.modId, to: r.mods.id }),
-  category: r.one.categories({ from: r.modCategories.categoryId, to: r.categories.id }),
-}
 ```
 
 **Access pattern:**
 ```typescript
-// Get categories for a mod
+// Get categories for a mod (direct access, no junction table in response)
 const mod = await db.query.mods.findFirst({
   with: {
-    modCategories: {
-      with: { category: true }
-    }
+    categories: true,  // Direct access to categories array
   }
 });
-// Access: mod.modCategories[].category
+// Access: mod.categories[]  (no junction table visible)
 ```
 
 ### 3. **Referential Integrity**
@@ -279,10 +278,13 @@ childTable: {
   parent: r.one.parentTable({
     from: r.childTable.parentId,
     to: r.parentTable.id,
+    where: { deleted: false },  // Optional: filter soft-deleted records
   }),
 },
 parentTable: {
-  children: r.many.childTable(),
+  children: r.many.childTable({
+    where: { deleted: false },  // Optional: filter soft-deleted records
+  }),
 }
 ```
 
@@ -292,25 +294,24 @@ import { createDb } from '@craftedtales/db';
 
 const db = createDb(env.craftedtales_db_dev);
 
-// Nested relations with soft-delete filtering
+// Nested relations (soft-delete filtering is in relations.ts)
 const mods = await db.query.mods.findMany({
   where: { deleted: false },
   with: {
     owner: {                        // User who owns the mod
-      where: { deleted: false }
-    },
-    icon: {                         // Mod icon
-      where: { deleted: false }
-    },
-    modCategories: {                // Categories through junction
+      columns: {                    // Select specific columns
+        id: true,
+        username: true,
+        bio: true,
+        createdAt: true,
+      },
       with: {
-        category: true,
+        avatar: true,               // Nested relation
       },
     },
-    modVersions: {                  // All active versions
-      where: { deleted: false },
-      orderBy: { createdAt: "desc" },
-    },
+    icon: true,                     // Mod icon (filtered in relations.ts)
+    categories: true,               // Direct many-to-many (no junction table visible)
+    versions: true,                 // Versions (filtered in relations.ts)
   },
 });
 ```
@@ -436,30 +437,33 @@ async listWithFilters(
 }
 ```
 
-#### 5. **Transform Junction Table Results**
+#### 5. **Direct Many-to-Many Access**
 
-When querying many-to-many relations, transform the junction table structure:
+With Drizzle's `.through()` syntax, many-to-many relations are accessed directly without transforming:
 
 ```typescript
 async getBySlug(db: Database, slug: string): Promise<PublicMod | null> {
   const mod = await db.query.mods.findFirst({
     where: { slug, deleted: false },
     with: {
-      modCategories: {
-        with: { category: true },
+      owner: {
+        columns: {
+          id: true,
+          username: true,
+          bio: true,
+          createdAt: true,
+        },
+        with: {
+          avatar: true,
+        },
       },
+      icon: true,
+      categories: true,  // Direct access - no junction table transformation needed
+      versions: true,
     },
   });
 
-  if (!mod) return null;
-
-  // Transform junction table to flat array
-  return {
-    ...mod,
-    categories: mod.modCategories
-      .map(mc => mc.category)
-      .filter((cat): cat is NonNullable<typeof cat> => cat !== null),
-  };
+  return mod ?? null;  // mod.categories is already an array of Category objects
 }
 ```
 
@@ -587,7 +591,6 @@ export const authQueries = {
 - ❌ Do NOT edit files in `drizzle/` — they are auto-generated
 - ❌ Do NOT skip migration generation after schema changes
 - ❌ Do NOT use relation names that match column names
-- ❌ Do NOT define many-to-many relations with `.through()` — use junction table pattern
 - ❌ Do NOT forget `onDelete: 'cascade'` for child foreign keys (unless using SET NULL for soft-delete)
 - ❌ Do NOT use `any` types — leverage Drizzle's type inference
 - ❌ Do NOT create duplicate junction tables — check existing schema first
@@ -599,7 +602,6 @@ export const authQueries = {
 - ❌ **Do NOT forget to set BOTH `deleted` and `deletedAt` fields** when soft-deleting
 - ❌ Do NOT put database logic directly in route handlers — encapsulate in query files
 - ❌ Do NOT forget to pass `db: Database` as the first parameter
-- ❌ Do NOT return raw junction table structures — transform `modCategories[].category` to `categories[]`
 - ❌ Do NOT forget explicit return types on query methods
 
 ---
@@ -622,10 +624,10 @@ export const authQueries = {
    - Tables: snake_case (e.g., `mod_categories`)
    - Relations: camelCase with descriptive suffixes (e.g., `iconMedia`, `ownerUser`)
    - Columns: camelCase (e.g., `createdAt`, `ownerId`)
-5. **Junction tables** should be exported in the same file as the primary entity
+5. **Junction tables** should be exported in the same file as the primary entity and use composite primary keys
 6. **When in doubt**, refer to existing tables like `mods.ts` or `users.ts` for patterns
 7. **For query files**, follow patterns in existing files like `mods.queries.ts` or `auth.queries.ts`
-8. **Always transform junction table results** before returning from queries
+8. **Use `.through()` syntax** for direct many-to-many access in relations
 
 ---
 

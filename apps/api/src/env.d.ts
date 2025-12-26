@@ -20,7 +20,6 @@ export interface Bindings {
   craftedtales_media: R2Bucket;
 
   // Environment variables from wrangler.json vars
-  SWAGGER_ENABLED: string;
   API_VERSION_PREFIX: string;
   CORS_ORIGIN: string;
   ENVIRONMENT: string;
