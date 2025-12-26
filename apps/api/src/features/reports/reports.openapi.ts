@@ -37,6 +37,7 @@ export const listReportsRoute = createRoute({
     },
   },
   tags: ['reports'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });
 
@@ -76,6 +77,7 @@ export const createReportRoute = createRoute({
     },
   },
   tags: ['reports'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth(), rateLimit(RATE_LIMITS.REPORTS)] as const,
 });
 
@@ -110,5 +112,6 @@ export const resolveReportRoute = createRoute({
     },
   },
   tags: ['reports'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });

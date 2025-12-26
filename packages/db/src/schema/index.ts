@@ -1,18 +1,16 @@
 export * from './users';
 export * from './categories';
 export * from './mods';
-export * from './modVersions';
 export * from './media';
-export * from './interactions';
+export * from './reports';
 export * from './column.helpers';
 export * from './relations';
 
 import { users } from './users';
 import { categories } from './categories';
-import { mods, modCategories } from './mods';
-import { modVersions } from './modVersions';
+import { mods, modCategories, modLikes, modVersions } from './mods';
 import { media } from './media';
-import { modLikes, reports } from './interactions';
+import { reports } from './reports';
 
 export const schema = {
   users,

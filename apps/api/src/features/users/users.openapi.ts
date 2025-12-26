@@ -39,6 +39,7 @@ export const getMeRoute = createRoute({
     },
   },
   tags: ['users'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth()] as const,
 });
 
@@ -74,6 +75,7 @@ export const updateMeRoute = createRoute({
     },
   },
   tags: ['users'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth()] as const,
 });
 
@@ -171,5 +173,6 @@ export const userActionRoute = createRoute({
     },
   },
   tags: ['users'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });

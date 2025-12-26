@@ -1,21 +1,16 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { swaggerUI } from '@hono/swagger-ui';
+import { Scalar } from '@scalar/hono-api-reference';
 import type { Env } from '../env.d';
 
 export const createOpenApiApp = (): OpenAPIHono<Env> => new OpenAPIHono<Env>();
 
-export const registerOpenApiDocs = (app: OpenAPIHono<Env>): void => {
-  app.doc('/doc', {
-    openapi: '3.1.0',
-    info: { title: 'CraftedTales API', version: '1.0.0' },
+export const registerOpenApiDocs = async (app: OpenAPIHono<Env>): Promise<void> => {
+  app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
+    type: 'http',
+    scheme: 'bearer',
   });
 
-  app.get('/health', c => c.json({ ok: true }));
-};
-
-export const maybeRegisterSwaggerUI = (app: OpenAPIHono<Env>): void => {
-  // Gate Swagger by env at runtime, then mount UI handler
-  app.use('/docs', async (c, next) => {
+  app.use('/doc', async (c, next) => {
     const enabled = (c.env.SWAGGER_ENABLED ?? 'false').toString().toLowerCase() === 'true';
 
     if (!enabled) {
@@ -24,5 +19,16 @@ export const maybeRegisterSwaggerUI = (app: OpenAPIHono<Env>): void => {
 
     await next();
   });
-  app.get('/docs', swaggerUI({ url: '/doc' }));
+
+  app.doc('/doc', {
+    openapi: '3.1.0',
+    info: { title: 'CraftedTales API', version: '1.0.0' },
+  });
+
+  app.get('/docs', Scalar({
+    url: '/doc',
+    pageTitle: 'CraftedTales API Docs',
+    hideClientButton: true,
+  }));
+  app.get('/health', c => c.json({ ok: true }));
 };

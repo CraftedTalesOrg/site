@@ -93,6 +93,7 @@ export const createModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth()] as const,
 });
 
@@ -133,6 +134,7 @@ export const updateModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth()] as const,
 });
 
@@ -164,6 +166,7 @@ export const deleteModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth()] as const,
 });
 
@@ -191,6 +194,7 @@ export const likeModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth()] as const,
 });
 
@@ -241,6 +245,7 @@ export const listReviewQueueRoute = createRoute({
     },
   },
   tags: ['mods'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });
 
@@ -285,5 +290,6 @@ export const reviewModRoute = createRoute({
     },
   },
   tags: ['mods'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });

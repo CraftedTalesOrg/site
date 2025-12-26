@@ -182,5 +182,6 @@ export const resendVerificationRoute = createRoute({
     },
   },
   tags: ['auth'],
+  security: [{ Bearer: [] }],
   middleware: [requireAuth()] as const,
 });

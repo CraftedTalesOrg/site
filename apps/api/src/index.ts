@@ -1,5 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { createOpenApiApp, maybeRegisterSwaggerUI, registerOpenApiDocs } from './docs/openapi';
+import { createOpenApiApp, registerOpenApiDocs } from './docs/openapi';
 import type { Env } from './env.d';
 import { createCors, createLogger, createPrettyJson, createRequestId, createSecurity } from './middleware';
 import { registerAuthRoutes } from './features/auth/auth.routes';
@@ -33,9 +33,8 @@ registerCategoriesRoutes(v1);
 // Mount v1 router under the prefix so OpenAPI aggregates paths
 app.route(v1Prefix, v1);
 
-// OpenAPI doc JSON and maybe Swagger UI (register after routes so paths are included)
+// OpenAPI doc JSON and UI
 registerOpenApiDocs(app);
-maybeRegisterSwaggerUI(app);
 
 export default {
   fetch: (req: Request, env: Env['Bindings'], ctx: ExecutionContext): Response | Promise<Response> => app.fetch(req, env, ctx),
