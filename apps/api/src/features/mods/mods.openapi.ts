@@ -87,9 +87,13 @@ export const createModRoute = createRoute({
       description: 'Slug already exists',
       content: { 'application/json': { schema: errorResponseSchema } },
     },
+    500: {
+      description: 'Failed to create mod',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
   },
   tags: ['mods'],
-  middleware: [requireAuth()],
+  middleware: [requireAuth()] as const,
 });
 
 /**
@@ -123,9 +127,13 @@ export const updateModRoute = createRoute({
       description: 'Mod not found',
       content: { 'application/json': { schema: errorResponseSchema } },
     },
+    500: {
+      description: 'Failed to fetch updated mod',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
   },
   tags: ['mods'],
-  middleware: [requireAuth()],
+  middleware: [requireAuth()] as const,
 });
 
 /**
@@ -156,7 +164,7 @@ export const deleteModRoute = createRoute({
     },
   },
   tags: ['mods'],
-  middleware: [requireAuth()],
+  middleware: [requireAuth()] as const,
 });
 
 /**
@@ -171,14 +179,7 @@ export const likeModRoute = createRoute({
   responses: {
     200: {
       description: 'Like toggled',
-      content: {
-        'application/json': {
-          schema: z.object({
-            liked: z.boolean(),
-            likes: z.number().int(),
-          }),
-        },
-      },
+      content: { 'application/json': { schema: successResponseSchema } },
     },
     401: {
       description: 'Not authenticated',
@@ -190,7 +191,7 @@ export const likeModRoute = createRoute({
     },
   },
   tags: ['mods'],
-  middleware: [requireAuth()],
+  middleware: [requireAuth()] as const,
 });
 
 /**
@@ -240,7 +241,7 @@ export const listReviewQueueRoute = createRoute({
     },
   },
   tags: ['mods'],
-  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])],
+  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });
 
 /**
@@ -284,5 +285,5 @@ export const reviewModRoute = createRoute({
     },
   },
   tags: ['mods'],
-  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])],
+  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });

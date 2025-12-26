@@ -14,6 +14,33 @@ import { requireAuth, rateLimit, requireAnyRole } from '../../middleware';
 import { RATE_LIMITS } from '../../utils/rate-limit';
 
 /**
+ * GET /reports
+ */
+export const listReportsRoute = createRoute({
+  method: 'get',
+  path: '/reports',
+  request: {
+    query: reviewReportsQuerySchema,
+  },
+  responses: {
+    200: {
+      description: 'List of reports',
+      content: { 'application/json': { schema: createPaginatedSchema(reportSchema) } },
+    },
+    401: {
+      description: 'Not authenticated',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+    403: {
+      description: 'Not authorized',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
+  },
+  tags: ['reports'],
+  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
+});
+
+/**
  * POST /reports
  */
 export const createReportRoute = createRoute({
@@ -49,34 +76,7 @@ export const createReportRoute = createRoute({
     },
   },
   tags: ['reports'],
-  middleware: [requireAuth(), rateLimit(RATE_LIMITS.REPORTS)],
-});
-
-/**
- * GET /reports
- */
-export const listReportsRoute = createRoute({
-  method: 'get',
-  path: '/reports',
-  request: {
-    query: reviewReportsQuerySchema,
-  },
-  responses: {
-    200: {
-      description: 'List of reports',
-      content: { 'application/json': { schema: createPaginatedSchema(reportSchema) } },
-    },
-    401: {
-      description: 'Not authenticated',
-      content: { 'application/json': { schema: errorResponseSchema } },
-    },
-    403: {
-      description: 'Not authorized',
-      content: { 'application/json': { schema: errorResponseSchema } },
-    },
-  },
-  tags: ['reports'],
-  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])],
+  middleware: [requireAuth(), rateLimit(RATE_LIMITS.REPORTS)] as const,
 });
 
 /**
@@ -110,5 +110,5 @@ export const resolveReportRoute = createRoute({
     },
   },
   tags: ['reports'],
-  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])],
+  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });

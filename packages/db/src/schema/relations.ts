@@ -1,10 +1,9 @@
 import { defineRelations } from 'drizzle-orm';
 import { categories } from './categories';
-import { modLikes, reports } from './interactions';
 import { media } from './media';
-import { modCategories, mods } from './mods';
+import { mods, modVersions, modCategories, modLikes } from './mods';
 import { users } from './users';
-import { modVersions } from './modVersions';
+import { reports } from './reports';
 
 export const relations = defineRelations(
   {

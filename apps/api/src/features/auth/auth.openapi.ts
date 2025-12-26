@@ -43,7 +43,7 @@ export const registerRoute = createRoute({
     },
   },
   tags: ['auth'],
-  middleware: [rateLimit(RATE_LIMITS.AUTH_REGISTER)],
+  middleware: [rateLimit(RATE_LIMITS.AUTH_REGISTER)] as const,
 });
 
 /**
@@ -74,7 +74,7 @@ export const loginRoute = createRoute({
     },
   },
   tags: ['auth'],
-  middleware: [rateLimit(RATE_LIMITS.AUTH_LOGIN)],
+  middleware: [rateLimit(RATE_LIMITS.AUTH_LOGIN)] as const,
 });
 
 /**
@@ -101,7 +101,7 @@ export const forgotPasswordRoute = createRoute({
     },
   },
   tags: ['auth'],
-  middleware: [rateLimit(RATE_LIMITS.AUTH_FORGOT_PASSWORD)],
+  middleware: [rateLimit(RATE_LIMITS.AUTH_FORGOT_PASSWORD)] as const,
 });
 
 /**
@@ -176,7 +176,11 @@ export const resendVerificationRoute = createRoute({
       description: 'Not authenticated',
       content: { 'application/json': { schema: errorResponseSchema } },
     },
+    404: {
+      description: 'User not found',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
   },
   tags: ['auth'],
-  middleware: [requireAuth()],
+  middleware: [requireAuth()] as const,
 });

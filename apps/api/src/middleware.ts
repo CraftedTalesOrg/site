@@ -4,7 +4,6 @@ import { logger } from 'hono/logger';
 import { prettyJSON } from 'hono/pretty-json';
 import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
-import { HTTPException } from 'hono/http-exception';
 import { createDb, getRateLimitKV } from './utils/db';
 import { checkRateLimit, getClientIdentifier, type RateLimitConfig } from './utils/rate-limit';
 import type { Env } from './env';
@@ -37,9 +36,14 @@ export const createRequestId = (): MiddlewareHandler => requestId();
  * Authentication middleware - requires user to be logged in via JWT Bearer token
  */
 export const requireAuth = (): MiddlewareHandler<Env> => async (c, next) => {
-  const middleware = jwt({ secret: c.env?.JWT_SECRET ?? 'dev-secret-change-me' });
+  const res = await jwt({ secret: c.env?.JWT_SECRET ?? 'dev-secret-change-me' })(c, next);
 
-  return middleware(c, next);
+  // Normalize unauthorized response to ErrorResponse schema
+  if (res && res.status === 401) {
+    return c.json({ error: 'Unauthorized', code: 'UNAUTHORIZED' }, 401);
+  }
+
+  return res;
 };
 
 /**
@@ -47,32 +51,32 @@ export const requireAuth = (): MiddlewareHandler<Env> => async (c, next) => {
  * Fetches user from DB and verifies roles match the JWT payload
  */
 export const requireAnyRole = (allowedRoles: string[]): MiddlewareHandler<Env> => async (c, next) => {
-  const payload = c.get('jwtPayload');
+  const { userId, roles } = c.get('jwtPayload');
 
-  if (!payload.userId || !Array.isArray(payload.roles)) {
-    throw new HTTPException(401, { message: 'Invalid token payload' });
+  if (!userId || !Array.isArray(roles)) {
+    return c.json({ error: 'Invalid token payload', code: 'INVALID_TOKEN' }, 401);
   }
 
   const db = createDb(c.env);
-  const user = await usersQueries.findById(db, payload.userId);
+  const user = await usersQueries.findById(db, userId);
 
   if (!user) {
-    throw new HTTPException(401, { message: 'User not found' });
+    return c.json({ error: 'User not found', code: 'USER_NOT_FOUND' }, 401);
   }
 
   // Verify roles in JWT match the database
-  const jwtRoles = [...payload.roles].sort();
+  const jwtRoles = [...roles].sort();
   const dbRoles = [...user.roles].sort();
 
   if (jwtRoles.length !== dbRoles.length || !jwtRoles.every((role, i) => role === dbRoles[i])) {
-    throw new HTTPException(401, { message: 'Token roles mismatch. Please re-authenticate.' });
+    return c.json({ error: 'Token roles mismatch. Please re-authenticate.', code: 'ROLES_MISMATCH' }, 401);
   }
 
   // Check if user has any of the allowed roles
   const hasRole = user.roles.some(role => allowedRoles.includes(role));
 
   if (!hasRole) {
-    throw new HTTPException(403, { message: 'Access denied.' });
+    return c.json({ error: 'Access denied.', code: 'ACCESS_DENIED' }, 403);
   }
 
   await next();
@@ -100,9 +104,10 @@ export const rateLimit = (config: RateLimitConfig): MiddlewareHandler<Env> => as
 
     c.header('Retry-After', retryAfter.toString());
 
-    throw new HTTPException(429, {
-      message: 'Too many requests. Please try again later.',
-    });
+    return c.json(
+      { error: 'Too many requests. Please try again later.', code: 'RATE_LIMITED' },
+      429,
+    );
   }
 
   await next();

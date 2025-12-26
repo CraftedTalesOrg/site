@@ -1,8 +1,7 @@
 import { z } from '@hono/zod-openapi';
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { mods, modVersions } from '@craftedtales/db';
-import { privateUserSchema,
-  publicUserSchema } from '../auth/auth.schemas';
+import { privateUserSchema, publicUserSchema } from '../users/users.schemas';
 import { categorySchema } from '../categories/categories.schemas';
 import { mediaSchema } from '../_shared/media.schemas';
 import { paginationQuerySchema } from '../_shared/common.schemas';
@@ -182,16 +181,3 @@ export const reviewModsQuerySchema = z
   .openapi('ReviewModsQuery');
 
 export type ReviewModsQuery = z.infer<typeof reviewModsQuerySchema>;
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Responses
-// ─────────────────────────────────────────────────────────────────────────────
-
-export const likeToggleResponseSchema = z
-  .object({
-    liked: z.boolean(),
-    likes: z.number().int(),
-  })
-  .openapi('LikeToggleResponse');
-
-export type LikeToggleResponse = z.infer<typeof likeToggleResponseSchema>;

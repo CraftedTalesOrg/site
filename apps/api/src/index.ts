@@ -4,8 +4,8 @@ import type { Env } from './env.d';
 import { createCors, createLogger, createPrettyJson, createRequestId, createSecurity } from './middleware';
 import { registerAuthRoutes } from './features/auth/auth.routes';
 import { registerCategoriesRoutes } from './features/categories/categories.routes';
-import { registerReportRoutes } from './features/reports/reports.routes';
-import { registerUserRoutes } from './features/users/users.routes';
+import { registerReportsRoutes } from './features/reports/reports.routes';
+import { registerUsersRoutes } from './features/users/users.routes';
 import { registerModsRoutes } from './features/mods/mods.routes';
 
 const app = createOpenApiApp();
@@ -25,8 +25,8 @@ const v1Prefix = '/api/v1';
 const v1 = new OpenAPIHono<Env>();
 
 registerAuthRoutes(v1);
-registerUserRoutes(v1);
-registerReportRoutes(v1);
+registerUsersRoutes(v1);
+registerReportsRoutes(v1);
 registerModsRoutes(v1);
 registerCategoriesRoutes(v1);
 

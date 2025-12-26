@@ -1,5 +1,5 @@
 import type { R2Bucket } from '@cloudflare/workers-types';
-import { ALLOWED_IMAGE_TYPES, ALLOWED_MOD_TYPES, MAX_FILE_SIZE, MAX_IMAGE_SIZE } from '../schemas/common';
+import { ALLOWED_IMAGE_TYPES, ALLOWED_MOD_TYPES, MAX_FILE_SIZE, MAX_IMAGE_SIZE } from '../features/_shared/common.schemas';
 
 /**
  * File upload utilities for R2

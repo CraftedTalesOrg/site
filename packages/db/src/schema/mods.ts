@@ -31,8 +31,8 @@ export const mods = sqliteTable('mods', {
   donationUrls: text({ mode: 'json' }).$type<string[]>(),
 
   // Metadata
-  downloads: integer().notNull().default(0), // TODO Total downloads across all versions, should it be calculated?
-  likes: integer().notNull().default(0), // TODO It is in a relation, should it be calculated?
+  downloads: integer().notNull().default(0),
+  likes: integer().notNull().default(0),
 
   // Relationships
   ownerId: text().notNull().references(() => users.id, { onDelete: 'cascade' }),
@@ -41,10 +41,40 @@ export const mods = sqliteTable('mods', {
   ...timestamps,
 });
 
+export const modVersions = sqliteTable('mod_versions', {
+  id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+  modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
+
+  // Version info
+  name: text({ length: 100 }).notNull(), // Semver: 1.2.0, 2.0.0-beta.1
+  gameVersions: text({ mode: 'json' }).$type<string[]>().notNull().default([]),
+  channel: text({ enum: ['release', 'beta', 'alpha'] }).notNull().default('release'),
+
+  // File info
+  url: text().notNull(),
+  size: integer().notNull(), // Bytes
+
+  // Metadata
+  changelog: text().notNull().default(''),
+  downloads: integer().notNull().default(0),
+
+  ...state,
+  ...timestamps,
+  publishedAt: integer({ mode: 'timestamp' }),
+});
+
 export const modCategories = sqliteTable('mod_categories',
   {
     modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
     categoryId: text().notNull().references(() => categories.id, { onDelete: 'cascade' }),
   },
   t => [primaryKey({ columns: [t.modId, t.categoryId] })],
+);
+
+export const modLikes = sqliteTable('mod_likes',
+  {
+    modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
+    userId: text().references(() => users.id, { onDelete: 'set null' }),
+  },
+  t => [primaryKey({ columns: [t.modId, t.userId] })],
 );

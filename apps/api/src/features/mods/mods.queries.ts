@@ -1,10 +1,8 @@
-import { modCategories, modLikes, mods, modVersions } from '@craftedtales/db';
+import { modCategories, modLikes, mods, modVersions, Database } from '@craftedtales/db';
 import { and, eq } from 'drizzle-orm';
-import type { Database } from '../../utils/db';
 import type { PaginatedResponse } from '../_shared/common.schemas';
 import type {
   CreateModRequest,
-  LikeToggleResponse,
   ListModsQuery,
   PrivateMod,
   PublicMod,
@@ -18,7 +16,7 @@ export const modsQueries = {
    */
   async findById(db: Database, modId: string): Promise<PrivateMod | null> {
     const mod = await db.query.mods.findFirst({
-      where: { id: modId },
+      where: { id: modId, deleted: false },
       with: {
         owner: {
           columns: {
@@ -74,6 +72,7 @@ export const modsQueries = {
    * Check if a slug exists
    */
   async existsSlug(db: Database, slug: string): Promise<boolean> {
+    // Not filtering with deleted: false to allow checking slugs of deleted mods
     const existing = await db.query.mods.findFirst({
       where: { slug },
       columns: { id: true },
@@ -133,7 +132,6 @@ export const modsQueries = {
       if (data.categoryIds.length > 0) {
         await db.insert(modCategories).values(
           data.categoryIds.map(category => ({
-            id: crypto.randomUUID(),
             modId,
             categoryId: category.id,
           })),
@@ -153,46 +151,46 @@ export const modsQueries = {
   },
 
   /**
-   * Toggle like on a mod
+   * Check if user has liked a mod
    */
-  async toggleLike(db: Database, modId: string, userId: string): Promise<LikeToggleResponse | null> {
-    const mod = await db.query.mods.findFirst({
-      where: { id: modId, deleted: false },
-      columns: { id: true, likes: true },
-    });
-
-    if (!mod) {
-      return null;
-    }
-
-    // Check if already liked
-    const existingLike = await db.query.modLikes.findFirst({
+  async hasLike(db: Database, modId: string, userId: string): Promise<boolean> {
+    const like = await db.query.modLikes.findFirst({
       where: { modId, userId },
     });
 
-    let liked: boolean;
-    let newLikes: number;
+    return !!like;
+  },
 
-    if (existingLike) {
-      // Unlike
-      await db.delete(modLikes).where(and(eq(modLikes.modId, modId), eq(modLikes.userId, userId)));
-      newLikes = mod.likes - 1;
-      liked = false;
-    } else {
-      // Like
-      await db.insert(modLikes).values({
-        id: crypto.randomUUID(),
-        modId,
-        userId,
-      });
-      newLikes = mod.likes + 1;
-      liked = true;
-    }
+  /**
+   * Add a like to a mod and update the count
+   */
+  async addLike(db: Database, modId: string, userId: string): Promise<void> {
+    // Insert the like
+    await db.insert(modLikes).values({
+      modId,
+      userId,
+    });
 
-    // Update mod likes count
-    await db.update(mods).set({ likes: newLikes }).where(eq(mods.id, modId));
+    // Count actual likes from join table
+    const likesCount = await db.$count(modLikes, eq(modLikes.modId, modId));
 
-    return { liked, likes: newLikes };
+    // Update mod's likes count
+    await db.update(mods).set({ likes: likesCount }).where(eq(mods.id, modId));
+  },
+
+  /**
+   * Remove a like from a mod and update the count
+   */
+  async removeLike(db: Database, modId: string, userId: string): Promise<void> {
+    // Delete the like
+    await db.delete(modLikes)
+      .where(and(eq(modLikes.modId, modId), eq(modLikes.userId, userId)));
+
+    // Count actual likes from join table
+    const likesCount = await db.$count(modLikes, eq(modLikes.modId, modId));
+
+    // Update mod's likes count
+    await db.update(mods).set({ likes: likesCount }).where(eq(mods.id, modId));
   },
 
   /**
@@ -391,45 +389,20 @@ export const modsQueries = {
   },
 
   /**
-   * Review a mod (approve or reject)
+   * Set mod approval status
    */
-  async review(
+  async setApprovalStatus(
     db: Database,
     modId: string,
-    action: 'approve' | 'reject',
-    reason?: string,
-  ): Promise<{ success: boolean; message: string } | null> {
-    const mod = await db.query.mods.findFirst({
-      where: { id: modId, deleted: false },
-    });
-
-    if (!mod) {
-      return null;
-    }
-
-    if (action === 'approve') {
-      await db
-        .update(mods)
-        .set({ approved: true })
-        .where(eq(mods.id, modId));
-
-      return { success: true, message: 'Mod approved successfully' };
-    } else {
-      // Reject - set to draft status
-      await db
-        .update(mods)
-        .set({
-          approved: false,
-          status: 'draft',
-        })
-        .where(eq(mods.id, modId));
-
-      // TODO: Notify mod owner with rejection reason via email
-      if (reason) {
-        console.info(`[STUB] Mod ${modId} rejected with reason: ${reason}`);
-      }
-
-      return { success: true, message: 'Mod rejected successfully' };
-    }
+    approved: boolean,
+    setDraftIfRejected?: boolean,
+  ): Promise<void> {
+    await db
+      .update(mods)
+      .set({
+        approved,
+        status: setDraftIfRejected && !approved ? 'draft' : undefined,
+      })
+      .where(eq(mods.id, modId));
   },
 };

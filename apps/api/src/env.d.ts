@@ -27,10 +27,12 @@ export interface Bindings {
   JWT_SECRET: string;
 }
 
-export type Variables = JwtVariables<{
+export interface JwtPayload {
   userId: string;
   roles: string[];
-}>;
+};
+
+export type Variables = JwtVariables<JwtPayload>;
 
 /**
  * Hono environment type with Bindings

@@ -89,7 +89,7 @@ export async function signAccessToken(
   const exp = now + JWT_EXPIRY_DAYS * 24 * 60 * 60;
 
   const payload = {
-    sub: userId,
+    userId,
     roles,
     iat: now,
     exp,

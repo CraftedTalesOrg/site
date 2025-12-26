@@ -39,7 +39,6 @@ export interface PaginatedResponse<T> {
 export const errorResponseSchema = z.object({
   error: z.string().openapi({ example: 'Resource not found' }),
   code: z.string().openapi({ example: 'NOT_FOUND' }),
-  statusCode: z.number().int().openapi({ example: 404 }),
   details: z.record(z.any()).optional().openapi({
     example: { field: 'email', message: 'Invalid email format' },
   }),

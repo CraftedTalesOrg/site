@@ -1,8 +1,25 @@
-import { users } from '@craftedtales/db';
+import { users, Database } from '@craftedtales/db';
 import { eq } from 'drizzle-orm';
-import type { Database } from '../../utils/db';
 
 export const authQueries = {
+  /**
+   * Find user credentials for authentication (id and password only)
+   */
+  async findCredentialsByEmail(
+    db: Database,
+    email: string,
+  ): Promise<{ id: string; password: string | null } | null> {
+    const user = await db.query.users.findFirst({
+      where: { email, deleted: false },
+      columns: {
+        id: true,
+        password: true,
+      },
+    });
+
+    return user ?? null;
+  },
+
   /**
    * Update user password
    */

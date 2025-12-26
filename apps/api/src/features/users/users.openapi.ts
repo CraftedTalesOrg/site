@@ -3,7 +3,7 @@ import {
   publicUserSchema,
   privateUserSchema,
   updateProfileRequestSchema,
-} from '../auth/auth.schemas';
+} from './users.schemas';
 import {
   errorResponseSchema,
   successResponseSchema,
@@ -39,7 +39,7 @@ export const getMeRoute = createRoute({
     },
   },
   tags: ['users'],
-  middleware: [requireAuth()],
+  middleware: [requireAuth()] as const,
 });
 
 /**
@@ -74,7 +74,7 @@ export const updateMeRoute = createRoute({
     },
   },
   tags: ['users'],
-  middleware: [requireAuth()],
+  middleware: [requireAuth()] as const,
 });
 
 /**
@@ -171,5 +171,5 @@ export const userActionRoute = createRoute({
     },
   },
   tags: ['users'],
-  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])],
+  middleware: [requireAuth(), requireAnyRole(['admin', 'moderator'])] as const,
 });
