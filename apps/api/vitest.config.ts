@@ -1,10 +1,45 @@
-import { defineWorkersConfig, readD1Migrations } from '@cloudflare/vitest-pool-workers/config';
+import { D1Migration, defineWorkersConfig, readD1Migrations } from '@cloudflare/vitest-pool-workers/config';
 import path from 'node:path';
+import fs from 'node:fs/promises';
+
+// Drizzle puts migrations in nested folders rather than all in the same directory, so we need to read them all
+async function readAllD1Migrations(dir: string): Promise<D1Migration[]> {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const migrations: D1Migration[] = [];
+
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      const fullPath = path.join(dir, entry.name);
+
+      // Check if this directory contains migration.sql (indicating it's a migration folder)
+      try {
+        const migrationFiles = await fs.readdir(fullPath);
+
+        if (migrationFiles.includes('migration.sql')) {
+          // This is a migration directory, read it directly
+          const dirMigrations = await readD1Migrations(fullPath);
+
+          migrations.push(...dirMigrations);
+        } else {
+          // Not a migration directory, recurse deeper
+          const nested = await readAllD1Migrations(fullPath);
+
+          migrations.push(...nested);
+        }
+      } catch {
+        // If we can't read the directory, skip it
+        continue;
+      }
+    }
+  }
+
+  return migrations;
+}
 
 export default defineWorkersConfig(async () => {
   // Read D1 migrations from the db package
   const migrationsPath = path.join(__dirname, '../../packages/db/drizzle');
-  const migrations = await readD1Migrations(migrationsPath);
+  const migrations = await readAllD1Migrations(migrationsPath);
 
   return {
     test: {

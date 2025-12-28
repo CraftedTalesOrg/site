@@ -11,8 +11,7 @@
 			"WebWorker"
 		],
 		"types": [
-			"@cloudflare/workers-types",
-			"@cloudflare/vitest-pool-workers" // For `cloudflare:test` types
+			"@cloudflare/workers-types"
 		],
 	},
 	"include": [

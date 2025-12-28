@@ -54,38 +54,3 @@ export async function authenticatedRequest(
     headers,
   }, testEnv);
 }
-
-/**
- * Make an unauthenticated request (helper for clarity in tests)
- *
- * @example
- * const res = await unauthenticatedRequest(app, env, '/api/v1/mods');
- */
-export async function unauthenticatedRequest(
-  app: OpenAPIHono<Env>,
-  env: ProvidedEnv,
-  path: string,
-  options: RequestInit = {},
-): Promise<Response> {
-  const headers = new Headers(options.headers);
-
-  // Set Content-Type for JSON body if not already set
-  if (options.body && !headers.has('Content-Type')) {
-    headers.set('Content-Type', 'application/json');
-  }
-
-  return app.request(path, {
-    ...options,
-    headers,
-  }, env);
-}
-
-/**
- * Parse JSON response body with type assertion
- *
- * @example
- * const data = await parseJsonResponse<{ user: User }>(res);
- */
-export async function parseJsonResponse<T>(res: Response): Promise<T> {
-  return res.json();
-}

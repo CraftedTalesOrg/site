@@ -1,5 +1,5 @@
-import type { Database } from '../../utils/db';
 import type { Category } from './categories.schemas';
+import { Database } from '@craftedtales/db';
 
 export const categoriesQueries = {
   /**
