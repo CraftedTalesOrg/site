@@ -24,9 +24,6 @@ export type Category = z.infer<typeof categorySchema>;
  * Create category request
  */
 export const createCategoryRequestSchema = insertCategorySchema
-  .omit({
-    id: true,
-  })
   .openapi('CreateCategoryRequest');
 
 export type CreateCategoryRequest = z.infer<typeof createCategoryRequestSchema>;
@@ -35,9 +32,6 @@ export type CreateCategoryRequest = z.infer<typeof createCategoryRequestSchema>;
  * Update category request
  */
 export const updateCategoryRequestSchema = insertCategorySchema
-  .omit({
-    id: true,
-  })
   .partial()
   .openapi('UpdateCategoryRequest');
 

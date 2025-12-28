@@ -344,7 +344,7 @@ describe('POST /api/v1/reports', () => {
       expect(res.status).toBe(404);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.code).toBe('NOT_FOUND');
+      expect(error.code).toBe('MOD_NOT_FOUND');
     });
 
     it('should return 404 for non-existent user', async () => {
@@ -365,7 +365,7 @@ describe('POST /api/v1/reports', () => {
       expect(res.status).toBe(404);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.code).toBe('NOT_FOUND');
+      expect(error.code).toBe('USER_NOT_FOUND');
     });
 
     it('should return 404 for deleted mod', async () => {
@@ -394,7 +394,7 @@ describe('POST /api/v1/reports', () => {
       expect(res.status).toBe(404);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.code).toBe('NOT_FOUND');
+      expect(error.code).toBe('MOD_NOT_FOUND');
     });
   });
 

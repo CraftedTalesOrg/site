@@ -7,7 +7,7 @@ export const categoriesQueries = {
    */
   async list(db: Database): Promise<Category[]> {
     const categoriesList = await db.query.categories.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: { id: 'asc' },
     });
 
     return categoriesList;

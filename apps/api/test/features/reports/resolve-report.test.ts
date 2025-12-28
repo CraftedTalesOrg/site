@@ -318,7 +318,7 @@ describe('POST /api/v1/reports/{id}/resolve', () => {
       expect(res.status).toBe(404);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.code).toBe('NOT_FOUND');
+      expect(error.code).toBe('REPORT_NOT_FOUND');
     });
   });
 

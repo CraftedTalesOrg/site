@@ -30,7 +30,7 @@ describe('GET /api/v1/mods/:slug', () => {
       expect(data.summary).toBe('An awesome test mod');
       expect(data.owner?.username).toBe('modauthor');
       expect(data.categories).toHaveLength(1);
-      expect(data.categories[0].slug).toBe('tools');
+      expect(data.categories[0].id).toBe('tools');
     });
 
     it('should return mod with owner information', async () => {
@@ -71,7 +71,7 @@ describe('GET /api/v1/mods/:slug', () => {
       const data = await res.json<PublicMod>();
 
       expect(data.categories).toHaveLength(2);
-      const categorySlugs = data.categories.map(c => c.slug);
+      const categorySlugs = data.categories.map(c => c.id);
 
       expect(categorySlugs).toContain('tools');
       expect(categorySlugs).toContain('weapons');

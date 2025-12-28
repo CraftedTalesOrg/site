@@ -339,7 +339,7 @@ describe('POST /api/v1/admin/mods/{id}/review', () => {
       expect(res.status).toBe(404);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.code).toBe('NOT_FOUND');
+      expect(error.code).toBe('MOD_NOT_FOUND');
     });
 
     it('should return 404 for deleted mod', async () => {
@@ -372,7 +372,7 @@ describe('POST /api/v1/admin/mods/{id}/review', () => {
       expect(res.status).toBe(404);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.code).toBe('NOT_FOUND');
+      expect(error.code).toBe('MOD_NOT_FOUND');
     });
   });
 
