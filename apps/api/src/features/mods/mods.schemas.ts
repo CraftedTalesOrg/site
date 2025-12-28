@@ -101,6 +101,12 @@ export const createModRequestSchema = insertModSchema
     visibility: true,
     summary: true,
   })
+  .extend({
+    name: z.string().min(3, 'Name is required').max(255),
+    slug: z.string().min(3, 'Slug is required').max(255).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must contain only lowercase letters, numbers, and hyphens'),
+    summary: z.string().min(3, 'Summary is required'),
+    visibility: z.enum(['public', 'unlisted', 'private']),
+  })
   .openapi('CreateModRequest');
 
 export type CreateModRequest = z.infer<typeof createModRequestSchema>;
@@ -122,6 +128,9 @@ export const updateModRequestSchema = insertModSchema
     updatedAt: true,
   })
   .extend({
+    name: z.string().min(3, 'Name cannot be empty').max(255).optional(),
+    slug: z.string().min(3, 'Slug cannot be empty').max(255).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must contain only lowercase letters, numbers, and hyphens').optional(),
+    summary: z.string().min(3, 'Summary cannot be empty').optional(),
     categoryIds: z.array(z.string().min(1).max(100)).min(1).max(5).optional(),
   })
   .partial()

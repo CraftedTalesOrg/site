@@ -130,6 +130,10 @@ export const updateModRoute = createRoute({
       description: 'Mod not found',
       content: { 'application/json': { schema: errorResponseSchema } },
     },
+    409: {
+      description: 'Slug already exists',
+      content: { 'application/json': { schema: errorResponseSchema } },
+    },
     500: {
       description: 'Failed to fetch updated mod',
       content: { 'application/json': { schema: errorResponseSchema } },

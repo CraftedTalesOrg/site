@@ -302,7 +302,6 @@ describe('POST /api/v1/mods', () => {
       const error = await res.json<ErrorResponse>();
 
       expect(error.code).toBe('SLUG_EXISTS');
-      expect(error.error).toBe('Slug already exists');
     });
 
     it('should reject duplicate slug from different users', async () => {

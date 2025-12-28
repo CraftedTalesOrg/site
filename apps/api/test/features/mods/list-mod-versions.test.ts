@@ -21,6 +21,7 @@ describe('GET /api/v1/mods/{slug}/versions', () => {
         categoryIds: [category.id],
         slug: 'test-mod',
         status: 'published',
+        approved: true,
       });
 
       const res = await app.request(`/api/v1/mods/${mod.slug}/versions`, {}, env);
@@ -40,6 +41,7 @@ describe('GET /api/v1/mods/{slug}/versions', () => {
         categoryIds: [category.id],
         slug: 'versioned-mod',
         status: 'published',
+        approved: true,
       });
 
       // Create versions using factory
@@ -77,6 +79,7 @@ describe('GET /api/v1/mods/{slug}/versions', () => {
         categoryIds: [category.id],
         slug: 'paginated-versions',
         status: 'published',
+        approved: true,
       });
 
       // Create 5 versions
@@ -109,6 +112,7 @@ describe('GET /api/v1/mods/{slug}/versions', () => {
         categoryIds: [category.id],
         slug: 'filtered-versions',
         status: 'published',
+        approved: true,
       });
 
       // Create normal version
@@ -207,6 +211,7 @@ describe('GET /api/v1/mods/{slug}/versions', () => {
         categoryIds: [category.id],
         slug: 'default-pagination',
         status: 'published',
+        approved: true,
       });
 
       const res = await app.request(`/api/v1/mods/${mod.slug}/versions`, {}, env);

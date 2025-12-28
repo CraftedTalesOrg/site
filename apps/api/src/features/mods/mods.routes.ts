@@ -153,6 +153,15 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
       return c.json({ error: 'Not owner of mod', code: 'ACCESS_DENIED' }, 403);
     }
 
+    // Check for slug conflict if slug is being updated
+    if (body.slug && body.slug !== mod.slug) {
+      const slugExists = await modsQueries.existsSlug(db, body.slug);
+
+      if (slugExists) {
+        return c.json({ error: 'Slug already exists', code: 'SLUG_EXISTS' }, 409);
+      }
+    }
+
     // Update mod
     await modsQueries.update(db, mod.id, body);
 

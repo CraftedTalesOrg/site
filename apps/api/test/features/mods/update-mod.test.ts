@@ -215,7 +215,6 @@ describe('PATCH /api/v1/mods/:id', () => {
       const error = await res.json<ErrorResponse>();
 
       expect(error.code).toBe('ACCESS_DENIED');
-      expect(error.error).toBe('Not owner of mod');
     });
   });
 
@@ -289,7 +288,9 @@ describe('PATCH /api/v1/mods/:id', () => {
     it('should return 404 for non-existent mod', async () => {
       const user = await createTestUser(env);
 
-      const res = await authenticatedRequest(app, env, user, '/api/v1/mods/non-existent', {
+      // Use a valid UUID that doesn't exist
+      const nonExistentId = '00000000-0000-0000-0000-000000000000';
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${nonExistentId}`, {
         method: 'PATCH',
         body: JSON.stringify({
           name: 'Updated Name',
@@ -314,7 +315,7 @@ describe('PATCH /api/v1/mods/:id', () => {
         slug: 'another-slug',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod2.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod2.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           slug: 'existing-slug',

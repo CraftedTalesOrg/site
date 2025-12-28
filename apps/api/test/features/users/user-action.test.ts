@@ -179,7 +179,7 @@ describe('POST /api/v1/users/{id}/{action}', () => {
       expect(res.status).toBe(403);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.error).toBeDefined();
+      expect(error.code).toBe('ACCESS_DENIED');
     });
 
     it('should deny user without admin/moderator role', async () => {

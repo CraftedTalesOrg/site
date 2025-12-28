@@ -1,6 +1,4 @@
-import { OpenAPIHono } from '@hono/zod-openapi';
 import { createOpenApiApp, registerOpenApiDocs } from './docs/openapi';
-import type { Env } from './env.d';
 import { createCors, createLogger, createPrettyJson, createRequestId, createSecurity } from './middleware';
 import { registerAuthRoutes } from './features/auth/auth.routes';
 import { registerCategoriesRoutes } from './features/categories/categories.routes';
@@ -22,16 +20,15 @@ app.get('/health', c => c.json({ ok: true }));
 
 // Versioned API: use a sub OpenAPIHono and mount via route()
 const v1Prefix = '/api/v1';
-const v1 = new OpenAPIHono<Env>();
 
-registerAuthRoutes(v1);
-registerUsersRoutes(v1);
-registerReportsRoutes(v1);
-registerModsRoutes(v1);
-registerCategoriesRoutes(v1);
+registerAuthRoutes(app);
+registerUsersRoutes(app);
+registerReportsRoutes(app);
+registerModsRoutes(app);
+registerCategoriesRoutes(app);
 
 // Mount v1 router under the prefix so OpenAPI aggregates paths
-app.route(v1Prefix, v1);
+app.route(v1Prefix, app);
 
 // OpenAPI doc JSON and UI
 registerOpenApiDocs(app);

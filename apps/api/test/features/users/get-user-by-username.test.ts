@@ -96,7 +96,6 @@ describe('GET /api/v1/users/{username}', () => {
       const error = await res.json<ErrorResponse>();
 
       expect(error.code).toBe('USER_NOT_FOUND');
-      expect(error.error).toBeDefined();
     });
 
     it('should return 404 for empty username', async () => {

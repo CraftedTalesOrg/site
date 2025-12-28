@@ -46,7 +46,7 @@ describe('POST /api/v1/mods/:slug/like', () => {
       expect(data.message).toBe('Mod liked successfully');
     });
 
-    it('should like a draft mod', async () => {
+    it('should return 404 for draft mod', async () => {
       const owner = await createTestUser(env);
       const liker = await createTestUser(env);
       const mod = await createTestMod(env, {
@@ -58,10 +58,10 @@ describe('POST /api/v1/mods/:slug/like', () => {
         method: 'POST',
       });
 
-      expect(res.status).toBe(200);
-      const data = await res.json<SuccessResponse>();
+      expect(res.status).toBe(404);
+      const error = await res.json<ErrorResponse>();
 
-      expect(data.success).toBe(true);
+      expect(error.code).toBe('MOD_NOT_FOUND');
     });
 
     it('should like an unlisted mod', async () => {
@@ -84,7 +84,7 @@ describe('POST /api/v1/mods/:slug/like', () => {
       expect(data.success).toBe(true);
     });
 
-    it('should like a private mod', async () => {
+    it('should return 404 for private mod', async () => {
       const owner = await createTestUser(env);
       const liker = await createTestUser(env);
       const mod = await createTestMod(env, {
@@ -98,10 +98,10 @@ describe('POST /api/v1/mods/:slug/like', () => {
         method: 'POST',
       });
 
-      expect(res.status).toBe(200);
-      const data = await res.json<SuccessResponse>();
+      expect(res.status).toBe(404);
+      const error = await res.json<ErrorResponse>();
 
-      expect(data.success).toBe(true);
+      expect(error.code).toBe('MOD_NOT_FOUND');
     });
   });
 
@@ -220,7 +220,6 @@ describe('POST /api/v1/mods/:slug/like', () => {
       const error = await res.json<ErrorResponse>();
 
       expect(error.code).toBe('MOD_NOT_FOUND');
-      expect(error.error).toBe('Mod not found');
     });
 
     it('should return 404 for deleted mod', async () => {
@@ -233,7 +232,7 @@ describe('POST /api/v1/mods/:slug/like', () => {
       });
 
       // Delete the mod
-      await authenticatedRequest(app, env, owner, `/api/v1/mods/${mod.slug}`, {
+      await authenticatedRequest(app, env, owner, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 

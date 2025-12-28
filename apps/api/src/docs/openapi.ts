@@ -2,7 +2,23 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 import { Scalar } from '@scalar/hono-api-reference';
 import type { Env } from '../env.d';
 
-export const createOpenApiApp = (): OpenAPIHono<Env> => new OpenAPIHono<Env>();
+export const createOpenApiApp = (): OpenAPIHono<Env> => new OpenAPIHono<Env>({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  defaultHook: (result, c) => {
+    if (!result.success) {
+      return c.json(
+        {
+          error: 'Validation error',
+          code: 'VALIDATION_ERROR',
+          details: {
+            issues: result.error.issues,
+          },
+        },
+        400,
+      );
+    }
+  },
+});
 
 export const registerOpenApiDocs = async (app: OpenAPIHono<Env>): Promise<void> => {
   app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {

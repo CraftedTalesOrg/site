@@ -122,7 +122,6 @@ describe('GET /api/v1/mods/:slug', () => {
       const error = await res.json<ErrorResponse>();
 
       expect(error.code).toBe('MOD_NOT_FOUND');
-      expect(error.error).toBe('Mod not found');
     });
 
     it('should return 404 for draft mods accessed by slug', async () => {

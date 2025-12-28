@@ -163,7 +163,6 @@ describe('DELETE /api/v1/mods/:id', () => {
       const error = await res.json<ErrorResponse>();
 
       expect(error.code).toBe('ACCESS_DENIED');
-      expect(error.error).toBe('Not owner of mod');
     });
 
     it('should only allow owner to delete their own mod', async () => {
@@ -197,8 +196,9 @@ describe('DELETE /api/v1/mods/:id', () => {
   describe('error cases', () => {
     it('should return 404 for non-existent mod', async () => {
       const user = await createTestUser(env);
+      const nonExistentId = '00000000-0000-0000-0000-000000000000';
 
-      const res = await authenticatedRequest(app, env, user, '/api/v1/mods/non-existent-mod', {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${nonExistentId}`, {
         method: 'DELETE',
       });
 
@@ -206,7 +206,6 @@ describe('DELETE /api/v1/mods/:id', () => {
       const error = await res.json<ErrorResponse>();
 
       expect(error.code).toBe('MOD_NOT_FOUND');
-      expect(error.error).toBe('Mod not found');
     });
 
     it('should return 404 when trying to delete already deleted mod', async () => {

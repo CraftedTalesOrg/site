@@ -111,23 +111,31 @@ export const modsQueries = {
     modId: string,
     data: UpdateModRequest,
   ): Promise<void> {
-    await db
-      .update(mods)
-      .set({
-        name: data.name,
-        summary: data.summary,
-        description: data.description,
-        license: data.license,
-        licenseUrl: data.licenseUrl,
-        issueTrackerUrl: data.issueTrackerUrl,
-        sourceCodeUrl: data.sourceCodeUrl,
-        wikiUrl: data.wikiUrl,
-        discordInviteUrl: data.discordInviteUrl,
-        donationUrls: data.donationUrls,
-        visibility: data.visibility,
-        status: data.status,
-      })
-      .where(eq(mods.id, modId));
+    // Drizzle ignores undefined values, so we can safely pass all fields
+    // Only update if there are actual changes (not just categoryIds)
+    const hasUpdates = Object.entries(data)
+      .some(([key, value]) => key !== 'categoryIds' && value !== undefined);
+
+    if (hasUpdates) {
+      await db
+        .update(mods)
+        .set({
+          name: data.name,
+          slug: data.slug,
+          summary: data.summary,
+          description: data.description,
+          license: data.license,
+          licenseUrl: data.licenseUrl,
+          issueTrackerUrl: data.issueTrackerUrl,
+          sourceCodeUrl: data.sourceCodeUrl,
+          wikiUrl: data.wikiUrl,
+          discordInviteUrl: data.discordInviteUrl,
+          donationUrls: data.donationUrls,
+          visibility: data.visibility,
+          status: data.status,
+        })
+        .where(eq(mods.id, modId));
+    }
 
     // Update categories if provided
     if (data.categoryIds) {
