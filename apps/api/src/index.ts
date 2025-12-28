@@ -36,8 +36,6 @@ app.route(v1Prefix, v1);
 // OpenAPI doc JSON and UI
 registerOpenApiDocs(app);
 
-export default {
-  fetch: (req: Request, env: Env['Bindings'], ctx: ExecutionContext): Response | Promise<Response> => app.fetch(req, env, ctx),
-};
+export default app;
 
 export type AppType = typeof app;

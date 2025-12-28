@@ -5,6 +5,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "deploy": "turbo run deploy",
     "deploy:api": "pnpm --filter @craftedtales/api run deploy",
     "deploy:web": "pnpm --filter @craftedtales/web run deploy"

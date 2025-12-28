@@ -1,4 +1,5 @@
-import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1';
+import { drizzle } from 'drizzle-orm/d1';
+import { D1Database } from '@cloudflare/workers-types';
 import { relations, schema } from './schema';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -16,5 +17,5 @@ export function createDb(d1: DrizzleD1) {
   return drizzle(d1, { schema, relations });
 }
 
-export type DrizzleD1 = DrizzleD1Database<typeof schema>;
+export type DrizzleD1 = D1Database;
 export type Database = ReturnType<typeof createDb>;

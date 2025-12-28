@@ -1,26 +1,29 @@
 {
-  "extends": "@craftedtales/config/base.json",
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "outDir": "dist",
-    "lib": [
-      "ES2022",
-      "WebWorker"
-    ],
-    "types": [
-      "@cloudflare/workers-types"
-    ]
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-	".turbo",
-	".wrangler"
-  ]
+	"extends": "@craftedtales/config/base.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"outDir": "dist",
+		"lib": [
+			"ES2022",
+			"WebWorker"
+		],
+		"types": [
+			"@cloudflare/workers-types",
+			"@cloudflare/vitest-pool-workers" // For `cloudflare:test` types
+		],
+	},
+	"include": [
+		"src/**/*",
+		"test/**/*",
+		"vitest.config.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		".turbo",
+		".wrangler"
+	]
 }
