@@ -17,25 +17,25 @@
 	},
 	"d1_databases": [
 		{
-			"binding": "craftedtales_db_dev",
+			"binding": "craftedtales_db",
 			"database_name": "craftedtales-db-dev",
 			"database_id": "ef41a6a6-6ef0-4021-a454-c5d2c2c3cae2"
 		}
 	],
 	"kv_namespaces": [
 		{
-			"binding": "craftedtales_rl_dev",
+			"binding": "craftedtales_rl",
 			"id": "61373b869419439bb6dce3d7b4eba663"
 		}
 	],
 	"r2_buckets": [
 		{
-			"bucket_name": "craftedtales-mods-dev",
-			"binding": "craftedtales_mods_dev"
+			"binding": "craftedtales_mods",
+			"bucket_name": "craftedtales-mods-dev"
 		},
 		{
-			"bucket_name": "craftedtales-media-dev",
-			"binding": "craftedtales_media_dev"
+			"binding": "craftedtales_media",
+			"bucket_name": "craftedtales-media-dev"
 		}
 	],
 	"env": {
@@ -62,12 +62,12 @@
 			],
 			"r2_buckets": [
 				{
-					"bucket_name": "craftedtales-mods",
-					"binding": "craftedtales_mods"
+					"binding": "craftedtales_mods",
+					"bucket_name": "craftedtales-mods"
 				},
 				{
-					"bucket_name": "craftedtales-media",
-					"binding": "craftedtales_media"
+					"binding": "craftedtales_media",
+					"bucket_name": "craftedtales-media"
 				}
 			]
 		}

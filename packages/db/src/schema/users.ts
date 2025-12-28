@@ -8,17 +8,19 @@ export const users = sqliteTable('users', {
   // Public fields
   username: text({ length: 255 }).notNull().unique(),
   bio: text().notNull().default(''),
-  avatarId: text().references(() => media.id),
+  avatarId: text('avatar_id').references(() => media.id),
   // TODO ROLES CHECK AGAIN IMPLEMENTATION
   roles: text({ mode: 'json' }).$type<string[]>().notNull().default([]),
 
   // Internal fields
   email: text({ length: 255 }).notNull().unique(),
-  emailVerified: integer({ mode: 'boolean' }).notNull().default(false),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
   password: text(), // Nullable for OAuth-only accounts
-  twoFactorEnabled: integer({ mode: 'boolean' }).notNull().default(false),
-  twoFactorSecret: text(),
+  twoFactorEnabled: integer('two_factor_enabled', { mode: 'boolean' }).notNull().default(false),
+  twoFactorSecret: text('two_factor_secret'),
 
   ...state,
   ...timestamps,
 });
+
+export type User = typeof users.$inferInsert;

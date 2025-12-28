@@ -28,8 +28,8 @@ export const relations = defineRelations(
       }),
       ownedMods: r.many.mods(),
       modLikes: r.many.modLikes(),
-      submittedReports: r.many.reports({ alias: 'submittedReports' }),
-      reviewedReports: r.many.reports({ alias: 'reviewedReports' }),
+      submittedReports: r.many.reports({ alias: 'submitted_reports' }),
+      reviewedReports: r.many.reports({ alias: 'reviewed_reports' }),
     },
 
     // ========================================================================
@@ -101,12 +101,12 @@ export const relations = defineRelations(
       reporter: r.one.users({
         from: r.reports.reporterId,
         to: r.users.id,
-        alias: 'submittedReports',
+        alias: 'submitted_reports',
       }),
       reviewer: r.one.users({
         from: r.reports.reviewedBy,
         to: r.users.id,
-        alias: 'reviewedReports',
+        alias: 'reviewed_reports',
       }),
     },
   }),

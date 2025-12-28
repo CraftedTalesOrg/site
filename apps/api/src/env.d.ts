@@ -1,4 +1,5 @@
 import type { JwtVariables } from 'hono/jwt';
+import type { DrizzleD1 } from '@craftedtales/db';
 
 /**
  * Bindings interface for Cloudflare Workers
@@ -6,17 +7,13 @@ import type { JwtVariables } from 'hono/jwt';
  */
 export interface Bindings {
   // D1 Database bindings
-  craftedtales_db_dev: D1Database;
-  craftedtales_db: D1Database;
+  craftedtales_db: DrizzleD1;
 
   // KV namespace bindings
-  craftedtales_rl_dev: KVNamespace;
   craftedtales_rl: KVNamespace;
 
   // R2 bucket bindings
-  craftedtales_mods_dev: R2Bucket;
   craftedtales_mods: R2Bucket;
-  craftedtales_media_dev: R2Bucket;
   craftedtales_media: R2Bucket;
 
   // Environment variables from wrangler.json vars

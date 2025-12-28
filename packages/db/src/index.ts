@@ -1,5 +1,4 @@
-import { drizzle } from 'drizzle-orm/d1';
-import type { D1Database } from '@cloudflare/workers-types';
+import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1';
 import { relations, schema } from './schema';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -13,8 +12,9 @@ export * from './schema';
  * @returns Drizzle database client with relations for db.query API
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function createDb(d1: D1Database) {
+export function createDb(d1: DrizzleD1) {
   return drizzle(d1, { schema, relations });
 }
 
+export type DrizzleD1 = DrizzleD1Database<typeof schema>;
 export type Database = ReturnType<typeof createDb>;

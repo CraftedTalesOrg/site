@@ -8,19 +8,26 @@
   },
   "scripts": {
     "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
     "push": "drizzle-kit push",
-    "studio": "drizzle-kit studio"
+    "seed": "pnpm dlx tsx src/seed/index.ts",
+    "seed:reset": "pnpm dlx tsx src/seed/index.ts --reset"
   },
   "dependencies": {
     "drizzle-orm": "1.0.0-beta.2-58a4521"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20241127.0",
     "@craftedtales/config": "workspace:*",
+    "@faker-js/faker": "^9.3.0",
+    "@nerdfolio/drizzle-d1-proxy": "^0.1.5",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.10.2",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.6.1",
     "drizzle-kit": "1.0.0-beta.2-58a4521",
     "eslint": "^9.39.1",
-    "typescript": "^5.0.0"
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0",
+    "wrangler": "^4.54.0"
   }
 }

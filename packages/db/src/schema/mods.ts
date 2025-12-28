@@ -10,7 +10,7 @@ export const mods = sqliteTable('mods', {
 
   // Core fields
   name: text({ length: 255 }).notNull(),
-  iconId: text().references(() => media.id),
+  iconId: text('icon_id').references(() => media.id),
   summary: text().notNull(),
   description: text().notNull().default(''),
 
@@ -21,21 +21,21 @@ export const mods = sqliteTable('mods', {
 
   // License
   license: text({ length: 100 }),
-  licenseUrl: text(),
+  licenseUrl: text('license_url'),
 
   // External links
-  issueTrackerUrl: text(),
-  sourceCodeUrl: text(),
-  wikiUrl: text(),
-  discordInviteUrl: text(),
-  donationUrls: text({ mode: 'json' }).$type<string[]>(),
+  issueTrackerUrl: text('issue_tracker_url'),
+  sourceCodeUrl: text('source_code_url'),
+  wikiUrl: text('wiki_url'),
+  discordInviteUrl: text('discord_invite_url'),
+  donationUrls: text('donation_urls', { mode: 'json' }).$type<string[]>(),
 
   // Metadata
   downloads: integer().notNull().default(0),
   likes: integer().notNull().default(0),
 
   // Relationships
-  ownerId: text().notNull().references(() => users.id, { onDelete: 'cascade' }),
+  ownerId: text('owner_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 
   ...state,
   ...timestamps,
@@ -43,11 +43,11 @@ export const mods = sqliteTable('mods', {
 
 export const modVersions = sqliteTable('mod_versions', {
   id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
-  modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
+  modId: text('mod_id').notNull().references(() => mods.id, { onDelete: 'cascade' }),
 
   // Version info
   name: text({ length: 100 }).notNull(), // Semver: 1.2.0, 2.0.0-beta.1
-  gameVersions: text({ mode: 'json' }).$type<string[]>().notNull().default([]),
+  gameVersions: text('game_versions', { mode: 'json' }).$type<string[]>().notNull().default([]),
   channel: text({ enum: ['release', 'beta', 'alpha'] }).notNull().default('release'),
 
   // File info
@@ -60,21 +60,26 @@ export const modVersions = sqliteTable('mod_versions', {
 
   ...state,
   ...timestamps,
-  publishedAt: integer({ mode: 'timestamp' }),
+  publishedAt: integer('published_at', { mode: 'timestamp' }),
 });
 
 export const modCategories = sqliteTable('mod_categories',
   {
-    modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
-    categoryId: text().notNull().references(() => categories.id, { onDelete: 'cascade' }),
+    modId: text('mod_id').notNull().references(() => mods.id, { onDelete: 'cascade' }),
+    categoryId: text('category_id').notNull().references(() => categories.id, { onDelete: 'cascade' }),
   },
   t => [primaryKey({ columns: [t.modId, t.categoryId] })],
 );
 
 export const modLikes = sqliteTable('mod_likes',
   {
-    modId: text().notNull().references(() => mods.id, { onDelete: 'cascade' }),
-    userId: text().references(() => users.id, { onDelete: 'set null' }),
+    modId: text('mod_id').notNull().references(() => mods.id, { onDelete: 'cascade' }),
+    userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
   },
   t => [primaryKey({ columns: [t.modId, t.userId] })],
 );
+
+export type Mod = typeof mods.$inferInsert;
+export type ModVersion = typeof modVersions.$inferInsert;
+export type ModCategory = typeof modCategories.$inferInsert;
+export type ModLike = typeof modLikes.$inferInsert;

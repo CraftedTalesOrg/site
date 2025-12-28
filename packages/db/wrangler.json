@@ -1,0 +1,14 @@
+{
+	"name": "craftedtales-db-seed",
+	"compatibility_date": "2024-11-21",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "craftedtales-db-dev",
+			"database_id": "ef41a6a6-6ef0-4021-a454-c5d2c2c3cae2"
+		}
+	]
+}

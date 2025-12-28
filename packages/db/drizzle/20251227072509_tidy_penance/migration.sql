@@ -7,7 +7,7 @@ CREATE TABLE `categories` (
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY,
 	`username` text(255) NOT NULL UNIQUE,
-	`bio` text,
+	`bio` text DEFAULT '' NOT NULL,
 	`avatar_id` text,
 	`roles` text DEFAULT '[]' NOT NULL,
 	`email` text(255) NOT NULL UNIQUE,
@@ -24,40 +24,19 @@ CREATE TABLE `users` (
 );
 --> statement-breakpoint
 CREATE TABLE `mod_categories` (
-	`id` text PRIMARY KEY,
 	`mod_id` text NOT NULL,
 	`category_id` text NOT NULL,
+	CONSTRAINT `mod_categories_pk` PRIMARY KEY(`mod_id`, `category_id`),
 	CONSTRAINT `fk_mod_categories_mod_id_mods_id_fk` FOREIGN KEY (`mod_id`) REFERENCES `mods`(`id`) ON DELETE cascade,
 	CONSTRAINT `fk_mod_categories_category_id_categories_id_fk` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE `mods` (
-	`id` text PRIMARY KEY,
-	`slug` text(255) NOT NULL UNIQUE,
-	`name` text(255) NOT NULL,
-	`icon_id` text,
-	`summary` text NOT NULL,
-	`description` text NOT NULL,
-	`status` text DEFAULT 'draft' NOT NULL,
-	`visibility` text DEFAULT 'public' NOT NULL,
-	`approved` integer DEFAULT 0 NOT NULL,
-	`license` text(100) NOT NULL,
-	`license_url` text,
-	`issue_tracker_url` text,
-	`source_code_url` text,
-	`wiki_url` text,
-	`discord_invite_url` text,
-	`donation_urls` text,
-	`downloads` integer DEFAULT 0 NOT NULL,
-	`likes` integer DEFAULT 0 NOT NULL,
-	`owner_id` text NOT NULL,
-	`enabled` integer DEFAULT 1 NOT NULL,
-	`deleted` integer DEFAULT 0 NOT NULL,
-	`created_at` integer NOT NULL,
-	`updated_at` integer NOT NULL,
-	`deleted_at` integer,
-	CONSTRAINT `fk_mods_icon_id_media_id_fk` FOREIGN KEY (`icon_id`) REFERENCES `media`(`id`),
-	CONSTRAINT `fk_mods_owner_id_users_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `users`(`id`) ON DELETE cascade
+CREATE TABLE `mod_likes` (
+	`mod_id` text NOT NULL,
+	`user_id` text,
+	CONSTRAINT `mod_likes_pk` PRIMARY KEY(`mod_id`, `user_id`),
+	CONSTRAINT `fk_mod_likes_mod_id_mods_id_fk` FOREIGN KEY (`mod_id`) REFERENCES `mods`(`id`) ON DELETE cascade,
+	CONSTRAINT `fk_mod_likes_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `mod_versions` (
@@ -79,6 +58,35 @@ CREATE TABLE `mod_versions` (
 	CONSTRAINT `fk_mod_versions_mod_id_mods_id_fk` FOREIGN KEY (`mod_id`) REFERENCES `mods`(`id`) ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `mods` (
+	`id` text PRIMARY KEY,
+	`slug` text(255) NOT NULL UNIQUE,
+	`name` text(255) NOT NULL,
+	`icon_id` text,
+	`summary` text NOT NULL,
+	`description` text DEFAULT '' NOT NULL,
+	`status` text DEFAULT 'draft' NOT NULL,
+	`visibility` text DEFAULT 'public' NOT NULL,
+	`approved` integer DEFAULT 0 NOT NULL,
+	`license` text(100),
+	`license_url` text,
+	`issue_tracker_url` text,
+	`source_code_url` text,
+	`wiki_url` text,
+	`discord_invite_url` text,
+	`donation_urls` text,
+	`downloads` integer DEFAULT 0 NOT NULL,
+	`likes` integer DEFAULT 0 NOT NULL,
+	`owner_id` text NOT NULL,
+	`enabled` integer DEFAULT 1 NOT NULL,
+	`deleted` integer DEFAULT 0 NOT NULL,
+	`created_at` integer NOT NULL,
+	`updated_at` integer NOT NULL,
+	`deleted_at` integer,
+	CONSTRAINT `fk_mods_icon_id_media_id_fk` FOREIGN KEY (`icon_id`) REFERENCES `media`(`id`),
+	CONSTRAINT `fk_mods_owner_id_users_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `users`(`id`) ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `media` (
 	`id` text PRIMARY KEY,
 	`filename` text NOT NULL,
@@ -92,17 +100,6 @@ CREATE TABLE `media` (
 	`created_at` integer NOT NULL,
 	`updated_at` integer NOT NULL,
 	`deleted_at` integer
-);
---> statement-breakpoint
-CREATE TABLE `mod_likes` (
-	`id` text PRIMARY KEY,
-	`mod_id` text NOT NULL,
-	`user_id` text,
-	`created_at` integer NOT NULL,
-	`updated_at` integer NOT NULL,
-	`deleted_at` integer,
-	CONSTRAINT `fk_mod_likes_mod_id_mods_id_fk` FOREIGN KEY (`mod_id`) REFERENCES `mods`(`id`) ON DELETE cascade,
-	CONSTRAINT `fk_mod_likes_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `reports` (

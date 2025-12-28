@@ -8,7 +8,7 @@ export const media = sqliteTable('media', {
   filename: text().notNull(),
   url: text().notNull(),
   size: integer().notNull(), // Bytes
-  mimeType: text().notNull(), // e.g., image/png, image/jpeg, image/webp
+  mimeType: text('mime_type').notNull(), // e.g., image/png, image/jpeg, image/webp
 
   // Image dimensions
   width: integer(), // px
@@ -17,3 +17,5 @@ export const media = sqliteTable('media', {
   ...state,
   ...timestamps,
 });
+
+export type Media = typeof media.$inferInsert;

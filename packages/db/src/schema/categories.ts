@@ -5,3 +5,5 @@ export const categories = sqliteTable('categories', {
   name: text({ length: 100 }).notNull().unique(),
   slug: text({ length: 100 }).notNull().unique(),
 });
+
+export type Category = typeof categories.$inferInsert;
