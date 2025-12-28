@@ -1,5 +1,6 @@
 import type { ProvidedEnv } from 'cloudflare:test';
-import { createDb, users, categories, mods, modCategories, reports } from '@craftedtales/db';
+import { createDb, users, categories, mods, modCategories, reports, modVersions } from '@craftedtales/db';
+import { eq } from 'drizzle-orm';
 import { hashPassword } from '../../src/utils/auth';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -40,6 +41,15 @@ export interface TestReport {
   reason: string;
   description: string;
   status: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
+}
+
+export interface TestModVersion {
+  id: string;
+  modId: string;
+  name: string;
+  gameVersions: string[];
+  channel: 'release' | 'beta' | 'alpha';
+  changelog: string;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -268,4 +278,102 @@ export async function createTestReport(
     description: inserted.description,
     status: inserted.status,
   };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mod Version Factory
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface CreateTestModVersionOptions {
+  modId: string; // Required - must reference an existing mod
+  name?: string;
+  gameVersions?: string[];
+  channel?: 'release' | 'beta' | 'alpha';
+  changelog?: string;
+  fileUrl?: string;
+  fileSize?: number;
+  enabled?: boolean;
+  deleted?: boolean;
+}
+
+/**
+ * Create a test mod version in the database
+ *
+ * @example
+ * const mod = await createTestMod(env, { ownerId: user.id });
+ * const version = await createTestModVersion(env, { modId: mod.id });
+ * const betaVersion = await createTestModVersion(env, { modId: mod.id, channel: 'beta' });
+ */
+export async function createTestModVersion(
+  env: ProvidedEnv,
+  options: CreateTestModVersionOptions,
+): Promise<TestModVersion> {
+  const db = createDb(env.craftedtales_db);
+
+  const versionData = {
+    modId: options.modId,
+    name: options.name ?? '1.0.0',
+    gameVersions: options.gameVersions ?? ['1.0'],
+    channel: options.channel ?? 'release',
+    changelog: options.changelog ?? 'Test version',
+    url: options.fileUrl ?? 'https://example.com/file.jar',
+    size: options.fileSize ?? 1024,
+    publishedAt: new Date(),
+    enabled: options.enabled ?? true,
+    deleted: options.deleted ?? false,
+    deletedAt: options.deleted ? new Date() : null,
+  };
+
+  const [inserted] = await db.insert(modVersions).values(versionData).returning();
+
+  return {
+    id: inserted.id,
+    modId: inserted.modId,
+    name: inserted.name,
+    gameVersions: inserted.gameVersions,
+    channel: inserted.channel,
+    changelog: inserted.changelog,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper Functions for Test Data Manipulation
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Soft delete a mod (sets deleted = true and deleted_at = now)
+ */
+export async function softDeleteMod(env: ProvidedEnv, modId: string): Promise<void> {
+  const db = createDb(env.craftedtales_db);
+
+  await db
+    .update(mods)
+    .set({
+      deleted: true,
+      deletedAt: new Date(),
+    })
+    .where(eq(mods.id, modId));
+}
+
+/**
+ * Get a mod's approval status from the database
+ */
+export async function getModApprovalStatus(env: ProvidedEnv, modId: string): Promise<boolean> {
+  const db = createDb(env.craftedtales_db);
+  const [result] = await db.select({ approved: mods.approved }).from(mods).where(eq(mods.id, modId));
+
+  return result?.approved ?? false;
+}
+
+/**
+ * Get a report's status from the database
+ */
+export async function getReportStatus(
+  env: ProvidedEnv,
+  reportId: string,
+): Promise<'pending' | 'reviewed' | 'resolved' | 'dismissed' | null> {
+  const db = createDb(env.craftedtales_db);
+  const [result] = await db.select({ status: reports.status }).from(reports).where(eq(reports.id, reportId));
+
+  return result?.status ?? null;
 }

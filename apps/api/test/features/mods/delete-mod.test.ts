@@ -162,7 +162,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
       expect(res.status).toBe(403);
       const error = await res.json<ErrorResponse>();
 
-      expect(error.code).toBe('FORBIDDEN');
+      expect(error.code).toBe('ACCESS_DENIED');
       expect(error.error).toBe('Not owner of mod');
     });
 

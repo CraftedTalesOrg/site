@@ -86,7 +86,7 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
 
     // Check ownership
     if (mod.owner?.id !== userId) {
-      return c.json({ error: 'Not owner of mod', code: 'FORBIDDEN' }, 403);
+      return c.json({ error: 'Not owner of mod', code: 'ACCESS_DENIED' }, 403);
     }
 
     // Update mod
@@ -116,7 +116,7 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
 
     // Check ownership
     if (mod.owner?.id !== userId) {
-      return c.json({ error: 'Not owner of mod', code: 'FORBIDDEN' }, 403);
+      return c.json({ error: 'Not owner of mod', code: 'ACCESS_DENIED' }, 403);
     }
 
     // Delete mod (soft delete)
