@@ -21,6 +21,9 @@ import { PrivateMod } from '../mods/mods.schemas';
  * Register reports routes
  */
 export const registerReportsRoutes = (app: OpenAPIHono<Env>): void => {
+  /**
+   * GET /reports
+   */
   app.openapi(listReportsRoute, async (c) => {
     const db = createDb(c.env);
     const query: ReviewReportsQuery = c.req.valid('query');
@@ -30,6 +33,9 @@ export const registerReportsRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json(reports, 200);
   });
 
+  /**
+   * POST /reports
+   */
   app.openapi(createReportRoute, async (c) => {
     const db = createDb(c.env);
     const { userId }: JwtPayload = c.get('jwtPayload');
@@ -63,6 +69,9 @@ export const registerReportsRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ success: true, message: 'Report submitted successfully' }, 201);
   });
 
+  /**
+   * POST /reports/{id}/resolve
+   */
   app.openapi(resolveReportRoute, async (c) => {
     const db = createDb(c.env);
     const { userId: adminId }: JwtPayload = c.get('jwtPayload');

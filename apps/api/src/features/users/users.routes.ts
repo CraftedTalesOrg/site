@@ -18,6 +18,9 @@ import { PaginationQuery,
  * Register users routes
  */
 export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
+  /**
+   * GET /me
+   */
   app.openapi(getMeRoute, async (c) => {
     const db = createDb(c.env);
     const { userId }: JwtPayload = c.get('jwtPayload');
@@ -31,6 +34,9 @@ export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ user }, 200);
   });
 
+  /**
+   * PUT /me
+   */
   app.openapi(updateMeRoute, async (c) => {
     const db = createDb(c.env);
     const { userId }: JwtPayload = c.get('jwtPayload');
@@ -45,6 +51,9 @@ export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ user: updatedUser }, 200);
   });
 
+  /**
+   * GET /users/{username}
+   */
   app.openapi(getUserByUsernameRoute, async (c) => {
     const db = createDb(c.env);
     const { username }: UsernameParam = c.req.valid('param');
@@ -58,6 +67,9 @@ export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ user }, 200);
   });
 
+  /**
+   * GET /users/{username}/mods
+   */
   app.openapi(getUserModsRoute, async (c) => {
     const db = createDb(c.env);
     const { username }: UsernameParam = c.req.valid('param');
@@ -76,6 +88,9 @@ export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json(mods, 200);
   });
 
+  /**
+   * POST /admin/users/{id}/{action}
+   */
   app.openapi(userActionRoute, async (c) => {
     const db = createDb(c.env);
     const { userId: adminId }: JwtPayload = c.get('jwtPayload');

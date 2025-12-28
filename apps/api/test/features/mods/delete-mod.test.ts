@@ -6,7 +6,7 @@ import { authenticatedRequest } from '../../helpers/auth';
 import type { SuccessResponse, ErrorResponse } from '../../../src/features/_shared/common.schemas';
 import type { PublicMod } from '../../../src/features/mods/mods.schemas';
 
-describe('DELETE /api/v1/mods/:slug', () => {
+describe('DELETE /api/v1/mods/:id', () => {
   describe('success cases', () => {
     it('should delete a mod', async () => {
       const user = await createTestUser(env);
@@ -15,7 +15,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         slug: 'mod-to-delete',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -33,7 +33,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         slug: 'soft-delete-mod',
       });
 
-      const deleteRes = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const deleteRes = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -53,7 +53,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         status: 'draft',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -71,7 +71,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         approved: true,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -88,7 +88,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         visibility: 'private',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -105,7 +105,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         visibility: 'unlisted',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -123,7 +123,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await app.request(`/api/v1/mods/${mod.slug}`, {
+      const res = await app.request(`/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       }, env);
 
@@ -136,7 +136,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await app.request(`/api/v1/mods/${mod.slug}`, {
+      const res = await app.request(`/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
         headers: {
           Authorization: 'Bearer invalid-token',
@@ -155,7 +155,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         ownerId: owner.id,
       });
 
-      const res = await authenticatedRequest(app, env, otherUser, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, otherUser, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -179,14 +179,14 @@ describe('DELETE /api/v1/mods/:slug', () => {
       });
 
       // User 1 can delete their own mod
-      const res1 = await authenticatedRequest(app, env, user1, `/api/v1/mods/${mod1.slug}`, {
+      const res1 = await authenticatedRequest(app, env, user1, `/api/v1/mods/${mod1.id}`, {
         method: 'DELETE',
       });
 
       expect(res1.status).toBe(200);
 
       // But cannot delete user 2's mod
-      const res2 = await authenticatedRequest(app, env, user1, `/api/v1/mods/${mod2.slug}`, {
+      const res2 = await authenticatedRequest(app, env, user1, `/api/v1/mods/${mod2.id}`, {
         method: 'DELETE',
       });
 
@@ -216,12 +216,12 @@ describe('DELETE /api/v1/mods/:slug', () => {
       });
 
       // Delete once
-      await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
       // Try to delete again
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -237,7 +237,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
         slug: 'mod-with-dashes-123',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'DELETE',
       });
 
@@ -260,7 +260,7 @@ describe('DELETE /api/v1/mods/:slug', () => {
       });
 
       // Delete mod 1
-      const deleteRes = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod1.slug}`, {
+      const deleteRes = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod1.id}`, {
         method: 'DELETE',
       });
 

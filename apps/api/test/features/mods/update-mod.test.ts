@@ -6,7 +6,7 @@ import { authenticatedRequest } from '../../helpers/auth';
 import type { PrivateMod } from '../../../src/features/mods/mods.schemas';
 import type { ErrorResponse } from '../../../src/features/_shared/common.schemas';
 
-describe('PATCH /api/v1/mods/:slug', () => {
+describe('PATCH /api/v1/mods/:id', () => {
   describe('success cases', () => {
     it('should update a mod name', async () => {
       const user = await createTestUser(env);
@@ -15,7 +15,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         name: 'Original Name',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           name: 'Updated Name',
@@ -35,7 +35,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         summary: 'Original summary',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           summary: 'Updated summary',
@@ -55,7 +55,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         description: 'Original description',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           description: 'Updated description',
@@ -75,7 +75,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         visibility: 'public',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           visibility: 'private',
@@ -95,7 +95,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         status: 'draft',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           status: 'published',
@@ -117,7 +117,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         visibility: 'public',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           name: 'Updated Name',
@@ -142,7 +142,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         summary: 'Original summary',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           name: 'Only Name Updated',
@@ -163,7 +163,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         slug: 'original-slug',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           slug: 'new-slug',
@@ -184,7 +184,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await app.request(`/api/v1/mods/${mod.slug}`, {
+      const res = await app.request(`/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -204,7 +204,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: owner.id,
       });
 
-      const res = await authenticatedRequest(app, env, otherUser, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, otherUser, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           name: 'Attempted Update',
@@ -226,7 +226,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           visibility: 'invalid',
@@ -242,7 +242,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           status: 'invalid',
@@ -258,7 +258,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           name: '',
@@ -274,7 +274,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           slug: '',
@@ -333,7 +333,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         name: 'Same Name',
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           name: 'Same Name',
@@ -349,7 +349,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({}),
       });
@@ -364,7 +364,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           ownerId: otherUser.id,
@@ -384,7 +384,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           downloads: 999999,
@@ -404,7 +404,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         ownerId: user.id,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           likes: 999999,
@@ -425,7 +425,7 @@ describe('PATCH /api/v1/mods/:slug', () => {
         approved: false,
       });
 
-      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.slug}`, {
+      const res = await authenticatedRequest(app, env, user, `/api/v1/mods/${mod.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
           approved: true,

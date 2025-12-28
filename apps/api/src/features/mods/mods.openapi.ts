@@ -98,13 +98,15 @@ export const createModRoute = createRoute({
 });
 
 /**
- * PATCH /mods/{slug}
+ * PATCH /mods/{id}
  */
 export const updateModRoute = createRoute({
   method: 'patch',
-  path: '/mods/{slug}',
+  path: '/mods/{id}',
   request: {
-    params: slugParamSchema,
+    params: z.object({
+      id: z.string().uuid(),
+    }),
     body: {
       content: {
         'application/json': { schema: updateModRequestSchema },
@@ -139,13 +141,15 @@ export const updateModRoute = createRoute({
 });
 
 /**
- * DELETE /mods/{slug}
+ * DELETE /mods/{id}
  */
 export const deleteModRoute = createRoute({
   method: 'delete',
-  path: '/mods/{slug}',
+  path: '/mods/{id}',
   request: {
-    params: slugParamSchema,
+    params: z.object({
+      id: z.string().uuid(),
+    }),
   },
   responses: {
     200: {

@@ -25,6 +25,9 @@ import type { PrivateUser } from '../users/users.schemas';
  * Register auth routes
  */
 export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
+  /**
+   * POST /register
+   */
   app.openapi(registerRoute, async (c) => {
     const db = createDb(c.env);
     const body: RegisterRequest = c.req.valid('json');
@@ -64,6 +67,9 @@ export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ user, accessToken }, 201);
   });
 
+  /**
+   * POST /login
+   */
   app.openapi(loginRoute, async (c) => {
     const db = createDb(c.env);
     const body: LoginRequest = c.req.valid('json');
@@ -95,6 +101,9 @@ export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ user, accessToken }, 200);
   });
 
+  /**
+   * POST /forgot-password
+   */
   app.openapi(forgotPasswordRoute, async (c) => {
     const db = createDb(c.env);
     const body: ForgotPasswordRequest = c.req.valid('json');
@@ -113,6 +122,9 @@ export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ success: true, message: 'If the email exists, a password reset link has been sent' }, 200);
   });
 
+  /**
+   * POST /reset-password
+   */
   app.openapi(resetPasswordRoute, async (c) => {
     const db = createDb(c.env);
     const body: ResetPasswordRequest = c.req.valid('json');
@@ -133,6 +145,9 @@ export const registerAuthRoutes = (app: OpenAPIHono<Env>): void => {
     return c.json({ success: true, message: 'Password reset successfully' }, 200);
   });
 
+  /**
+   * POST /verify-email
+   */
   app.openapi(verifyEmailRoute, async (c) => {
     const db = createDb(c.env);
     const body: VerifyEmailRequest = c.req.valid('json');
