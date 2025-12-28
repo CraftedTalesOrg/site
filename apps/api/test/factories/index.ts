@@ -19,7 +19,6 @@ export interface TestUser {
 export interface TestCategory {
   id: string;
   name: string;
-  slug: string;
 }
 
 export interface TestMod {
@@ -146,9 +145,10 @@ export async function createTestCategory(
   const db = createDb(env.craftedtales_db);
   const count = ++categoryCounter;
 
+  const slug = options.slug ?? `category-${count}`;
   const categoryData = {
+    id: slug,
     name: options.name ?? `Category ${count}`,
-    slug: options.slug ?? `category-${count}`,
   };
 
   const [inserted] = await db.insert(categories).values(categoryData).returning();
@@ -156,7 +156,6 @@ export async function createTestCategory(
   return {
     id: inserted.id,
     name: inserted.name,
-    slug: inserted.slug,
   };
 }
 

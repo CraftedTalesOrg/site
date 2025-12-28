@@ -128,7 +128,7 @@ describe('GET /api/v1/mods', () => {
         categoryIds: [category2.id],
       });
 
-      const res = await app.request(`/api/v1/mods?categories=${category1.slug}`, {}, env);
+      const res = await app.request(`/api/v1/mods?categoryIds=${category1.id}`, {}, env);
 
       expect(res.status).toBe(200);
       const data = await res.json<PaginatedResponse<PublicMod>>();
@@ -241,7 +241,7 @@ describe('GET /api/v1/mods', () => {
     });
 
     it('should handle non-existent category filter gracefully', async () => {
-      const res = await app.request('/api/v1/mods?categories=non-existent', {}, env);
+      const res = await app.request('/api/v1/mods?categoryIds=non-existent', {}, env);
 
       expect(res.status).toBe(200);
       const data = await res.json<PaginatedResponse<PublicMod>>();

@@ -1,7 +1,7 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "9cdf7345-6f0c-4f37-a6d3-8aeb23054d30",
+  "id": "54cbb271-a6f0-4fdc-8055-945e5ce5c866",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -39,7 +39,7 @@
       "entityType": "tables"
     },
     {
-      "type": "text",
+      "type": "text(100)",
       "notNull": false,
       "autoincrement": false,
       "default": null,
@@ -55,16 +55,6 @@
       "default": null,
       "generated": null,
       "name": "name",
-      "entityType": "columns",
-      "table": "categories"
-    },
-    {
-      "type": "text(100)",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "name": "slug",
       "entityType": "columns",
       "table": "categories"
     },
@@ -1118,15 +1108,6 @@
       ],
       "nameExplicit": false,
       "name": "categories_name_unique",
-      "entityType": "uniques",
-      "table": "categories"
-    },
-    {
-      "columns": [
-        "slug"
-      ],
-      "nameExplicit": false,
-      "name": "categories_slug_unique",
       "entityType": "uniques",
       "table": "categories"
     },

@@ -46,7 +46,13 @@ export const modsQueries = {
    */
   async findBySlug(db: Database, slug: string): Promise<PublicMod | null> {
     const mod = await db.query.mods.findFirst({
-      where: { slug, deleted: false },
+      where: {
+        slug,
+        deleted: false,
+        status: 'published',
+        approved: true,
+        NOT: { visibility: 'private' },
+      },
       with: {
         owner: {
           columns: {
@@ -131,9 +137,9 @@ export const modsQueries = {
       // Add new categories
       if (data.categoryIds.length > 0) {
         await db.insert(modCategories).values(
-          data.categoryIds.map(category => ({
+          data.categoryIds.map(categoryId => ({
             modId,
-            categoryId: category.id,
+            categoryId,
           })),
         );
       }
@@ -200,7 +206,7 @@ export const modsQueries = {
     db: Database,
     filters: ListModsQuery,
   ): Promise<PaginatedResponse<PublicMod>> {
-    const { page, limit, categories, search, sortBy, sortOrder } = filters;
+    const { page, limit, categoryIds, search, sortBy, sortOrder } = filters;
 
     const searchFilter
       = search?.trim()
@@ -218,11 +224,16 @@ export const modsQueries = {
         status: 'published',
         visibility: 'public',
         approved: true,
-        categories: {
-          id: {
-            in: (categories && categories.length > 0) ? categories.map(c => c.id) : undefined,
-          },
-        },
+        // Only add categories filter if there are category IDs to filter by
+        ...(categoryIds && categoryIds.length > 0
+          ? {
+              categories: {
+                id: {
+                  in: categoryIds,
+                },
+              },
+            }
+          : {}),
         ...searchFilter,
       },
       with: {
@@ -284,7 +295,7 @@ export const modsQueries = {
       and(eq(modVersions.modId, modId), eq(modVersions.deleted, false)),
     );
 
-    return { data: versions as PublicModVersion[], totalItems };
+    return { data: versions, totalItems };
   },
 
   /**

@@ -222,11 +222,11 @@ export const listModVersionsRoute = createRoute({
 });
 
 /**
- * GET /mods/review-queue
+ * GET /admin/mods/review-queue
  */
 export const listReviewQueueRoute = createRoute({
   method: 'get',
-  path: '/mods/review-queue',
+  path: '/admin/mods/review-queue',
   request: {
     query: reviewModsQuerySchema,
   },
@@ -250,25 +250,24 @@ export const listReviewQueueRoute = createRoute({
 });
 
 /**
- * POST /mods/{id}/review/{action}
+ * POST /admin/mods/{id}/review
  */
 export const reviewModRoute = createRoute({
   method: 'post',
-  path: '/mods/{id}/review/{action}',
+  path: '/admin/mods/{id}/review',
   request: {
     params: z.object({
       id: z.string().uuid(),
-      action: z.enum(['approve', 'reject']),
     }),
     body: {
       content: {
         'application/json': {
           schema: z.object({
+            action: z.enum(['approve', 'reject']),
             reason: z.string().min(1).max(500).optional(),
           }),
         },
       },
-      required: false,
     },
   },
   responses: {

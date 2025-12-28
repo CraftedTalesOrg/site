@@ -5,7 +5,7 @@ import { createTestUser, createTestMod, createTestCategory, getModApprovalStatus
 import { authenticatedRequest } from '../../helpers/auth';
 import type { SuccessResponse, ErrorResponse } from '../../../src/features/_shared/common.schemas';
 
-describe('POST /api/v1/mods/{id}/review/{action}', () => {
+describe('POST /api/v1/admin/mods/{id}/review', () => {
   describe('success cases - approve', () => {
     it('should allow admin to approve a mod', async () => {
       const admin = await createTestUser(env, { roles: ['admin'] });
@@ -23,10 +23,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/approve`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
       );
 
@@ -57,10 +58,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         moderator,
-        `/api/v1/mods/${mod.id}/review/approve`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
       );
 
@@ -86,10 +88,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/approve`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
       );
 
@@ -112,11 +115,12 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/approve`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'approve',
             reason: 'Excellent mod, meets all quality standards',
           }),
         },
@@ -146,11 +150,12 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/reject`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'reject',
             reason: 'Does not meet quality standards',
           }),
         },
@@ -183,11 +188,12 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         moderator,
-        `/api/v1/mods/${mod.id}/review/reject`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'reject',
             reason: 'Inappropriate content',
           }),
         },
@@ -212,10 +218,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/reject`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reject' }),
         },
       );
 
@@ -240,10 +247,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         user,
-        `/api/v1/mods/${mod.id}/review/approve`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
       );
 
@@ -269,10 +277,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         user,
-        `/api/v1/mods/${mod.id}/review/reject`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reject' }),
         },
       );
 
@@ -294,10 +303,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
       });
 
       const res = await app.request(
-        `/api/v1/mods/${mod.id}/review/approve`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
         env,
       );
@@ -318,10 +328,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${fakeId}/review/approve`,
+        `/api/v1/admin/mods/${fakeId}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
       );
 
@@ -350,10 +361,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/approve`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
       );
 
@@ -381,10 +393,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/invalid`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'invalid' }),
         },
       );
 
@@ -401,10 +414,11 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/not-a-uuid/review/approve',
+        '/api/v1/admin/mods/not-a-uuid/review',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve' }),
         },
       );
 
@@ -430,11 +444,12 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/reject`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'reject',
             reason: 'a'.repeat(501), // Exceeds 500 character limit
           }),
         },
@@ -462,11 +477,12 @@ describe('POST /api/v1/mods/{id}/review/{action}', () => {
         app,
         env,
         admin,
-        `/api/v1/mods/${mod.id}/review/reject`,
+        `/api/v1/admin/mods/${mod.id}/review`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'reject',
             reason: '',
           }),
         },

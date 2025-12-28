@@ -54,7 +54,7 @@ describe('GET /api/v1/categories', () => {
 
     it('should return categories with correct structure', async () => {
       // Arrange: Create a test category
-      const category = await createTestCategory(env, {
+      await createTestCategory(env, {
         name: 'Magic',
         slug: 'magic',
       });
@@ -70,12 +70,10 @@ describe('GET /api/v1/categories', () => {
       // Verify category has required fields
       expect(returnedCategory).toHaveProperty('id');
       expect(returnedCategory).toHaveProperty('name');
-      expect(returnedCategory).toHaveProperty('slug');
 
       // Verify field values match
-      expect(returnedCategory.id).toBe(category.id);
+      expect(returnedCategory.id).toBe('magic');
       expect(returnedCategory.name).toBe('Magic');
-      expect(returnedCategory.slug).toBe('magic');
     });
 
     it('should return multiple categories in a stable order', async () => {

@@ -6,7 +6,7 @@ import { authenticatedRequest } from '../../helpers/auth';
 import type { PublicMod } from '../../../src/features/mods/mods.schemas';
 import type { ErrorResponse, PaginatedResponse } from '../../../src/features/_shared/common.schemas';
 
-describe('GET /api/v1/mods/review-queue', () => {
+describe('GET /api/v1/admin/mods/review-queue', () => {
   describe('success cases', () => {
     it('should allow admin to access review queue', async () => {
       const admin = await createTestUser(env, { roles: ['admin'] });
@@ -15,7 +15,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue',
+        '/api/v1/admin/mods/review-queue',
       );
 
       expect(res.status).toBe(200);
@@ -32,7 +32,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         moderator,
-        '/api/v1/mods/review-queue',
+        '/api/v1/admin/mods/review-queue',
       );
 
       expect(res.status).toBe(200);
@@ -68,7 +68,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue',
+        '/api/v1/admin/mods/review-queue',
       );
 
       expect(res.status).toBe(200);
@@ -105,7 +105,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue?approved=true',
+        '/api/v1/admin/mods/review-queue?approved=true',
       );
 
       expect(res.status).toBe(200);
@@ -142,7 +142,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue?approved=all',
+        '/api/v1/admin/mods/review-queue?approved=all',
       );
 
       expect(res.status).toBe(200);
@@ -171,7 +171,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue?page=1&limit=2',
+        '/api/v1/admin/mods/review-queue?page=1&limit=2',
       );
 
       expect(res.status).toBe(200);
@@ -202,7 +202,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue',
+        '/api/v1/admin/mods/review-queue',
       );
 
       expect(res.status).toBe(200);
@@ -220,7 +220,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         user,
-        '/api/v1/mods/review-queue',
+        '/api/v1/admin/mods/review-queue',
       );
 
       expect(res.status).toBe(403);
@@ -230,7 +230,7 @@ describe('GET /api/v1/mods/review-queue', () => {
     });
 
     it('should deny access to unauthenticated requests', async () => {
-      const res = await app.request('/api/v1/mods/review-queue', {}, env);
+      const res = await app.request('/api/v1/admin/mods/review-queue', {}, env);
 
       expect(res.status).toBe(401);
       const error = await res.json<ErrorResponse>();
@@ -247,7 +247,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue?approved=invalid',
+        '/api/v1/admin/mods/review-queue?approved=invalid',
       );
 
       expect(res.status).toBe(400);
@@ -263,7 +263,7 @@ describe('GET /api/v1/mods/review-queue', () => {
         app,
         env,
         admin,
-        '/api/v1/mods/review-queue?page=-1&limit=0',
+        '/api/v1/admin/mods/review-queue?page=-1&limit=0',
       );
 
       expect(res.status).toBe(400);

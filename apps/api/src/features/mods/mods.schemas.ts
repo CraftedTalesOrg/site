@@ -122,7 +122,7 @@ export const updateModRequestSchema = insertModSchema
     updatedAt: true,
   })
   .extend({
-    categoryIds: z.array(categorySchema).min(1).max(5).optional(),
+    categoryIds: z.array(z.string().min(1).max(100)).min(1).max(5).optional(),
   })
   .partial()
   .openapi('UpdateModRequest');
@@ -157,7 +157,7 @@ export type CreateModVersionRequest = z.infer<
  */
 export const listModsQuerySchema = z
   .object({
-    categories: z.array(categorySchema).optional(),
+    categoryIds: z.array(z.string().min(1).max(100)).optional(),
     gameVersions: z.array(z.string().max(50)).optional(),
     search: z.string().max(255).optional(),
     sortBy: z

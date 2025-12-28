@@ -36,14 +36,13 @@ export const createRequestId = (): MiddlewareHandler => requestId();
  * Authentication middleware - requires user to be logged in via JWT Bearer token
  */
 export const requireAuth = (): MiddlewareHandler<Env> => async (c, next) => {
-  const res = await jwt({ secret: c.env?.JWT_SECRET ?? 'dev-secret-change-me' })(c, next);
-
-  // Normalize unauthorized response to ErrorResponse schema
-  if (res && res.status === 401) {
+  try {
+    return await jwt({ secret: c.env?.JWT_SECRET ?? 'dev-secret-change-me' })(c, next);
+  } catch {
+    // JWT middleware throws errors on invalid/missing tokens
+    // Normalize to JSON error response
     return c.json({ error: 'Unauthorized', code: 'UNAUTHORIZED' }, 401);
   }
-
-  return res;
 };
 
 /**

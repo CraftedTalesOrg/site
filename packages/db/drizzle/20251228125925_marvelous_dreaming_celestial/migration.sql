@@ -1,7 +1,6 @@
 CREATE TABLE `categories` (
-	`id` text PRIMARY KEY,
-	`name` text(100) NOT NULL UNIQUE,
-	`slug` text(100) NOT NULL UNIQUE
+	`id` text(100) PRIMARY KEY,
+	`name` text(100) NOT NULL UNIQUE
 );
 --> statement-breakpoint
 CREATE TABLE `users` (

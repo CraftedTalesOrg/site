@@ -180,8 +180,8 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
 
   app.openapi(reviewModRoute, async (c) => {
     const db = createDb(c.env);
-    const { id, action } = c.req.valid('param');
-    const body = c.req.valid('json');
+    const { id } = c.req.valid('param');
+    const { action, reason } = c.req.valid('json');
 
     // Verify mod exists
     const mod: PrivateMod | null = await modsQueries.findById(db, id);
@@ -200,8 +200,8 @@ export const registerModsRoutes = (app: OpenAPIHono<Env>): void => {
       await modsQueries.setApprovalStatus(db, id, false, true);
 
       // TODO: Notify mod owner with rejection reason via email
-      if (body?.reason) {
-        console.info(`[STUB] Mod ${id} rejected with reason: ${body.reason}`);
+      if (reason) {
+        console.info(`[STUB] Mod ${id} rejected with reason: ${reason}`);
       }
 
       return c.json({ success: true, message: 'Mod rejected successfully' }, 200);
