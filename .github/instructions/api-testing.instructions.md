@@ -129,20 +129,26 @@ const res = await app.request('/api/v1/mods?page=1&limit=10&status=published', {
 
 ### 4. **Asserting Responses**
 
-Always check status code first, then parse and validate the body:
+Always check status code first, then parse and validate the body with proper TypeScript types:
 
 ```typescript
-// Success response
-expect(res.status).toBe(200);
-const data = await res.json();
-expect(data.user.email).toBe('test@example.com');
+// Success response - ALWAYS type res.json() with the expected response type
+import type { PublicUser } from '../../../src/features/users/users.schemas';
 
-// Error response
+expect(res.status).toBe(200);
+const data = await res.json<PublicUser>();
+expect(data.email).toBe('test@example.com');
+
+// Error response - use ErrorResponse or SuccessResponse types
+import type { ErrorResponse } from '../../../src/features/_shared/common.schemas';
+
 expect(res.status).toBe(400);
-const error = await res.json();
+const error = await res.json<ErrorResponse>();
 expect(error.code).toBe('VALIDATION_ERROR');
 expect(error.message).toBeDefined();
 ```
+
+**CRITICAL:** Always import and use the appropriate TypeScript types for `res.json<Type>()` calls. This ensures type safety and catches response shape mismatches at compile time.
 
 ### 5. **Using Factories**
 
