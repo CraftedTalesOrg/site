@@ -11,7 +11,6 @@ Important commands (root workspace):
 - `pnpm dev` — starts development (`turbo run dev`).
 - `pnpm build` — runs `turbo run build` for all packages.
 - `pnpm lint` — runs lint across the monorepo.
-- `pnpm format` — runs Prettier (see `package.json` scripts).
 - DB-specific (in `packages/db`): `pnpm generate` to generate migrations, `pnpm push` to push schema changes (run in the `db` package workspace).
 
 Conventions & patterns specific to this repo:

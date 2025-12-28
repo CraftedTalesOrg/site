@@ -89,7 +89,7 @@ export const rateLimit = (config: RateLimitConfig): MiddlewareHandler<Env> => as
   const kv = getRateLimitKV(c.env);
 
   // There may be or may not be a userId if this is applied without auth middleware
-  const { userId } = c.get('jwtPayload');
+  const { userId } = c.get('jwtPayload') ?? {};
   const clientId = getClientIdentifier(c.req.raw, userId);
 
   const result = await checkRateLimit(kv, clientId, config);

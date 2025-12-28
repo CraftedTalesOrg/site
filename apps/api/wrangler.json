@@ -19,23 +19,27 @@
 		{
 			"binding": "craftedtales_db",
 			"database_name": "craftedtales-db-dev",
-			"database_id": "ef41a6a6-6ef0-4021-a454-c5d2c2c3cae2"
+			"database_id": "ef41a6a6-6ef0-4021-a454-c5d2c2c3cae2",
+			"remote": true
 		}
 	],
 	"kv_namespaces": [
 		{
 			"binding": "craftedtales_rl",
-			"id": "61373b869419439bb6dce3d7b4eba663"
+			"id": "61373b869419439bb6dce3d7b4eba663",
+			"remote": true
 		}
 	],
 	"r2_buckets": [
 		{
 			"binding": "craftedtales_mods",
-			"bucket_name": "craftedtales-mods-dev"
+			"bucket_name": "craftedtales-mods-dev",
+			"remote": true
 		},
 		{
 			"binding": "craftedtales_media",
-			"bucket_name": "craftedtales-media-dev"
+			"bucket_name": "craftedtales-media-dev",
+			"remote": true
 		}
 	],
 	"env": {

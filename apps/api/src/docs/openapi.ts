@@ -10,13 +10,13 @@ export const registerOpenApiDocs = async (app: OpenAPIHono<Env>): Promise<void> 
     scheme: 'bearer',
   });
 
-  app.doc('/doc', {
+  app.doc('/docs.json', {
     openapi: '3.1.0',
     info: { title: 'CraftedTales API', version: '1.0.0' },
   });
 
   app.get('/docs', Scalar<Env>(c => ({
-    url: '/doc',
+    url: '/docs.json',
     pageTitle: 'CraftedTales API Docs',
     persistAuth: c.env.ENVIRONMENT !== 'production',
     hideClientButton: c.env.ENVIRONMENT === 'production',

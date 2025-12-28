@@ -9,8 +9,6 @@
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
-    "format": "prettier",
-    "check": "prettier --write . && eslint --fix",
     "typegen": "chakra typegen ./src/theming/index.ts"
   },
   "dependencies": {
@@ -58,7 +56,6 @@
     "cross-env": "^10.1.0",
     "eslint": "^9.39.1",
     "jsdom": "^27.0.0",
-    "prettier": "^3.5.3",
     "shx": "^0.4.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
