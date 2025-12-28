@@ -1,0 +1,14 @@
+diff --git a/dist/pool/index.mjs b/dist/pool/index.mjs
+index 0f6f53eb2b478f061a37c9adb763cbb7e1867e03..dcaec958f51d57378150d7c027ffcf752f5c5a66 100644
+--- a/dist/pool/index.mjs
++++ b/dist/pool/index.mjs
+@@ -545,9 +545,6 @@ async function emptyDir(dirPath) {
+       await fs.rm(path3.join(dirPath, name), { recursive: true, force: true });
+     } catch (e) {
+       if (isEbusyError(e)) {
+-        console.warn(
+-          `vitest-pool-worker: Unable to remove temporary directory: ${e}`
+-        );
+       }
+     }
+   }

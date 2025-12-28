@@ -1,6 +1,6 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
-	"name": "craftedtales-api-dev",
+	"name": "craftedtales-api-local",
 	"main": "src/index.ts",
 	"compatibility_date": "2024-11-21",
 	"compatibility_flags": [
@@ -12,37 +12,69 @@
 	"vars": {
 		"API_VERSION_PREFIX": "/api/v1",
 		"CORS_ORIGIN": "http://localhost:5173",
-		"ENVIRONMENT": "development",
+		"ENVIRONMENT": "local",
 		"JWT_SECRET": ""
 	},
 	"d1_databases": [
 		{
 			"binding": "craftedtales_db",
-			"database_name": "craftedtales-db-dev",
-			"database_id": "ef41a6a6-6ef0-4021-a454-c5d2c2c3cae2",
-			"remote": true
+			"database_name": "craftedtales-db-local",
+			"database_id": "local"
 		}
 	],
 	"kv_namespaces": [
 		{
 			"binding": "craftedtales_rl",
-			"id": "61373b869419439bb6dce3d7b4eba663",
-			"remote": true
+			"id": "local-rl"
 		}
 	],
 	"r2_buckets": [
 		{
 			"binding": "craftedtales_mods",
-			"bucket_name": "craftedtales-mods-dev",
-			"remote": true
+			"bucket_name": "craftedtales-mods-local"
 		},
 		{
 			"binding": "craftedtales_media",
-			"bucket_name": "craftedtales-media-dev",
-			"remote": true
+			"bucket_name": "craftedtales-media-local"
 		}
 	],
 	"env": {
+		"development": {
+			"name": "craftedtales-api-dev",
+			"vars": {
+				"API_VERSION_PREFIX": "/api/v1",
+				"CORS_ORIGIN": "http://localhost:5173",
+				"ENVIRONMENT": "development",
+				"JWT_SECRET": ""
+			},
+			"d1_databases": [
+				{
+					"binding": "craftedtales_db",
+					"database_name": "craftedtales-db-dev",
+					"database_id": "ef41a6a6-6ef0-4021-a454-c5d2c2c3cae2",
+					"remote": true
+				}
+			],
+			"kv_namespaces": [
+				{
+					"binding": "craftedtales_rl",
+					"id": "61373b869419439bb6dce3d7b4eba663",
+					"remote": true
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "craftedtales_mods",
+					"bucket_name": "craftedtales-mods-dev",
+					"remote": true
+				},
+				{
+					"binding": "craftedtales_media",
+					"bucket_name": "craftedtales-media-dev",
+					"remote": true
+				}
+			]
+		},
 		"production": {
 			"name": "craftedtales-api",
 			"vars": {

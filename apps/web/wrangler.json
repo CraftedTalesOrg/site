@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "craftedtales-web-dev",
+  "name": "craftedtales-web-local",
   "main": "@tanstack/react-start/server-entry",
   "compatibility_date": "2024-11-21",
   "compatibility_flags": ["nodejs_compat"],
@@ -9,6 +9,9 @@
     "binding": "ASSETS"
   },
   "env": {
+    "development": {
+      "name": "craftedtales-web-dev"
+    },
     "production": {
       "name": "craftedtales-web"
     }
