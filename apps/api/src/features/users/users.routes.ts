@@ -31,7 +31,7 @@ export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
       return c.json({ error: 'User not found', code: 'USER_NOT_FOUND' }, 404);
     }
 
-    return c.json({ user }, 200);
+    return c.json(user, 200);
   });
 
   /**
@@ -48,7 +48,7 @@ export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
       return c.json({ error: 'Failed to update profile', code: 'UPDATE_FAILED' }, 500);
     }
 
-    return c.json({ user: updatedUser }, 200);
+    return c.json(updatedUser, 200);
   });
 
   /**
@@ -64,7 +64,7 @@ export const registerUsersRoutes = (app: OpenAPIHono<Env>): void => {
       return c.json({ error: 'User not found', code: 'USER_NOT_FOUND' }, 404);
     }
 
-    return c.json({ user }, 200);
+    return c.json(user, 200);
   });
 
   /**

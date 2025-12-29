@@ -1,8 +1,13 @@
 {
   "name": "@craftedtales/api",
   "type": "module",
+  "exports": {
+    "./schemas/shared*": "./src/features/_shared/*.schemas.ts",
+    "./schemas/*": "./src/features/*/*.schemas.ts"
+  },
   "scripts": {
     "dev": "wrangler dev",
+    "dev:remote": "wrangler dev --env development",
     "deploy": "wrangler deploy --env production",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",

@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:remote": "turbo run dev:remote",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "deploy": "turbo run deploy",

@@ -23,10 +23,10 @@ describe('PATCH /api/v1/users/me', () => {
 
       // Assert: Check response
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user.username).toBe('newusername');
-      expect(data.user.id).toBe(user.id);
+      expect(data.username).toBe('newusername');
+      expect(data.id).toBe(user.id);
     });
 
     it('should update bio', async () => {
@@ -45,9 +45,9 @@ describe('PATCH /api/v1/users/me', () => {
 
       // Assert: Check bio updated
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user.bio).toBe('New and improved bio!');
+      expect(data.bio).toBe('New and improved bio!');
     });
 
     it('should update multiple fields at once', async () => {
@@ -68,10 +68,10 @@ describe('PATCH /api/v1/users/me', () => {
 
       // Assert: Check both fields updated
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user.username).toBe('newuser');
-      expect(data.user.bio).toBe('New bio');
+      expect(data.username).toBe('newuser');
+      expect(data.bio).toBe('New bio');
     });
 
     it('should allow partial updates', async () => {
@@ -91,10 +91,10 @@ describe('PATCH /api/v1/users/me', () => {
 
       // Assert: Bio updated, username unchanged
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user.bio).toBe('Updated bio only');
-      expect(data.user.username).toBe('testuser');
+      expect(data.bio).toBe('Updated bio only');
+      expect(data.username).toBe('testuser');
     });
   });
 

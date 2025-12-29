@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ModsIndexRouteImport } from './routes/mods/index'
+import { Route as ModsSlugRouteImport } from './routes/mods/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModsIndexRoute = ModsIndexRouteImport.update({
+  id: '/mods/',
+  path: '/mods/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModsSlugRoute = ModsSlugRouteImport.update({
+  id: '/mods/$slug',
+  path: '/mods/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/mods/$slug': typeof ModsSlugRoute
+  '/mods': typeof ModsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/mods/$slug': typeof ModsSlugRoute
+  '/mods': typeof ModsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/mods/$slug': typeof ModsSlugRoute
+  '/mods/': typeof ModsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/mods/$slug' | '/mods'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/mods/$slug' | '/mods'
+  id: '__root__' | '/' | '/mods/$slug' | '/mods/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ModsSlugRoute: typeof ModsSlugRoute
+  ModsIndexRoute: typeof ModsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mods/': {
+      id: '/mods/'
+      path: '/mods'
+      fullPath: '/mods'
+      preLoaderRoute: typeof ModsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mods/$slug': {
+      id: '/mods/$slug'
+      path: '/mods/$slug'
+      fullPath: '/mods/$slug'
+      preLoaderRoute: typeof ModsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ModsSlugRoute: ModsSlugRoute,
+  ModsIndexRoute: ModsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

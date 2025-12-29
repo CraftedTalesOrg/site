@@ -25,7 +25,7 @@ export const getMeRoute = createRoute({
       description: 'Current user profile',
       content: {
         'application/json': {
-          schema: z.object({ user: privateUserSchema }),
+          schema: privateUserSchema,
         },
       },
     },
@@ -61,7 +61,7 @@ export const updateMeRoute = createRoute({
       description: 'Profile updated',
       content: {
         'application/json': {
-          schema: z.object({ user: privateUserSchema }),
+          schema: privateUserSchema,
         },
       },
     },
@@ -93,7 +93,7 @@ export const getUserByUsernameRoute = createRoute({
       description: 'User profile',
       content: {
         'application/json': {
-          schema: z.object({ user: publicUserSchema }),
+          schema: publicUserSchema,
         },
       },
     },

@@ -19,11 +19,11 @@ describe('GET /api/v1/users/{username}', () => {
 
       // Assert: Check response
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PublicUser }>();
+      const data = await res.json<PublicUser>();
 
-      expect(data.user.id).toBe(user.id);
-      expect(data.user.username).toBe('johndoe');
-      expect(data.user.bio).toBe('I am John Doe');
+      expect(data.id).toBe(user.id);
+      expect(data.username).toBe('johndoe');
+      expect(data.bio).toBe('I am John Doe');
     });
 
     it('should return user with avatar field', async () => {
@@ -37,10 +37,10 @@ describe('GET /api/v1/users/{username}', () => {
 
       // Assert: Check avatar field exists
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PublicUser }>();
+      const data = await res.json<PublicUser>();
 
-      expect(data.user).toHaveProperty('avatar');
-      expect(data.user.avatar).toBeNull();
+      expect(data).toHaveProperty('avatar');
+      expect(data.avatar).toBeNull();
     });
 
     it('should not include private fields', async () => {
@@ -55,14 +55,14 @@ describe('GET /api/v1/users/{username}', () => {
 
       // Assert: Verify private fields are NOT in response
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PublicUser }>();
+      const data = await res.json<PublicUser>();
 
-      expect(data.user).not.toHaveProperty('email');
-      expect(data.user).not.toHaveProperty('password');
-      expect(data.user).not.toHaveProperty('emailVerified');
-      expect(data.user).not.toHaveProperty('twoFactorEnabled');
-      expect(data.user).not.toHaveProperty('twoFactorSecret');
-      expect(data.user).not.toHaveProperty('roles');
+      expect(data).not.toHaveProperty('email');
+      expect(data).not.toHaveProperty('password');
+      expect(data).not.toHaveProperty('emailVerified');
+      expect(data).not.toHaveProperty('twoFactorEnabled');
+      expect(data).not.toHaveProperty('twoFactorSecret');
+      expect(data).not.toHaveProperty('roles');
     });
 
     it('should include public fields like createdAt', async () => {
@@ -76,13 +76,13 @@ describe('GET /api/v1/users/{username}', () => {
 
       // Assert: Check public fields exist
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PublicUser }>();
+      const data = await res.json<PublicUser>();
 
-      expect(data.user).toHaveProperty('id');
-      expect(data.user).toHaveProperty('username');
-      expect(data.user).toHaveProperty('bio');
-      expect(data.user).toHaveProperty('createdAt');
-      expect(data.user).toHaveProperty('avatar');
+      expect(data).toHaveProperty('id');
+      expect(data).toHaveProperty('username');
+      expect(data).toHaveProperty('bio');
+      expect(data).toHaveProperty('createdAt');
+      expect(data).toHaveProperty('avatar');
     });
   });
 
@@ -117,9 +117,9 @@ describe('GET /api/v1/users/{username}', () => {
 
       // Assert: Should succeed (public endpoint)
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PublicUser }>();
+      const data = await res.json<PublicUser>();
 
-      expect(data.user.username).toBe('publicaccess');
+      expect(data.username).toBe('publicaccess');
     });
   });
 

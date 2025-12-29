@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=\"--import ./instrument.server.mjs\" vite dev --port 3000",
+    "dev:remote": "cross-env NODE_OPTIONS=\"--import ./instrument.server.mjs\" vite dev --port 3000 --mode development",
     "build": "vite build --mode production",
     "deploy": "vite build --mode production && wrangler deploy --env production",
     "serve": "vite preview",
@@ -43,6 +44,7 @@
     "@chakra-ui/cli": "^3.30.0",
     "@cloudflare/vite-plugin": "^1.17.1",
     "@cloudflare/workers-types": "^4.20251209.0",
+    "@craftedtales/api": "workspace:*",
     "@craftedtales/config": "workspace:*",
     "@tanstack/devtools-event-client": "^0.3.2",
     "@tanstack/devtools-vite": "^0.3.11",

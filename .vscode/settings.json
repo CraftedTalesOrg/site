@@ -50,5 +50,5 @@
 	"eslint.enable": true,
 	"eslint.format.enable": true,
 	"npm.packageManager": "pnpm",
-	"typescript.experimental.useTsgo": true
+	"typescript.experimental.useTsgo": false
 }

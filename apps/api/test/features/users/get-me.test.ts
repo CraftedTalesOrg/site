@@ -20,12 +20,12 @@ describe('GET /api/v1/users/me', () => {
 
       // Assert: Check response
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user.id).toBe(user.id);
-      expect(data.user.email).toBe('testuser@example.com');
-      expect(data.user.username).toBe('testuser');
-      expect(data.user.bio).toBe('Test bio');
+      expect(data.id).toBe(user.id);
+      expect(data.email).toBe('testuser@example.com');
+      expect(data.username).toBe('testuser');
+      expect(data.bio).toBe('Test bio');
     });
 
     it('should return user with roles', async () => {
@@ -40,9 +40,9 @@ describe('GET /api/v1/users/me', () => {
 
       // Assert: Check roles are returned
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user.roles).toEqual(expect.arrayContaining(['admin', 'moderator']));
+      expect(data.roles).toEqual(expect.arrayContaining(['admin', 'moderator']));
     });
 
     it('should include avatar if present', async () => {
@@ -54,10 +54,10 @@ describe('GET /api/v1/users/me', () => {
 
       // Assert: Check avatar field exists
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user).toHaveProperty('avatar');
-      expect(data.user.avatar).toBeNull();
+      expect(data).toHaveProperty('avatar');
+      expect(data.avatar).toBeNull();
     });
 
     it('should not include sensitive fields like password', async () => {
@@ -69,10 +69,10 @@ describe('GET /api/v1/users/me', () => {
 
       // Assert: Verify password is NOT in response
       expect(res.status).toBe(200);
-      const data = await res.json<{ user: PrivateUser }>();
+      const data = await res.json<PrivateUser>();
 
-      expect(data.user).not.toHaveProperty('password');
-      expect(data.user).not.toHaveProperty('twoFactorSecret');
+      expect(data).not.toHaveProperty('password');
+      expect(data).not.toHaveProperty('twoFactorSecret');
     });
   });
 
