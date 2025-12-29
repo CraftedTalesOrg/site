@@ -46,13 +46,13 @@ export const registerReportsRoutes = (app: OpenAPIHono<Env>): void => {
       const mod: PrivateMod | null = await modsQueries.findById(db, targetId);
 
       if (!mod) {
-        return c.json({ error: 'Target not found', code: 'TARGET_NOT_FOUND' }, 404);
+        return c.json({ error: 'Mod not found', code: 'MOD_NOT_FOUND' }, 404);
       }
     } else {
       const user: PrivateUser | null = await usersQueries.findById(db, targetId);
 
       if (!user) {
-        return c.json({ error: 'Target not found', code: 'TARGET_NOT_FOUND' }, 404);
+        return c.json({ error: 'User not found', code: 'USER_NOT_FOUND' }, 404);
       }
     }
 

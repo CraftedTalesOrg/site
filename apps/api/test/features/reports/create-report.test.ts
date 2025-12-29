@@ -38,15 +38,17 @@ describe('POST /api/v1/reports', () => {
       const reporter = await createTestUser(env);
       const author = await createTestUser(env);
       const category = await createTestCategory(env);
-      const mod = await createTestMod(env, {
-        ownerId: author.id,
-        categoryIds: [category.id],
-        status: 'published',
-      });
 
       const reasons = ['spam', 'inappropriate', 'copyright', 'malware', 'other'];
 
       for (const reason of reasons) {
+        // Create a new mod for each reason to avoid duplicate report check
+        const mod = await createTestMod(env, {
+          ownerId: author.id,
+          categoryIds: [category.id],
+          status: 'published',
+        });
+
         const res = await authenticatedRequest(app, env, reporter, '/api/v1/reports', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -467,7 +469,7 @@ describe('POST /api/v1/reports', () => {
           rateLimited = true;
           const error = await res.json<ErrorResponse>();
 
-          expect(error.code).toBe('RATE_LIMIT_EXCEEDED');
+          expect(error.code).toBe('RATE_LIMITED');
           break;
         }
       }

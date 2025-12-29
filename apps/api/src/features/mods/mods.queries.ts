@@ -1,5 +1,5 @@
 import { modCategories, modLikes, mods, modVersions, Database } from '@craftedtales/db';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import type { PaginatedResponse } from '../_shared/common.schemas';
 import type {
   CreateModRequest,
@@ -216,16 +216,6 @@ export const modsQueries = {
   ): Promise<PaginatedResponse<PublicMod>> {
     const { page, limit, categoryIds, search, sortBy, sortOrder } = filters;
 
-    const searchFilter
-      = search?.trim()
-        ? {
-            OR: [
-              { name: { ilike: `%${search}%` } },
-              { summary: { ilike: `%${search}%` } },
-            ],
-          }
-        : {};
-
     const modsList = await db.query.mods.findMany({
       where: {
         deleted: false,
@@ -242,7 +232,13 @@ export const modsQueries = {
               },
             }
           : {}),
-        ...searchFilter,
+        ...(search?.trim()
+          ? {
+              // TODO: Typesense full-text search
+              // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+              RAW: table => sql`lower(${table.name}) LIKE lower(${`%${search}%`}) OR lower(${table.summary}) LIKE lower(${`%${search}%`})`,
+            }
+          : {}),
       },
       with: {
         owner: {
@@ -291,7 +287,7 @@ export const modsQueries = {
     limit: number,
   ): Promise<PaginatedResponse<PublicModVersion>> {
     const versions = await db.query.modVersions.findMany({
-      where: { modId, deleted: false },
+      where: { modId, deleted: false, enabled: true },
       limit,
       offset: (page - 1) * limit,
       orderBy: { createdAt: 'desc' },
@@ -300,7 +296,11 @@ export const modsQueries = {
     // Get total count efficiently
     const totalItems = await db.$count(
       modVersions,
-      and(eq(modVersions.modId, modId), eq(modVersions.deleted, false)),
+      and(
+        eq(modVersions.modId, modId),
+        eq(modVersions.deleted, false),
+        eq(modVersions.enabled, true),
+      ),
     );
 
     return { data: versions, totalItems };

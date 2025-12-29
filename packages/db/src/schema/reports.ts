@@ -13,7 +13,7 @@ export const reports = sqliteTable('reports', {
   targetId: text('target_id').notNull(),
 
   // Report details
-  reason: text({ length: 100 }).notNull(), // Predefined reason
+  reason: text({ enum: ['spam', 'inappropriate', 'copyright', 'malware', 'harassment', 'other'] }).notNull(),
   description: text().notNull(),
 
   // Status

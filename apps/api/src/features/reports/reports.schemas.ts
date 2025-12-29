@@ -31,6 +31,10 @@ export const createReportRequestSchema = insertReportSchema
     reason: true,
     description: true,
   })
+  .extend({
+    targetId: z.string().uuid(),
+    description: z.string().min(10).max(2000),
+  })
   .openapi('CreateReportRequest');
 
 export type CreateReportRequest = z.infer<typeof createReportRequestSchema>;

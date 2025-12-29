@@ -166,8 +166,34 @@ export type CreateModVersionRequest = z.infer<
  */
 export const listModsQuerySchema = z
   .object({
-    categoryIds: z.array(z.string().min(1).max(100)).optional(),
-    gameVersions: z.array(z.string().max(50)).optional(),
+    categoryIds: z.preprocess(
+      (val) => {
+        if (!val) {
+          return undefined;
+        }
+
+        if (Array.isArray(val)) {
+          return val;
+        }
+
+        return [val];
+      },
+      z.array(z.string().min(1).max(100)).optional(),
+    ),
+    gameVersions: z.preprocess(
+      (val) => {
+        if (!val) {
+          return undefined;
+        }
+
+        if (Array.isArray(val)) {
+          return val;
+        }
+
+        return [val];
+      },
+      z.array(z.string().max(50)).optional(),
+    ),
     search: z.string().max(255).optional(),
     sortBy: z
       .enum(['downloads', 'likes', 'createdAt', 'updatedAt'])

@@ -93,7 +93,7 @@ export const RATE_LIMITS = {
   UPLOAD_MOD: { maxRequests: 5, windowSeconds: 3600, identifier: 'upload:mod' },
 
   // Report endpoints (moderate-strict)
-  REPORTS: { maxRequests: 10, windowSeconds: 3600, identifier: 'reports:create' },
+  REPORTS: { maxRequests: 5, windowSeconds: 3600, identifier: 'reports:create' },
 } as const;
 
 const SALT_ROUNDS = 10;
