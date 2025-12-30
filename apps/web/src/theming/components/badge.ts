@@ -2,7 +2,7 @@
 
 import { chakra, defineRecipe } from '@chakra-ui/react';
 
-export const badgeRecipe = defineRecipe({
+const badgeRecipe = defineRecipe({
   base: {
     display: 'inline-block',
     borderRadius: 'xl',

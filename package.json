@@ -12,6 +12,7 @@
     "deploy:web": "pnpm --filter @craftedtales/web run deploy"
   },
   "devDependencies": {
+    "eslint": "^9.39.2",
     "turbo": "^2.0.0",
     "typescript": "^5.0.0"
   },

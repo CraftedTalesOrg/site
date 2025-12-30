@@ -4,21 +4,12 @@ import {
   defineConfig,
 } from '@chakra-ui/react';
 import {
-  badgeRecipe,
-  buttonRecipe,
-  cardRecipe,
-  iconContainerRecipe,
-  textRecipe,
-  timelineTitleRecipe,
-  timelineDescriptionRecipe,
-  menuRecipe,
-} from './components';
-import {
-  keyframes,
-  animationTokens,
-  transitionTokens,
   animationStyles,
+  animationTokens,
+  keyframes,
+  transitionTokens,
 } from './animations';
+import { checkboxSlotRecipe, menuSlotRecipe, selectSlotRecipe } from './components';
 
 const config = defineConfig({
   theme: {
@@ -223,17 +214,10 @@ const config = defineConfig({
     },
     keyframes,
     animationStyles,
-    recipes: {
-      badge: badgeRecipe,
-      button: buttonRecipe,
-      card: cardRecipe,
-      iconContainer: iconContainerRecipe,
-      text: textRecipe,
-      timelineTitle: timelineTitleRecipe,
-      timelineDescription: timelineDescriptionRecipe,
-    },
     slotRecipes: {
-      menu: menuRecipe,
+      checkbox: checkboxSlotRecipe,
+      menu: menuSlotRecipe,
+      select: selectSlotRecipe,
     },
   },
 });

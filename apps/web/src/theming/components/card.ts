@@ -2,7 +2,7 @@
 
 import { chakra, defineRecipe } from '@chakra-ui/react';
 
-export const cardRecipe = defineRecipe({
+const cardRecipe = defineRecipe({
   base: {
     bg: 'bg.card',
     border: '1px solid',

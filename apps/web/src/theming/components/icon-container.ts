@@ -2,7 +2,7 @@
 
 import { chakra, defineRecipe } from '@chakra-ui/react';
 
-export const iconContainerRecipe = defineRecipe({
+const iconContainerRecipe = defineRecipe({
   base: {
     display: 'flex',
     alignItems: 'center',

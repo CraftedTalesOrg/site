@@ -3,7 +3,7 @@
 import { chakra, defineRecipe } from '@chakra-ui/react';
 import { Timeline as ChakraTimeline } from '@chakra-ui/react';
 
-export const timelineTitleRecipe = defineRecipe({
+const timelineTitleRecipe = defineRecipe({
   base: {
     color: 'text.primary',
     fontWeight: 'semibold',
@@ -11,7 +11,7 @@ export const timelineTitleRecipe = defineRecipe({
   },
 });
 
-export const timelineDescriptionRecipe = defineRecipe({
+const timelineDescriptionRecipe = defineRecipe({
   base: {
     color: 'text.secondary',
     fontSize: 'xs',

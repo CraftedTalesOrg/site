@@ -5,7 +5,7 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig([
   {
-    ignores: ['**/dist/**', '**/.turbo/**', '**/.wrangler/**',],
+    ignores: ['**/node_modules/**', '**/dist/**', '**/.turbo/**', '**/.wrangler/**', "**/.tanstack/**"],
   },
 
   // Stylistic configuration factory (only for JS/TS files)
@@ -59,6 +59,9 @@ export default defineConfig([
       // TypeScript
       '@typescript-eslint/no-unsafe-function-type': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
+      "@typescript-eslint/no-empty-object-type": ["error", {
+        "allowInterfaces": 'always',
+      }],
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/explicit-function-return-type': 'warn',
       /* Use type predicates or guards instead of as cast. https://www.w3schools.com/typescript/typescript_type_guards.php */

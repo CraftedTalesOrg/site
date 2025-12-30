@@ -1,8 +1,10 @@
 'use client';
-import { menuAnatomy } from '@chakra-ui/react/anatomy';
-import { defineSlotRecipe } from '@chakra-ui/react';
 
-export const menuRecipe = defineSlotRecipe({
+import { Menu as ChakraMenu, defineSlotRecipe } from '@chakra-ui/react';
+import { menuAnatomy } from '@chakra-ui/react/anatomy';
+
+export const menuSlotRecipe = defineSlotRecipe({
+  className: 'menu',
   slots: menuAnatomy.keys(),
   base: {
     content: {
@@ -51,3 +53,5 @@ export const menuRecipe = defineSlotRecipe({
     },
   },
 });
+
+export const Menu = ChakraMenu;

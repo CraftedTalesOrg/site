@@ -2,7 +2,7 @@
 
 import { chakra, defineRecipe } from '@chakra-ui/react';
 
-export const buttonRecipe = defineRecipe({
+const buttonRecipe = defineRecipe({
   variants: {
     variant: {
       gradient: {

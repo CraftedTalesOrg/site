@@ -2,7 +2,7 @@
 
 import { chakra, defineRecipe } from '@chakra-ui/react';
 
-export const textRecipe = defineRecipe({
+const textRecipe = defineRecipe({
   base: {
     fontFamily: 'body',
     color: 'text.primary',

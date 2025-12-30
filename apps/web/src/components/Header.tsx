@@ -73,14 +73,6 @@ export default function Header(): JSX.Element {
         <HStack gap={'10'} display={{ base: 'none', lg: 'flex' }}>
           <Link
             to={'/mods'}
-            onClick={(e) => {
-              e.preventDefault();
-              toaster.error({
-                title: 'Coming Soon',
-                description: 'This page is under construction.',
-                duration: 3000,
-              });
-            }}
             style={{
               color: 'var(--chakra-colors-text-secondary)',
               fontWeight: '500',
