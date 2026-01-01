@@ -11,11 +11,10 @@ const { modVersions } = schema;
 export async function seedModVersions(
   db: DrizzleD1,
   modIds: string[],
-): Promise<void> {
+): Promise<string[]> {
   console.info('\n📦 Seeding mod versions...');
 
   const versionNames = ['0.9.0', '0.9.5', '1.0.0', '1.1.0', '1.2.0', '2.0.0', '2.1.0'];
-  const gameVersions = ['1.0.0', '1.0.1', '1.1.0'];
 
   const allVersions: ModVersion[] = [];
 
@@ -35,7 +34,6 @@ export async function seedModVersions(
         name: versionNames[i % versionNames.length],
         url: 'https://cdn.example.com/mods/download.zip',
         size: faker.number.int({ min: 5242880, max: 52428800 }), // 5MB - 50MB
-        gameVersions,
         channel: weightedRandom([
           { weight: 0.7, value: 'release' as const },
           { weight: 0.2, value: 'beta' as const },
@@ -56,4 +54,6 @@ export async function seedModVersions(
   await batchInsert(db, modVersions, allVersions);
 
   logInsert('mod_versions', allVersions.length);
+
+  return allVersions.map(v => v.id!);
 }

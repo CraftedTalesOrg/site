@@ -1,7 +1,8 @@
 import { defineRelations } from 'drizzle-orm';
 import { categories } from './categories';
+import { gameVersions } from './gameVersions';
 import { media } from './media';
-import { mods, modVersions, modCategories, modLikes } from './mods';
+import { mods, modVersions, modCategories, modLikes, modVersionGameVersions } from './mods';
 import { users } from './users';
 import { reports } from './reports';
 
@@ -9,9 +10,11 @@ export const relations = defineRelations(
   {
     users,
     categories,
+    gameVersions,
     mods,
     modCategories,
     modVersions,
+    modVersionGameVersions,
     modLikes,
     reports,
     media,
@@ -64,6 +67,10 @@ export const relations = defineRelations(
         from: r.modVersions.modId,
         to: r.mods.id,
       }),
+      gameVersions: r.many.gameVersions({
+        from: r.modVersions.id.through(r.modVersionGameVersions.modVersionId),
+        to: r.gameVersions.id.through(r.modVersionGameVersions.gameVersionId),
+      }),
     },
 
     // ========================================================================
@@ -107,6 +114,16 @@ export const relations = defineRelations(
         from: r.reports.reviewedBy,
         to: r.users.id,
         alias: 'reviewed_reports',
+      }),
+    },
+
+    // ========================================================================
+    // Game Versions Relations
+    // ========================================================================
+    gameVersions: {
+      modVersions: r.many.modVersions({
+        from: r.gameVersions.id.through(r.modVersionGameVersions.gameVersionId),
+        to: r.modVersions.id.through(r.modVersionGameVersions.modVersionId),
       }),
     },
   }),

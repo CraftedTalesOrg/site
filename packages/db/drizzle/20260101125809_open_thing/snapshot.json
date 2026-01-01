@@ -1,13 +1,17 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "54cbb271-a6f0-4fdc-8055-945e5ce5c866",
+  "id": "9f267cdd-4fc7-4407-8c1d-78c40fdc72f2",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
       "name": "categories",
+      "entityType": "tables"
+    },
+    {
+      "name": "game_versions",
       "entityType": "tables"
     },
     {
@@ -20,6 +24,10 @@
     },
     {
       "name": "mod_likes",
+      "entityType": "tables"
+    },
+    {
+      "name": "mod_version_game_versions",
       "entityType": "tables"
     },
     {
@@ -57,6 +65,26 @@
       "name": "name",
       "entityType": "columns",
       "table": "categories"
+    },
+    {
+      "type": "text(100)",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "game_versions"
+    },
+    {
+      "type": "text(100)",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "game_versions"
     },
     {
       "type": "text",
@@ -250,6 +278,26 @@
     },
     {
       "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "mod_version_id",
+      "entityType": "columns",
+      "table": "mod_version_game_versions"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "game_version_id",
+      "entityType": "columns",
+      "table": "mod_version_game_versions"
+    },
+    {
+      "type": "text",
       "notNull": false,
       "autoincrement": false,
       "default": null,
@@ -275,16 +323,6 @@
       "default": null,
       "generated": null,
       "name": "name",
-      "entityType": "columns",
-      "table": "mod_versions"
-    },
-    {
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": "'[]'",
-      "generated": null,
-      "name": "game_versions",
       "entityType": "columns",
       "table": "mod_versions"
     },
@@ -799,7 +837,7 @@
       "table": "reports"
     },
     {
-      "type": "text(100)",
+      "type": "text",
       "notNull": true,
       "autoincrement": false,
       "default": null,
@@ -955,6 +993,36 @@
     },
     {
       "columns": [
+        "mod_version_id"
+      ],
+      "tableTo": "mod_versions",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "cascade",
+      "nameExplicit": false,
+      "name": "fk_mod_version_game_versions_mod_version_id_mod_versions_id_fk",
+      "entityType": "fks",
+      "table": "mod_version_game_versions"
+    },
+    {
+      "columns": [
+        "game_version_id"
+      ],
+      "tableTo": "game_versions",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "cascade",
+      "nameExplicit": false,
+      "name": "fk_mod_version_game_versions_game_version_id_game_versions_id_fk",
+      "entityType": "fks",
+      "table": "mod_version_game_versions"
+    },
+    {
+      "columns": [
         "mod_id"
       ],
       "tableTo": "mods",
@@ -1050,11 +1118,30 @@
     },
     {
       "columns": [
+        "mod_version_id",
+        "game_version_id"
+      ],
+      "nameExplicit": false,
+      "name": "mod_version_game_versions_pk",
+      "entityType": "pks",
+      "table": "mod_version_game_versions"
+    },
+    {
+      "columns": [
         "id"
       ],
       "nameExplicit": false,
       "name": "categories_pk",
       "table": "categories",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "game_versions_pk",
+      "table": "game_versions",
       "entityType": "pks"
     },
     {
@@ -1110,6 +1197,15 @@
       "name": "categories_name_unique",
       "entityType": "uniques",
       "table": "categories"
+    },
+    {
+      "columns": [
+        "name"
+      ],
+      "nameExplicit": false,
+      "name": "game_versions_name_unique",
+      "entityType": "uniques",
+      "table": "game_versions"
     },
     {
       "columns": [

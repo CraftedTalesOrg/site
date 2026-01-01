@@ -3,6 +3,11 @@ CREATE TABLE `categories` (
 	`name` text(100) NOT NULL UNIQUE
 );
 --> statement-breakpoint
+CREATE TABLE `game_versions` (
+	`id` text(100) PRIMARY KEY,
+	`name` text(100) NOT NULL UNIQUE
+);
+--> statement-breakpoint
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY,
 	`username` text(255) NOT NULL UNIQUE,
@@ -38,11 +43,18 @@ CREATE TABLE `mod_likes` (
 	CONSTRAINT `fk_mod_likes_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE set null
 );
 --> statement-breakpoint
+CREATE TABLE `mod_version_game_versions` (
+	`mod_version_id` text NOT NULL,
+	`game_version_id` text NOT NULL,
+	CONSTRAINT `mod_version_game_versions_pk` PRIMARY KEY(`mod_version_id`, `game_version_id`),
+	CONSTRAINT `fk_mod_version_game_versions_mod_version_id_mod_versions_id_fk` FOREIGN KEY (`mod_version_id`) REFERENCES `mod_versions`(`id`) ON DELETE cascade,
+	CONSTRAINT `fk_mod_version_game_versions_game_version_id_game_versions_id_fk` FOREIGN KEY (`game_version_id`) REFERENCES `game_versions`(`id`) ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `mod_versions` (
 	`id` text PRIMARY KEY,
 	`mod_id` text NOT NULL,
 	`name` text(100) NOT NULL,
-	`game_versions` text DEFAULT '[]' NOT NULL,
 	`channel` text DEFAULT 'release' NOT NULL,
 	`url` text NOT NULL,
 	`size` integer NOT NULL,
@@ -106,7 +118,7 @@ CREATE TABLE `reports` (
 	`reporter_id` text,
 	`target_type` text NOT NULL,
 	`target_id` text NOT NULL,
-	`reason` text(100) NOT NULL,
+	`reason` text NOT NULL,
 	`description` text NOT NULL,
 	`status` text DEFAULT 'pending' NOT NULL,
 	`reviewed_by` text,

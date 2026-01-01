@@ -5,10 +5,12 @@ import { FAKER_SEED, TEST_PASSWORD } from './constants';
 import { resetDatabase } from './reset';
 import { seedMedia } from './media';
 import { seedCategories } from './categories';
+import { seedGameVersions } from './gameVersions';
 import { seedUsers } from './users';
 import { seedMods } from './mods';
 import { seedModVersions } from './modVersions';
 import { seedModCategories } from './modCategories';
+import { seedModVersionGameVersions } from './modVersionGameVersions';
 import { seedModLikes } from './modLikes';
 import { seedReports } from './reports';
 import { relations, schema } from '..';
@@ -63,11 +65,13 @@ async function main(): Promise<void> {
     // Seed in dependency order
     const mediaIds = await seedMedia(db);
     const categoryIds = await seedCategories(db);
+    const gameVersionIds = await seedGameVersions(db);
     const userIds = await seedUsers(db, mediaIds.slice(0, 20)); // Use first 20 (avatars)
     const modIds = await seedMods(db, userIds, mediaIds.slice(20, 40)); // Use next 20 (icons)
+    const modVersionIds = await seedModVersions(db, modIds);
 
-    await seedModVersions(db, modIds);
     await seedModCategories(db, modIds, categoryIds);
+    await seedModVersionGameVersions(db, modVersionIds, gameVersionIds);
     await seedModLikes(db, modIds, userIds);
     await seedReports(db, modIds, userIds);
 
