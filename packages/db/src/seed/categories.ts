@@ -11,18 +11,19 @@ export async function seedCategories(db: DrizzleD1): Promise<string[]> {
   console.info('\n📂 Seeding categories...');
 
   const categoryData: Category[] = [
-    { id: 'magic-spells', name: 'Magic & Spells' },
-    { id: 'technology', name: 'Technology' },
-    { id: 'world-generation', name: 'World Generation' },
-    { id: 'creatures-mobs', name: 'Creatures & Mobs' },
-    { id: 'building-construction', name: 'Building & Construction' },
-    { id: 'combat-weapons', name: 'Combat & Weapons' },
-    { id: 'exploration-adventure', name: 'Exploration & Adventure' },
+    { id: 'adventure', name: 'Adventure' },
+    { id: 'building', name: 'Building' },
+    { id: 'combat', name: 'Combat' },
+    { id: 'farming', name: 'Farming' },
+    { id: 'magic', name: 'Magic' },
+    { id: 'mobs', name: 'Mobs' },
     { id: 'quality-of-life', name: 'Quality of Life' },
-    { id: 'cosmetics-textures', name: 'Cosmetics & Textures' },
-    { id: 'audio-sound', name: 'Audio & Sound' },
-    { id: 'farming-agriculture', name: 'Farming & Agriculture' },
+    { id: 'social', name: 'Social' },
+    { id: 'storage', name: 'Storage' },
+    { id: 'technology', name: 'Technology' },
     { id: 'transportation', name: 'Transportation' },
+    { id: 'utility', name: 'Utility' },
+    { id: 'world-generation', name: 'World Generation' },
   ];
 
   await batchInsert(db, categories, categoryData);

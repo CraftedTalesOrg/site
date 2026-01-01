@@ -5,8 +5,10 @@ const {
   media,
   users,
   categories,
+  gameVersions,
   mods,
   modVersions,
+  modVersionGameVersions,
   modCategories,
   modLikes,
   reports,
@@ -27,6 +29,9 @@ export async function resetDatabase(db: DrizzleD1): Promise<void> {
   await db.delete(modCategories);
   console.info('   ✓ Deleted mod_categories');
 
+  await db.delete(modVersionGameVersions);
+  console.info('   ✓ Deleted mod_version_game_versions');
+
   await db.delete(modVersions);
   console.info('   ✓ Deleted mod_versions');
 
@@ -35,6 +40,9 @@ export async function resetDatabase(db: DrizzleD1): Promise<void> {
 
   await db.delete(users);
   console.info('   ✓ Deleted users');
+
+  await db.delete(gameVersions);
+  console.info('   ✓ Deleted game_versions');
 
   await db.delete(categories);
   console.info('   ✓ Deleted categories');

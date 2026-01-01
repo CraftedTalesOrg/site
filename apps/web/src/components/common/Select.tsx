@@ -1,9 +1,9 @@
 import { Select as ChakraSelect, SelectRootProps } from '@chakra-ui/react';
 import { JSX } from 'react';
 
-export interface SelectItem {
+export interface SelectItem<T extends string = string> {
   label: string;
-  value: string;
+  value: T;
 }
 
 interface SelectProps<T extends SelectItem> extends SelectRootProps<T> {

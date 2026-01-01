@@ -1,4 +1,7 @@
-import { Checkbox, Pagination, Select } from '@/components/common';
+import { Listbox, Pagination, Select } from '@/components/common';
+import { useCategories } from '@/hooks/api/useCategoriesHooks';
+import { useGameVersions } from '@/hooks/api/useGameVersionsHooks';
+import { useMods } from '@/hooks/api/useModsHooks';
 import {
   ButtonGroup,
   IconButton,
@@ -7,20 +10,18 @@ import {
 } from '@/theming/components';
 import {
   Box,
-  CheckboxGroup,
   Container,
   createListCollection,
-  Fieldset,
   Flex,
   Grid,
   ListCollection,
 } from '@chakra-ui/react';
+import { ModSortBy } from '@craftedtales/api/schemas/mods';
 import { createFileRoute } from '@tanstack/react-router';
 import { Grid as GridIcon, List } from 'lucide-react';
 import { JSX, useState } from 'react';
 import { SelectItem } from 'src/components/common/Select';
-import { useCategories } from '@/hooks/api/useCategoriesHooks';
-import { useGameVersions } from '@/hooks/api/useGameVersionsHooks';
+import { useDebounce } from '../../hooks/useDebounce';
 
 export const Route = createFileRoute('/mods/')({
   component: RouteComponent,
@@ -33,23 +34,42 @@ function RouteComponent(): JSX.Element {
     [],
   );
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('createdAt');
+  const [sortBy, setSortBy] = useState<ModSortBy>(ModSortBy.CreatedAt);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
+  // Debounce search query to avoid too many API calls
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
   // Fetch categories and game versions from API
-  const { data: categoriesData } = useCategories();
-  const { data: gameVersionsData } = useGameVersions();
+  const { data: categories } = useCategories();
+  const { data: gameVersions } = useGameVersions();
 
-  const categories = categoriesData?.data ?? [];
-  const gameVersions = gameVersionsData?.data ?? [];
+  // Create collections for filters
+  const categoriesCollection = createListCollection({
+    items: categories?.data.map(c => ({ label: c.name, value: c.id })) ?? [],
+  });
 
-  const sortByOptions: ListCollection<SelectItem> = createListCollection({
+  const gameVersionsCollection = createListCollection({
+    items: gameVersions?.data.map(v => ({ label: v.name, value: v.id })) ?? [],
+  });
+
+  // Fetch mods with all filters applied
+  const { data: modsData, isLoading, error } = useMods({
+    categoryIds: selectedCategories.length > 0 ? selectedCategories : undefined,
+    gameVersionIds: selectedGameVersions.length > 0 ? selectedGameVersions : undefined,
+    search: debouncedSearch || undefined,
+    sortBy,
+    page: currentPage,
+    limit: pageSize,
+  });
+
+  const sortByOptions: ListCollection<SelectItem<ModSortBy>> = createListCollection({
     items: [
-      { label: 'Created', value: 'createdAt' },
-      { label: 'Updated', value: 'updatedAt' },
-      { label: 'Downloads', value: 'downloads' },
-      { label: 'Likes', value: 'likes' },
+      { label: 'Created', value: ModSortBy.CreatedAt },
+      { label: 'Updated', value: ModSortBy.UpdatedAt },
+      { label: 'Downloads', value: ModSortBy.Downloads },
+      { label: 'Likes', value: ModSortBy.Likes },
     ],
   });
 
@@ -73,50 +93,24 @@ function RouteComponent(): JSX.Element {
 
           {/* Category Filter */}
           <Box mb={6}>
-            <Fieldset.Root>
-              <CheckboxGroup
-                value={selectedCategories}
-                onValueChange={setSelectedCategories}
-              >
-                <Fieldset.Legend fontWeight={'medium'} mb={3}>
-                  {'Categories'}
-                </Fieldset.Legend>
-                <Flex direction={'column'} gap={2}>
-                  {categories.map(category => (
-                    <Checkbox
-                      key={category.id}
-                      value={category.id}
-                    >
-                      {category.name}
-                    </Checkbox>
-                  ))}
-                </Flex>
-              </CheckboxGroup>
-            </Fieldset.Root>
+            <Listbox
+              collection={categoriesCollection}
+              value={selectedCategories}
+              onValueChange={details => setSelectedCategories(details.value)}
+              selectionMode={'multiple'}
+              label={'Categories'}
+            />
           </Box>
 
           {/* Game Version Filter */}
           <Box>
-            <Fieldset.Root>
-              <Fieldset.Legend fontWeight={'medium'} mb={3}>
-                {'Game Versions'}
-              </Fieldset.Legend>
-              <CheckboxGroup
-                value={selectedGameVersions}
-                onValueChange={setSelectedGameVersions}
-              >
-                <Flex direction={'column'} gap={2}>
-                  {gameVersions.map(version => (
-                    <Checkbox
-                      key={version.id}
-                      value={version.id}
-                    >
-                      {version.name}
-                    </Checkbox>
-                  ))}
-                </Flex>
-              </CheckboxGroup>
-            </Fieldset.Root>
+            <Listbox
+              collection={gameVersionsCollection}
+              value={selectedGameVersions}
+              onValueChange={details => setSelectedGameVersions(details.value)}
+              selectionMode={'multiple'}
+              label={'Game Versions'}
+            />
           </Box>
         </Box>
 
@@ -166,7 +160,9 @@ function RouteComponent(): JSX.Element {
               size={'sm'}
               width={'auto'}
               value={[sortBy]}
-              onValueChange={details => setSortBy(details.value[0])}
+              // controlled cast look how to propertly type this
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+              onValueChange={details => setSortBy(details.value[0] as ModSortBy)}
             />
 
             {/* Page Size */}
@@ -187,7 +183,7 @@ function RouteComponent(): JSX.Element {
               flexWrap={'wrap'}
             >
               <Pagination
-                count={100}
+                count={modsData?.totalItems ?? 0}
                 pageSize={pageSize}
                 page={currentPage}
                 onPageChange={e => setCurrentPage(e.page)}
@@ -203,7 +199,7 @@ function RouteComponent(): JSX.Element {
           {/* Bottom Pagination */}
           <Flex justifyContent={'flex-end'}>
             <Pagination
-              count={100}
+              count={modsData?.totalItems ?? 0}
               pageSize={pageSize}
               page={currentPage}
               onPageChange={e => setCurrentPage(e.page)}

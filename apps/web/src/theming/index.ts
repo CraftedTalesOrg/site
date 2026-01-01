@@ -9,7 +9,7 @@ import {
   keyframes,
   transitionTokens,
 } from './animations';
-import { checkboxSlotRecipe, menuSlotRecipe, selectSlotRecipe } from './components';
+import { checkboxSlotRecipe, listboxSlotRecipe, menuSlotRecipe, selectSlotRecipe } from './components';
 
 const config = defineConfig({
   theme: {
@@ -216,6 +216,7 @@ const config = defineConfig({
     animationStyles,
     slotRecipes: {
       checkbox: checkboxSlotRecipe,
+      listbox: listboxSlotRecipe,
       menu: menuSlotRecipe,
       select: selectSlotRecipe,
     },

@@ -170,6 +170,13 @@ export type CreateModVersionRequest = z.infer<
 // Queries
 // ─────────────────────────────────────────────────────────────────────────────
 
+export enum ModSortBy {
+  Downloads = 'downloads',
+  Likes = 'likes',
+  CreatedAt = 'createdAt',
+  UpdatedAt = 'updatedAt',
+}
+
 /**
  * List mods query
  */
@@ -205,8 +212,8 @@ export const listModsQuerySchema = z
     ),
     search: z.string().max(255).optional(),
     sortBy: z
-      .enum(['downloads', 'likes', 'createdAt', 'updatedAt'])
-      .default('createdAt'),
+      .nativeEnum(ModSortBy)
+      .default(ModSortBy.CreatedAt),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
   })
   .merge(paginationQuerySchema)

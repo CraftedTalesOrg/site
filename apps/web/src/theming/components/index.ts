@@ -7,6 +7,7 @@ export { IconButton } from './icon-button';
 export { IconContainer } from './icon-container';
 export { Input } from './input';
 export { Link } from './link';
+export { listboxSlotRecipe } from './listbox';
 export { Menu, menuSlotRecipe } from './menu';
 export { Select, selectSlotRecipe } from './select';
 export { Text } from './text';
