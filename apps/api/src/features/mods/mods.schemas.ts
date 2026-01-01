@@ -3,6 +3,7 @@ import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { mods, modVersions } from '@craftedtales/db';
 import { privateUserSchema, publicUserSchema } from '../users/users.schemas';
 import { categorySchema } from '../categories/categories.schemas';
+import { gameVersionSchema } from '../game-versions/gameVersions.schemas';
 import { mediaSchema } from '../_shared/media.schemas';
 import { paginationQuerySchema } from '../_shared/common.schemas';
 
@@ -26,6 +27,9 @@ export const publicModVersionSchema = selectModVersionSchema
     createdAt: true,
     deletedAt: true,
   })
+  .extend({
+    gameVersions: z.array(gameVersionSchema),
+  })
   .openapi('PublicModVersion');
 
 export type PublicModVersion = z.infer<typeof publicModVersionSchema>;
@@ -38,6 +42,9 @@ export const privateModVersionSchema = selectModVersionSchema
     enabled: true,
     deleted: true,
     deletedAt: true,
+  })
+  .extend({
+    gameVersions: z.array(gameVersionSchema),
   })
   .openapi('PrivateModVersion');
 
@@ -146,10 +153,12 @@ export type UpdateModRequest = z.infer<typeof updateModRequestSchema>;
 export const createModVersionRequestSchema = insertModVersionSchema
   .pick({
     name: true,
-    gameVersions: true,
     channel: true,
     changelog: true,
     publishedAt: true,
+  })
+  .extend({
+    gameVersionIds: z.array(z.string().min(1).max(100)).min(1, 'At least one game version is required'),
   })
   .openapi('CreateModVersionRequest');
 
@@ -180,7 +189,7 @@ export const listModsQuerySchema = z
       },
       z.array(z.string().min(1).max(100)).optional(),
     ),
-    gameVersions: z.preprocess(
+    gameVersionIds: z.preprocess(
       (val) => {
         if (!val) {
           return undefined;
@@ -192,7 +201,7 @@ export const listModsQuerySchema = z
 
         return [val];
       },
-      z.array(z.string().max(50)).optional(),
+      z.array(z.string().max(100)).optional(),
     ),
     search: z.string().max(255).optional(),
     sortBy: z

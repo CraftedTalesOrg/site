@@ -34,7 +34,11 @@ export const modsQueries = {
         },
         icon: true,
         categories: true,
-        versions: true,
+        versions: {
+          with: {
+            gameVersions: true,
+          },
+        },
       },
     });
 
@@ -67,7 +71,11 @@ export const modsQueries = {
         },
         icon: true,
         categories: true,
-        versions: true,
+        versions: {
+          with: {
+            gameVersions: true,
+          },
+        },
       },
     });
 
@@ -254,7 +262,11 @@ export const modsQueries = {
         },
         icon: true,
         categories: true,
-        versions: true,
+        versions: {
+          with: {
+            gameVersions: true,
+          },
+        },
       },
       limit,
       offset: (page - 1) * limit,
@@ -288,6 +300,9 @@ export const modsQueries = {
   ): Promise<PaginatedResponse<PublicModVersion>> {
     const versions = await db.query.modVersions.findMany({
       where: { modId, deleted: false, enabled: true },
+      with: {
+        gameVersions: true,
+      },
       limit,
       offset: (page - 1) * limit,
       orderBy: { createdAt: 'desc' },
@@ -337,7 +352,11 @@ export const modsQueries = {
         },
         icon: true,
         categories: true,
-        versions: true,
+        versions: {
+          with: {
+            gameVersions: true,
+          },
+        },
       },
       limit,
       offset: (page - 1) * limit,
@@ -386,7 +405,11 @@ export const modsQueries = {
         },
         icon: true,
         categories: true,
-        versions: true,
+        versions: {
+          with: {
+            gameVersions: true,
+          },
+        },
       },
       limit,
       offset: (page - 1) * limit,

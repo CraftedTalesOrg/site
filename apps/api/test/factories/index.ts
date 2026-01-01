@@ -1,5 +1,5 @@
 import type { ProvidedEnv } from 'cloudflare:test';
-import { createDb, users, categories, mods, modCategories, reports, modVersions } from '@craftedtales/db';
+import { createDb, users, categories, gameVersions, mods, modCategories, reports, modVersions, modVersionGameVersions } from '@craftedtales/db';
 import { eq } from 'drizzle-orm';
 import { hashPassword } from '../../src/utils/auth';
 
@@ -21,6 +21,11 @@ export interface TestCategory {
   name: string;
 }
 
+export interface TestGameVersion {
+  id: string;
+  name: string;
+}
+
 export interface TestMod {
   id: string;
   slug: string;
@@ -37,7 +42,7 @@ export interface TestReport {
   reporterId: string | null;
   targetType: 'mod' | 'user';
   targetId: string;
-  reason: string;
+  reason: 'spam' | 'inappropriate' | 'copyright' | 'malware' | 'harassment' | 'other';
   description: string;
   status: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
 }
@@ -46,7 +51,7 @@ export interface TestModVersion {
   id: string;
   modId: string;
   name: string;
-  gameVersions: string[];
+  gameVersionIds: string[];
   channel: 'release' | 'beta' | 'alpha';
   changelog: string;
 }
@@ -57,6 +62,7 @@ export interface TestModVersion {
 
 let userCounter = 0;
 let categoryCounter = 0;
+let gameVersionCounter = 0;
 let modCounter = 0;
 let reportCounter = 0;
 
@@ -66,6 +72,7 @@ let reportCounter = 0;
 export function resetFactoryCounters(): void {
   userCounter = 0;
   categoryCounter = 0;
+  gameVersionCounter = 0;
   modCounter = 0;
   reportCounter = 0;
 }
@@ -160,6 +167,43 @@ export async function createTestCategory(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Game Version Factory
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface CreateTestGameVersionOptions {
+  id?: string;
+  name?: string;
+}
+
+/**
+ * Create a test game version in the database
+ *
+ * @example
+ * const gameVersion = await createTestGameVersion(env);
+ * const v1 = await createTestGameVersion(env, { id: '1.0.0', name: '1.0.0' });
+ */
+export async function createTestGameVersion(
+  env: ProvidedEnv,
+  options: CreateTestGameVersionOptions = {},
+): Promise<TestGameVersion> {
+  const db = createDb(env.craftedtales_db);
+  const count = ++gameVersionCounter;
+
+  const id = options.id ?? `v${count}.0.0`;
+  const gameVersionData = {
+    id,
+    name: options.name ?? id,
+  };
+
+  const [inserted] = await db.insert(gameVersions).values(gameVersionData).returning();
+
+  return {
+    id: inserted.id,
+    name: inserted.name,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Mod Factory
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -233,7 +277,7 @@ export interface CreateTestReportOptions {
   reporterId?: string | null;
   targetType: 'mod' | 'user';
   targetId: string;
-  reason?: string;
+  reason?: 'spam' | 'inappropriate' | 'copyright' | 'malware' | 'harassment' | 'other';
   description?: string;
   status?: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
 }
@@ -286,7 +330,7 @@ export async function createTestReport(
 export interface CreateTestModVersionOptions {
   modId: string; // Required - must reference an existing mod
   name?: string;
-  gameVersions?: string[];
+  gameVersionIds?: string[]; // Must reference existing game versions
   channel?: 'release' | 'beta' | 'alpha';
   changelog?: string;
   fileUrl?: string;
@@ -300,7 +344,8 @@ export interface CreateTestModVersionOptions {
  *
  * @example
  * const mod = await createTestMod(env, { ownerId: user.id });
- * const version = await createTestModVersion(env, { modId: mod.id });
+ * const gameVersion = await createTestGameVersion(env, { id: '1.0.0' });
+ * const version = await createTestModVersion(env, { modId: mod.id, gameVersionIds: [gameVersion.id] });
  * const betaVersion = await createTestModVersion(env, { modId: mod.id, channel: 'beta' });
  */
 export async function createTestModVersion(
@@ -312,7 +357,6 @@ export async function createTestModVersion(
   const versionData = {
     modId: options.modId,
     name: options.name ?? '1.0.0',
-    gameVersions: options.gameVersions ?? ['1.0'],
     channel: options.channel ?? 'release',
     changelog: options.changelog ?? 'Test version',
     url: options.fileUrl ?? 'https://example.com/file.jar',
@@ -325,11 +369,23 @@ export async function createTestModVersion(
 
   const [inserted] = await db.insert(modVersions).values(versionData).returning();
 
+  // Add game version associations if provided
+  const gameVersionIds = options.gameVersionIds ?? [];
+
+  if (gameVersionIds.length > 0) {
+    await db.insert(modVersionGameVersions).values(
+      gameVersionIds.map(gameVersionId => ({
+        modVersionId: inserted.id,
+        gameVersionId,
+      })),
+    );
+  }
+
   return {
     id: inserted.id,
     modId: inserted.modId,
     name: inserted.name,
-    gameVersions: inserted.gameVersions,
+    gameVersionIds,
     channel: inserted.channel,
     changelog: inserted.changelog,
   };
