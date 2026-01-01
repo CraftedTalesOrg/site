@@ -12,7 +12,7 @@ const textRecipe = defineRecipe({
       // === UNIQUE CONTEXT-SPECIFIC VARIANTS ===
       heroTitle: {
         fontSize: { base: '2.25rem', sm: '2.75rem', md: '4rem' },
-        fontWeight: '700',
+        fontWeight: 'bold',
         fontFamily: 'heading',
         lineHeight: '1.1',
         color: 'text.primary',
@@ -23,7 +23,7 @@ const textRecipe = defineRecipe({
       },
       statValue: {
         fontSize: { base: '1.75rem', sm: '2rem', md: '2.5rem' },
-        fontWeight: '700',
+        fontWeight: 'bold',
         fontFamily: 'heading',
         color: 'brand.blue.500',
       },
@@ -43,13 +43,13 @@ const textRecipe = defineRecipe({
       // === NORMALIZED SEMANTIC VARIANTS ===
       sectionTitle: {
         fontSize: { base: '2rem', md: '2.75rem' },
-        fontWeight: '700',
+        fontWeight: 'bold',
         fontFamily: 'heading',
         color: 'text.primary',
       },
       cardTitle: {
         fontSize: '1.35rem',
-        fontWeight: '600',
+        fontWeight: 'semibold',
         fontFamily: 'heading',
         color: 'text.primary',
       },

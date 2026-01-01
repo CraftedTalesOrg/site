@@ -8,33 +8,31 @@ export const selectSlotRecipe = defineSlotRecipe({
   slots: selectAnatomy.keys(),
   base: {
     trigger: {
-      bg: 'bg.card',
-      border: '1px solid',
-      borderColor: 'border.default',
+      bg: 'blue',
+      bgColor: 'bg.card',
+      borderColor: 'red',
+      // No idea why we can only change color to something and then we override with border
+      border: '1px solid #2a2a3a', // border.default
       borderRadius: 'sm',
       color: 'text.primary',
-      fontSize: 'md',
-      fontWeight: '500',
+      fontWeight: 'medium',
       transition: '{durations.fast}',
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
       _hover: {
-        borderColor: 'text.secondary',
+        borderColor: 'brand.blue.500',
       },
       _focus: {
-        borderColor: 'brand.blue.500',
-        boxShadow: '0 0 0 1px {colors.brand.blue.500}',
-        outline: 'none',
+        borderColor: 'transparent',
+      },
+      _disabled: {
+        opacity: 0.5,
+        cursor: 'not-allowed',
       },
     },
     content: {
       bg: 'bg.card',
       border: '1px solid',
-      borderColor: 'border.default',
+      borderColor: 'transparent',
       borderRadius: 'sm',
-      boxShadow: 'card.elevated',
       py: 2,
       maxH: '300px',
       overflowY: 'auto',
@@ -42,9 +40,8 @@ export const selectSlotRecipe = defineSlotRecipe({
     },
     item: {
       color: 'text.primary',
-      fontSize: 'sm',
-      fontWeight: '500',
-      px: 3,
+      fontWeight: 'medium',
+      px: 4,
       py: 2,
       cursor: 'pointer',
       transition: '{durations.fast}',
@@ -55,6 +52,7 @@ export const selectSlotRecipe = defineSlotRecipe({
       _selected: {
         bg: 'alpha.blue.15',
         color: 'brand.blue.500',
+        fontWeight: 'semibold',
       },
     },
   },
@@ -62,23 +60,35 @@ export const selectSlotRecipe = defineSlotRecipe({
     size: {
       sm: {
         trigger: {
-          h: 8,
+          h: '10',
+          fontSize: 'sm',
+          px: 6,
+        },
+        item: {
           fontSize: 'sm',
           px: 3,
         },
       },
       md: {
         trigger: {
-          h: 10,
+          h: '14',
+          fontSize: 'md',
+          px: 8,
+        },
+        item: {
           fontSize: 'md',
           px: 4,
         },
       },
       lg: {
         trigger: {
-          h: 12,
+          h: '20',
           fontSize: 'lg',
-          px: 4,
+          px: 10,
+        },
+        item: {
+          fontSize: 'lg',
+          px: 5,
         },
       },
     },

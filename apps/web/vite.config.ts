@@ -5,12 +5,10 @@ import { cloudflare } from '@cloudflare/vite-plugin';
 import { defineConfig } from 'vite';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [
     devtools(),
-    // Only use cloudflare plugin for production builds
-    mode === 'production'
-    && cloudflare({
+    cloudflare({
       viteEnvironment: { name: 'ssr' },
     }),
     // this is the plugin that enables path aliases

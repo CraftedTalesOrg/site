@@ -106,7 +106,7 @@ export const buttonRecipe = defineRecipe({
         gradientTo: 'brand.gold.500',
         color: 'text.primary',
         boxShadow: 'glow.blue',
-        fontWeight: '600',
+        fontWeight: 'semibold',
         borderRadius: 'sm',
         transition: '{durations.fast}',
         cursor: 'pointer',
@@ -264,7 +264,7 @@ export const checkboxSlotRecipe = defineSlotRecipe({
     label: {
       color: 'text.primary',
       fontSize: 'sm',
-      fontWeight: '500',
+      fontWeight: 'medium',
       cursor: 'pointer',
       _disabled: {
         opacity: 0.5,

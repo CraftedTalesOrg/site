@@ -6,7 +6,7 @@ const badgeRecipe = defineRecipe({
   base: {
     display: 'inline-block',
     borderRadius: 'xl',
-    fontWeight: '600',
+    fontWeight: 'semibold',
     textTransform: 'uppercase',
   },
   variants: {
@@ -23,7 +23,7 @@ const badgeRecipe = defineRecipe({
         px: 3,
         py: '0.35rem',
         fontSize: 'xs',
-        fontWeight: '700',
+        fontWeight: 'bold',
         color: 'white',
       },
     },

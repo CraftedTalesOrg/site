@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { Box, Flex, Grid, HStack } from '@chakra-ui/react';
-import { Link } from '@tanstack/react-router';
+import { Link } from '@/theming/components';
 import { useTranslation } from 'react-i18next';
 import { Text } from '@/theming/components';
 import { siDiscord, siGithub } from 'simple-icons';
@@ -22,15 +22,7 @@ function FooterLink({ to, children }: FooterLinkProps): JSX.Element {
   };
 
   return (
-    <Link
-      to={to}
-      onClick={handleClick}
-      style={{
-        color: 'var(--chakra-colors-text-secondary)',
-        fontSize: '0.9rem',
-        textDecoration: 'none',
-      }}
-    >
+    <Link to={to} onClick={handleClick}>
       {children}
     </Link>
   );

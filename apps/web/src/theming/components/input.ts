@@ -10,19 +10,18 @@ const inputRecipe = defineRecipe({
     borderColor: 'border.default',
     borderRadius: 'sm',
     color: 'text.primary',
-    fontSize: 'md',
-    fontWeight: '500',
+    fontWeight: 'medium',
     transition: '{durations.fast}',
     outline: 'none',
     _placeholder: {
       color: 'text.muted',
     },
     _hover: {
-      borderColor: 'text.secondary',
+      borderColor: 'brand.blue.500',
     },
     _focus: {
       borderColor: 'brand.blue.500',
-      boxShadow: '0 0 0 1px {colors.brand.blue.500}',
+      outline: 'none',
     },
     _disabled: {
       opacity: 0.5,
@@ -33,20 +32,17 @@ const inputRecipe = defineRecipe({
     size: {
       sm: {
         px: 3,
-        py: 2,
-        h: 10,
-        fontSize: 'sm',
+        h: 8,
+        fontSize: 'xs',
       },
       md: {
         px: 4,
-        py: 2,
-        h: 12,
+        h: 10,
         fontSize: 'md',
       },
       lg: {
-        px: 4,
-        py: 3,
-        h: 14,
+        px: 5,
+        h: 12,
         fontSize: 'lg',
       },
     },

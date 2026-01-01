@@ -7,16 +7,11 @@ export const checkboxSlotRecipe = defineSlotRecipe({
   className: 'checkbox',
   slots: checkboxAnatomy.keys(),
   base: {
-    root: {
-      gap: 2,
-      alignItems: 'center',
-      display: 'flex',
-    },
     control: {
       width: '20px',
       height: '20px',
+      color: 'border.base',
       border: '1px solid',
-      borderColor: 'border.default',
       borderRadius: 'sm',
       bg: 'bg.card',
       transition: '{durations.fast}',
@@ -39,7 +34,7 @@ export const checkboxSlotRecipe = defineSlotRecipe({
     label: {
       color: 'text.primary',
       fontSize: 'sm',
-      fontWeight: '500',
+      fontWeight: 'medium',
       cursor: 'pointer',
       _disabled: {
         opacity: 0.5,

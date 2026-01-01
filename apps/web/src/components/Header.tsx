@@ -1,13 +1,14 @@
-import type { JSX } from 'react';
+import { Button, IconButton, Link } from '@/theming/components';
 import { Box, Flex, HStack, Menu, Portal } from '@chakra-ui/react';
-import { Link } from '@tanstack/react-router';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/theming/components';
+import { useLocation } from '@tanstack/react-router';
 import { Menu as MenuIcon } from 'lucide-react';
+import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toaster } from './Toaster';
 
 export default function Header(): JSX.Element {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
 
   return (
     <Box
@@ -71,19 +72,11 @@ export default function Header(): JSX.Element {
 
         {/* Navigation Links */}
         <HStack gap={'10'} display={{ base: 'none', lg: 'flex' }}>
-          <Link
-            to={'/mods'}
-            style={{
-              color: 'var(--chakra-colors-text-secondary)',
-              fontWeight: '500',
-              fontSize: '0.95rem',
-              position: 'relative',
-              textDecoration: 'none',
-            }}
-          >
+          <Link variant={'nav'} to={'/mods'} aria-current={pathname === '/mods' ? 'page' : undefined}>
             {t($ => $.COMMON.HEADER.NAV.MODS)}
           </Link>
           <Link
+            variant={'nav'}
             to={'/categories'}
             onClick={(e) => {
               e.preventDefault();
@@ -93,17 +86,11 @@ export default function Header(): JSX.Element {
                 duration: 3000,
               });
             }}
-            style={{
-              color: 'var(--chakra-colors-text-secondary)',
-              fontWeight: '500',
-              fontSize: '0.95rem',
-              position: 'relative',
-              textDecoration: 'none',
-            }}
           >
             {t($ => $.COMMON.HEADER.NAV.CATEGORIES)}
           </Link>
           <Link
+            variant={'nav'}
             to={'/creators'}
             onClick={(e) => {
               e.preventDefault();
@@ -112,13 +99,6 @@ export default function Header(): JSX.Element {
                 description: 'This page is under construction.',
                 duration: 3000,
               });
-            }}
-            style={{
-              color: 'var(--chakra-colors-text-secondary)',
-              fontWeight: '500',
-              fontSize: '0.95rem',
-              position: 'relative',
-              textDecoration: 'none',
             }}
           >
             {t($ => $.COMMON.HEADER.NAV.CREATORS)}
@@ -158,9 +138,9 @@ export default function Header(): JSX.Element {
         {/* Mobile Menu Button */}
         <Menu.Root>
           <Menu.Trigger asChild>
-            <Button variant={'transparent'} display={{ base: 'flex', lg: 'none' }} size={'sm'}>
+            <IconButton variant={'transparent'} display={{ base: 'flex', lg: 'none' }} size={'sm'}>
               <MenuIcon />
-            </Button>
+            </IconButton>
           </Menu.Trigger>
           <Portal>
             <Menu.Positioner>

@@ -1,9 +1,8 @@
+import { Checkbox, Pagination, Select } from '@/components/common';
 import {
   ButtonGroup,
   IconButton,
-  Checkbox,
   Input,
-  Select,
   Text,
 } from '@/theming/components';
 import {
@@ -14,12 +13,12 @@ import {
   Fieldset,
   Flex,
   Grid,
-  Pagination,
-  Portal,
+  ListCollection,
 } from '@chakra-ui/react';
 import { createFileRoute } from '@tanstack/react-router';
-import { ChevronLeft, ChevronRight, Grid as GridIcon, List } from 'lucide-react';
+import { Grid as GridIcon, List } from 'lucide-react';
 import { JSX, useState } from 'react';
+import { SelectItem } from 'src/components/common/Select';
 
 export const Route = createFileRoute('/mods/')({
   component: RouteComponent,
@@ -34,17 +33,27 @@ function RouteComponent(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('createdAt');
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   // Mock data for filters (will be replaced with real data)
   const categories = ['Combat', 'Building', 'Magic', 'Utility'];
   const gameVersions = ['1.0.0', '1.1.0', '1.2.0'];
 
-  const sortByOptions = createListCollection({
+  const sortByOptions: ListCollection<SelectItem> = createListCollection({
     items: [
       { label: 'Created', value: 'createdAt' },
       { label: 'Updated', value: 'updatedAt' },
       { label: 'Downloads', value: 'downloads' },
       { label: 'Likes', value: 'likes' },
+    ],
+  });
+
+  const pageSizeOptions: ListCollection<SelectItem> = createListCollection({
+    items: [
+      { label: '10', value: '10' },
+      { label: '20', value: '20' },
+      { label: '50', value: '50' },
+      { label: '100', value: '100' },
     ],
   });
 
@@ -69,11 +78,12 @@ function RouteComponent(): JSX.Element {
                 </Fieldset.Legend>
                 <Flex direction={'column'} gap={2}>
                   {categories.map(category => (
-                    <Checkbox.Root key={category} value={category}>
-                      <Checkbox.HiddenInput />
-                      <Checkbox.Control />
-                      <Checkbox.Label>{category}</Checkbox.Label>
-                    </Checkbox.Root>
+                    <Checkbox
+                      key={category}
+                      value={category}
+                    >
+                      {category}
+                    </Checkbox>
                   ))}
                 </Flex>
               </CheckboxGroup>
@@ -92,11 +102,12 @@ function RouteComponent(): JSX.Element {
               >
                 <Flex direction={'column'} gap={2}>
                   {gameVersions.map(version => (
-                    <Checkbox.Root key={version} value={version}>
-                      <Checkbox.HiddenInput />
-                      <Checkbox.Control />
-                      <Checkbox.Label>{version}</Checkbox.Label>
-                    </Checkbox.Root>
+                    <Checkbox
+                      key={version}
+                      value={version}
+                    >
+                      {version}
+                    </Checkbox>
                   ))}
                 </Flex>
               </CheckboxGroup>
@@ -131,14 +142,12 @@ function RouteComponent(): JSX.Element {
               attached
             >
               <IconButton
-                aria-label={'Grid view'}
                 variant={viewMode === 'grid' ? 'solid' : 'outline'}
                 onClick={() => setViewMode('grid')}
               >
                 <GridIcon size={16} />
               </IconButton>
               <IconButton
-                aria-label={'List view'}
                 variant={viewMode === 'list' ? 'solid' : 'outline'}
                 onClick={() => setViewMode('list')}
               >
@@ -146,7 +155,25 @@ function RouteComponent(): JSX.Element {
               </IconButton>
             </ButtonGroup>
 
-            {/* Sort Controls & Pagination */}
+            {/* Sort By Select */}
+            <Select
+              collection={sortByOptions}
+              size={'sm'}
+              width={'auto'}
+              value={[sortBy]}
+              onValueChange={details => setSortBy(details.value[0])}
+            />
+
+            {/* Page Size */}
+            <Select
+              collection={pageSizeOptions}
+              size={'sm'}
+              width={'auto'}
+              value={[pageSize.toString()]}
+              onValueChange={details => setPageSize(Number(details.value[0]))}
+            />
+
+            {/* Pagination */}
             <Flex
               gap={2}
               alignItems={'center'}
@@ -154,68 +181,12 @@ function RouteComponent(): JSX.Element {
               justifyContent={'flex-end'}
               flexWrap={'wrap'}
             >
-              {/* Sort By Select */}
-              <Select.Root
-                collection={sortByOptions}
-                size={'sm'}
-                width={'auto'}
-                value={[sortBy]}
-                onValueChange={details => setSortBy(details.value[0])}
-              >
-                <Select.Control>
-                  <Select.Trigger>
-                    <Select.ValueText placeholder={'Sort by'} />
-                    <Select.Indicator />
-                  </Select.Trigger>
-                </Select.Control>
-                <Portal>
-                  <Select.Positioner>
-                    <Select.Content>
-                      {sortByOptions.items.map(item => (
-                        <Select.Item
-                          key={item.value}
-                          item={item}
-                        >
-                          {item.label}
-                        </Select.Item>
-                      ))}
-                    </Select.Content>
-                  </Select.Positioner>
-                </Portal>
-              </Select.Root>
-
-              <Pagination.Root
+              <Pagination
                 count={100}
-                pageSize={20}
+                pageSize={pageSize}
                 page={currentPage}
                 onPageChange={e => setCurrentPage(e.page)}
-              >
-                <ButtonGroup size={'sm'} variant={'outline'}>
-                  <Pagination.PrevTrigger asChild>
-                    <IconButton aria-label={'Previous page'}>
-                      <ChevronLeft size={16} />
-                    </IconButton>
-                  </Pagination.PrevTrigger>
-
-                  <Pagination.Items
-                    render={page => (
-                      <IconButton
-                        key={page.value}
-                        aria-label={`Page ${page.value}`}
-                        variant={{ base: 'outline', _selected: 'solid' }}
-                      >
-                        {page.value}
-                      </IconButton>
-                    )}
-                  />
-
-                  <Pagination.NextTrigger asChild>
-                    <IconButton aria-label={'Next page'}>
-                      <ChevronRight size={16} />
-                    </IconButton>
-                  </Pagination.NextTrigger>
-                </ButtonGroup>
-              </Pagination.Root>
+              />
             </Flex>
           </Flex>
 
@@ -225,39 +196,13 @@ function RouteComponent(): JSX.Element {
           </Box>
 
           {/* Bottom Pagination */}
-          <Flex justifyContent={'center'}>
-            <Pagination.Root
+          <Flex justifyContent={'flex-end'}>
+            <Pagination
               count={100}
-              pageSize={20}
+              pageSize={pageSize}
               page={currentPage}
               onPageChange={e => setCurrentPage(e.page)}
-            >
-              <ButtonGroup size={'sm'} variant={'outline'}>
-                <Pagination.PrevTrigger asChild>
-                  <IconButton aria-label={'Previous page'}>
-                    <ChevronLeft size={16} />
-                  </IconButton>
-                </Pagination.PrevTrigger>
-
-                <Pagination.Items
-                  render={page => (
-                    <IconButton
-                      key={page.value}
-                      aria-label={`Page ${page.value}`}
-                      variant={{ base: 'outline', _selected: 'solid' }}
-                    >
-                      {page.value}
-                    </IconButton>
-                  )}
-                />
-
-                <Pagination.NextTrigger asChild>
-                  <IconButton aria-label={'Next page'}>
-                    <ChevronRight size={16} />
-                  </IconButton>
-                </Pagination.NextTrigger>
-              </ButtonGroup>
-            </Pagination.Root>
+            />
           </Flex>
         </Box>
       </Grid>
