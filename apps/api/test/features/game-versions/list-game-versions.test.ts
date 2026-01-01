@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { env } from 'cloudflare:test';
 import app from '../../../src/index';
 import { createTestGameVersion } from '../../factories';
-import type { ListGameVersionsResponse } from '../../../src/features/game-versions/gameVersions.schemas';
+import type { ListGameVersionsResponse } from '../../../src/features/game-versions/game-versions.schemas';
 
 describe('GET /api/v1/game-versions', () => {
   describe('success cases', () => {

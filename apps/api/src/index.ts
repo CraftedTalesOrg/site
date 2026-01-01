@@ -20,10 +20,8 @@ app.use('*', createPrettyJson());
 app.get('/health', c => c.json({ ok: true }));
 
 // Versioned API: create a sub router and mount under prefix
-// Versioned API: create a sub router and mount under prefix
 const v1Prefix = '/api/v1';
 const v1 = createOpenApiApp();
-const v1 = createOpenApiApp();
 
 registerAuthRoutes(v1);
 registerUsersRoutes(v1);
@@ -31,15 +29,7 @@ registerReportsRoutes(v1);
 registerModsRoutes(v1);
 registerCategoriesRoutes(v1);
 registerGameVersionsRoutes(v1);
-registerAuthRoutes(v1);
-registerUsersRoutes(v1);
-registerReportsRoutes(v1);
-registerModsRoutes(v1);
-registerCategoriesRoutes(v1);
-registerGameVersionsRoutes(v1);
 
-// Mount v1 router under the prefix
-app.route(v1Prefix, v1);
 // Mount v1 router under the prefix
 app.route(v1Prefix, v1);
 
