@@ -19,6 +19,8 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Grid as GridIcon, List } from 'lucide-react';
 import { JSX, useState } from 'react';
 import { SelectItem } from 'src/components/common/Select';
+import { useCategories } from '@/hooks/api/useCategoriesHooks';
+import { useGameVersions } from '@/hooks/api/useGameVersionsHooks';
 
 export const Route = createFileRoute('/mods/')({
   component: RouteComponent,
@@ -35,9 +37,12 @@ function RouteComponent(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
-  // Mock data for filters (will be replaced with real data)
-  const categories = ['Combat', 'Building', 'Magic', 'Utility'];
-  const gameVersions = ['1.0.0', '1.1.0', '1.2.0'];
+  // Fetch categories and game versions from API
+  const { data: categoriesData } = useCategories();
+  const { data: gameVersionsData } = useGameVersions();
+
+  const categories = categoriesData?.data ?? [];
+  const gameVersions = gameVersionsData?.data ?? [];
 
   const sortByOptions: ListCollection<SelectItem> = createListCollection({
     items: [
@@ -79,10 +84,10 @@ function RouteComponent(): JSX.Element {
                 <Flex direction={'column'} gap={2}>
                   {categories.map(category => (
                     <Checkbox
-                      key={category}
-                      value={category}
+                      key={category.id}
+                      value={category.id}
                     >
-                      {category}
+                      {category.name}
                     </Checkbox>
                   ))}
                 </Flex>
@@ -103,10 +108,10 @@ function RouteComponent(): JSX.Element {
                 <Flex direction={'column'} gap={2}>
                   {gameVersions.map(version => (
                     <Checkbox
-                      key={version}
-                      value={version}
+                      key={version.id}
+                      value={version.id}
                     >
-                      {version}
+                      {version.name}
                     </Checkbox>
                   ))}
                 </Flex>
