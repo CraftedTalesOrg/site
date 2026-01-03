@@ -13,7 +13,7 @@ export const registerRequestSchema = z
     username: z
       .string()
       .min(3)
-      .max(50)
+      .max(32)
       .regex(/^[a-zA-Z0-9_-]+$/),
     email: z.string().email(),
     password: z.string().min(8).max(128),

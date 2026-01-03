@@ -37,6 +37,46 @@ export async function seedUsers(
     deletedAt: null,
   }));
 
+  // Add edge case users with very long names and bios
+  userData.push(
+    // User with extremely long username (200+ chars)
+    {
+      id: crypto.randomUUID(),
+      username: 'VeryLongUsername_' + 'A'.repeat(150) + '_TestingMaximumLengthHandling_' + Date.now(),
+      email: 'longnameuser@test.com',
+      password: passwordHash,
+      bio: 'Normal bio',
+      avatarId: avatarIds[0] || null,
+      roles: [],
+      emailVerified: true,
+      twoFactorEnabled: false,
+      twoFactorSecret: null,
+      createdAt: faker.date.past({ years: 2 }),
+      updatedAt: faker.date.recent({ days: 60 }),
+      enabled: true,
+      deleted: false,
+      deletedAt: null,
+    },
+    // User with extremely long bio (5000+ chars)
+    {
+      id: crypto.randomUUID(),
+      username: 'LongBioUser',
+      email: 'longbiouser@test.com',
+      password: passwordHash,
+      bio: faker.lorem.paragraphs(50) + ' ' + faker.lorem.paragraphs(50) + ' EDGE_CASE_TEST_VERY_LONG_BIO_CONTENT '.repeat(20),
+      avatarId: avatarIds[1] || null,
+      roles: [],
+      emailVerified: true,
+      twoFactorEnabled: false,
+      twoFactorSecret: null,
+      createdAt: faker.date.past({ years: 2 }),
+      updatedAt: faker.date.recent({ days: 60 }),
+      enabled: true,
+      deleted: false,
+      deletedAt: null,
+    },
+  );
+
   await batchInsert(db, users, userData);
 
   logInsert('users', userData.length);

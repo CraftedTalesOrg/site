@@ -23,7 +23,7 @@ export default function ModCard({
   rating,
 }: ModCardProps): JSX.Element {
   return (
-    <Card variant={'pressable'} colorPalette={'gold'}>
+    <Card variant={'animatedPressable'} colorPalette={'gold'} p={8}>
       <Box
         width={'100%'}
         height={'180px'}

@@ -14,14 +14,15 @@ const cardRecipe = defineRecipe({
   variants: {
     variant: {
       pressable: {
-        p: 8,
         cursor: 'pointer',
+      },
+      animated: {
         _hover: {
           transform: 'translateY(-5px)',
         },
       },
-      hoverable: {
-        p: 8,
+      animatedPressable: {
+        cursor: 'pointer',
         _hover: {
           transform: 'translateY(-5px)',
         },
@@ -53,7 +54,6 @@ const cardRecipe = defineRecipe({
     },
   },
   defaultVariants: {
-    variant: 'pressable',
     colorPalette: 'blue',
   },
 });

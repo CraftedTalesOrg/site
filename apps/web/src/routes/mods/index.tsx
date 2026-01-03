@@ -1,4 +1,5 @@
 import { Listbox, Pagination, Select } from '@/components/common';
+import { ModCard, ModRow } from '@/components/mods';
 import { useCategories } from '@/hooks/api/useCategoriesHooks';
 import { useGameVersions } from '@/hooks/api/useGameVersionsHooks';
 import { useMods } from '@/hooks/api/useModsHooks';
@@ -15,6 +16,7 @@ import {
   Flex,
   Grid,
   ListCollection,
+  Stack,
 } from '@chakra-ui/react';
 import { ModSortBy } from '@craftedtales/api/schemas/mods';
 import { createFileRoute } from '@tanstack/react-router';
@@ -83,7 +85,7 @@ function RouteComponent(): JSX.Element {
   });
 
   return (
-    <Container maxW={'container.xl'} px={{ base: 4, lg: '12.5%' }} py={20}>
+    <Container maxW={'container.xl'} px={{ base: '4', lg: '32' }} py={20}>
       <Grid templateColumns={{ base: '1fr', lg: '1fr 3fr' }} gap={6} py={8}>
         {/* Left Column - Filters */}
         <Box>
@@ -192,8 +194,29 @@ function RouteComponent(): JSX.Element {
           </Flex>
 
           {/* Mods List/Grid */}
-          <Box mb={6} minH={'400px'}>
-            <Text>{'[Mods List/Grid View]'}</Text>
+          <Box mb={6}>
+            {viewMode === 'grid'
+              ? (
+                  <Grid
+                    templateColumns={{
+                      base: '1fr',
+                      sm: 'repeat(1, 1fr)',
+                      lg: 'repeat(2, 1fr)',
+                    }}
+                    gap={6}
+                  >
+                    {modsData?.data.map(mod => (
+                      <ModCard key={mod.id} mod={mod} />
+                    ))}
+                  </Grid>
+                )
+              : (
+                  <Stack gap={4}>
+                    {modsData?.data.map(mod => (
+                      <ModRow key={mod.id} mod={mod} />
+                    ))}
+                  </Stack>
+                )}
           </Box>
 
           {/* Bottom Pagination */}

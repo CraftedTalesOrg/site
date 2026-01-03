@@ -64,7 +64,7 @@ export const slugParamSchema = z.object({
 export type SlugParam = z.infer<typeof slugParamSchema>;
 
 export const usernameParamSchema = z.object({
-  username: z.string().min(1).max(50).openapi({ example: 'johndoe' }),
+  username: z.string().min(1).max(32).openapi({ example: 'johndoe' }),
 });
 
 export type UsernameParam = z.infer<typeof usernameParamSchema>;

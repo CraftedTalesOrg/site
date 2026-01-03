@@ -9,7 +9,7 @@ interface FeatureCardProps {
 
 export default function FeatureCard({ icon, title, description }: FeatureCardProps): JSX.Element {
   return (
-    <Card variant={'hoverable'} colorPalette={'green'} p={10}>
+    <Card variant={'animated'} colorPalette={'green'} p={10}>
       <IconContainer size={'md'} colorPalette={'green'} mb={6}>
         {icon}
       </IconContainer>

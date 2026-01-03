@@ -2,17 +2,19 @@ import type { OpenAPIHono } from '@hono/zod-openapi';
 import type { Env, JwtPayload } from '../../env.d';
 import { createDb } from '../../utils/db';
 import {
+  PaginationQuery,
+  UsernameParam,
+} from '../_shared/common.schemas';
+import { modsQueries } from '../mods/mods.queries';
+import {
   getMeRoute,
-  updateMeRoute,
   getUserByUsernameRoute,
   getUserModsRoute,
+  updateMeRoute,
   userActionRoute,
 } from './users.openapi';
 import { usersQueries } from './users.queries';
-import { modsQueries } from '../mods/mods.queries';
 import { PrivateUser, PublicUser, UpdateProfileRequest } from './users.schemas';
-import { PaginationQuery,
-  UsernameParam } from '../_shared/common.schemas';
 
 /**
  * Register users routes

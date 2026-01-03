@@ -21,7 +21,7 @@ export default function CategoryCard({
   };
 
   return (
-    <Card variant={'pressable'} colorPalette={'blue'} onClick={handleClick}>
+    <Card variant={'animatedPressable'} colorPalette={'blue'} onClick={handleClick} p={8}>
       <IconContainer size={'lg'} colorPalette={'blue'} mx={'auto'} mb={6}>
         {icon}
       </IconContainer>

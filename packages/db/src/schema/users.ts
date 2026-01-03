@@ -6,7 +6,7 @@ export const users = sqliteTable('users', {
   id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
 
   // Public fields
-  username: text({ length: 255 }).notNull().unique(),
+  username: text({ length: 32 }).notNull().unique(),
   bio: text().notNull().default(''),
   avatarId: text('avatar_id').references(() => media.id),
   // TODO ROLES CHECK AGAIN IMPLEMENTATION
